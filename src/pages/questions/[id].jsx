@@ -1,37 +1,42 @@
 import QuestionsSidebar from "@/components/QuestionsSidebar";
 import Layout from "@/layouts/Layout";
-import { getServerSession } from "next-auth";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { authOptions } from "../api/auth/[...nextauth]";
-import AddQuestionForm from "@/components/questions/AddQuestionForm";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
-export default function about({ categories }) {
+export default function index({ question }) {
   return (
     <div className={`${jakarta.className} py-4 px-8`}>
       <section className="flex gap-20 max-w">
         <QuestionsSidebar />
-        <AddQuestionForm categories={categories} />
+        <Question question={question} />
       </section>
     </div>
   );
 }
 
-about.getLayout = function getLayout(page) {
+index.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };
 
-import Category from "@/models/Category";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
+import Question from "@/components/questions/Question";
 
 export async function getServerSideProps(context) {
+  const Question = require("@/models/Question");
+  const Comment = require("@/models/Comment");
+  const User = require("@/models/User");
+
   const session = await getServerSession(context.req, context.res, authOptions);
-  const categories = await Category.findAll({ where: { type: "questions" } });
+
+  const user = session?.user;
+  const question = await Question.findByPk(context.params.id, { include: { model: User, attributes: ["id", "username"] } });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
-      categories: JSON.parse(JSON.stringify(categories)),
+      question: JSON.parse(JSON.stringify(question)),
     },
   };
 }

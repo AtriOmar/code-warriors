@@ -33,6 +33,7 @@
     "react-dom": "^18",
     "react-draft-wysiwyg": "^1.15.0",
     "react-loader-spinner": "^6.1.6",
+    "react-select": "^5.8.0",
     "sequelize": "^6.37.0",
     "slate": "^0.102.0",
     "slate-react": "^0.102.0"
