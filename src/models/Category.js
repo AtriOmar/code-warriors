@@ -17,7 +17,7 @@ const Category = sequelize.define(
   }
 );
 
-Category.sync({ alter: true });
+// Category.sync({ alter: true });
 
 // Category.update(
 //   {

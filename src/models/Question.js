@@ -25,6 +25,6 @@ Question.belongsTo(Category, { foreignKey: "categoryId", onDelete: "CASCADE", on
 User.hasMany(Question, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 Question.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 
-Question.sync({ alter: true });
+// Question.sync({ alter: true });
 
 module.exports = Question;

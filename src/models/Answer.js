@@ -16,10 +16,14 @@ const Answer = sequelize.define(
 );
 
 const Question = require("@/models/Question");
+const User = require("@/models/User");
 
 Question.hasMany(Answer, { foreignKey: "questionId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 Answer.belongsTo(Question, { foreignKey: "questionId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 
-Answer.sync({ alter: true });
+User.hasMany(Answer, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE" });
+Answer.belongsTo(User, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE" });
+
+// Answer.sync({ alter: true });
 
 module.exports = Answer;

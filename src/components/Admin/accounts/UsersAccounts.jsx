@@ -1,5 +1,6 @@
 import { RingLoader } from "@/components/Loading";
 import axios from "axios";
+import Image from "next/image";
 
 const { faSort, faPlus, faCircleUser } = require("@fortawesome/free-solid-svg-icons");
 const { FontAwesomeIcon } = require("@fortawesome/react-fontawesome");
@@ -76,13 +77,19 @@ function UserItem({ user }) {
   return (
     <div key={user.id} className="grid grid-cols-[1fr_100px_100px_100px_100px] px-4 font-bold text-sm">
       <div className="flex items-center gap-3  py-2 text-slate-900 capitalize">
-        <p href="/profile" className="flex gap-2 items-center">
-          <FontAwesomeIcon icon={faCircleUser} className="text-3xl text-slate-500" />
+        <div className="flex gap-2 items-center">
+          {user.picture ? (
+            <div className="relative w-8 aspect-square rounded-full overflow-hidden">
+              <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
+            </div>
+          ) : (
+            <FontAwesomeIcon icon={faCircleUser} className="text-3xl text-slate-500" />
+          )}
           <p className="font-medium capitalize">{user.username || "Jon Doe"}</p>
-        </p>
+        </div>
       </div>
       <div className="flex items-center gap-3  py-2 text-slate-900">
-        <p>{user.likes || Math.floor(Math.random() * 1000)}</p>
+        <p suppressHydrationWarning>{user.likes || Math.floor(Math.random() * 1000)}</p>
       </div>
       <div className="flex items-center gap-3  py-2 text-slate-900">
         <p>{user.numbers || "123"}</p>

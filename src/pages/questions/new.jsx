@@ -10,7 +10,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export default function about({ categories }) {
   return (
     <div className={`${jakarta.className} py-4 px-8`}>
-      <section className="flex gap-20 max-w">
+      <section className="flex gap-14 max-w">
         <QuestionsSidebar />
         <AddQuestionForm categories={categories} />
       </section>

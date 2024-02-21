@@ -8,11 +8,11 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export default function profile({ questions }) {
   return (
     <div className={jakarta.className}>
-      <section className="flex max-w">
+      <section className="flex flex-col-reverse scr800:flex-row max-w">
         <article className="grow">
           <Questions questions={questions} />
         </article>
-        <article className="shrink-0 w-full max-w-[450px] pb-20 border-x border-slate-300">
+        <article className="shrink-0 w-full scr800:max-w-[450px] mx-auto pb-20 border-x border-slate-300">
           <Info />
         </article>
       </section>
@@ -31,6 +31,16 @@ export async function getServerSideProps(context) {
   const Question = require("@/models/Question");
 
   const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
 
   const user = session?.user;
   const questions = await Question.findAll({ where: { userId: user.id } });

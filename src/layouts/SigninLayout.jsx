@@ -21,7 +21,7 @@ export default function SigninLayout({ children }) {
           </nav>
         </header>
         <section className="flex items-center  mt-[20px]">
-          <article className="hidden scr700:block grow">
+          <article className="hidden scr900:block grow">
             <h1 className="text-[45px] leading-tight font-medium text-black">
               Welcome to <br /> our website
             </h1>
@@ -34,10 +34,10 @@ export default function SigninLayout({ children }) {
               <Image src="/signin.png" alt="Sign in Image" layout="fill" objectPosition="left" objectFit="contain" />
             </div>
           </article>
-          <article className="grow">{children}</article>
+          <article className="grow shrink-0 w-[450px] scr900:min-w-[300px]">{children}</article>
         </section>
       </div>
-      <footer className="flex flex-col-reverse gap-2 scr700:flex-row justify-between items-center mt-2 py-3 px-8 shadow-md bg-[#F9F9F9]">
+      <footer className="flex flex-col-reverse gap-2 scr900:flex-row justify-between items-center mt-2 py-3 px-8 shadow-md bg-[#F9F9F9]">
         <p className="font-medium text-center">&copy; Copy Rights ENET’Com Junior Entreprise </p>
         <ul className="flex gap-4">
           <li>

@@ -7,7 +7,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 export default function index({ question }) {
   return (
     <div className={`${jakarta.className} py-4 px-8`}>
-      <section className="flex gap-20 max-w">
+      <section className="flex gap-14 max-w">
         <QuestionsSidebar />
         <Question question={question} />
       </section>
@@ -25,13 +25,23 @@ import Question from "@/components/questions/Question";
 
 export async function getServerSideProps(context) {
   const Question = require("@/models/Question");
-  const Comment = require("@/models/Comment");
+  const Answer = require("@/models/Answer");
   const User = require("@/models/User");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
-  const user = session?.user;
-  const question = await Question.findByPk(context.params.id, { include: { model: User, attributes: ["id", "username"] } });
+  const question = await Question.findByPk(context.params.id, {
+    include: [
+      { model: User, attributes: ["id", "username", "picture"] },
+      {
+        model: Answer,
+        include: {
+          model: User,
+          attributes: ["id", "username", "picture"],
+        },
+      },
+    ],
+  });
 
   return {
     props: {

@@ -20,6 +20,6 @@ const Question = require("@/models/Question");
 Question.hasMany(Comment, { foreignKey: "questionId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 Comment.belongsTo(Question, { foreignKey: "questionId", onDelete: "CASCADE", onUpdate: "CASCADE" });
 
-Comment.sync({ alter: true });
+// Comment.sync({ alter: true });
 
 module.exports = Comment;

@@ -12,7 +12,7 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider refetchOnWindowFocus={false} session={session}>
       <Head>
         <link rel="icon" href="/favicon.png" />
         <title>Code Warriors</title>

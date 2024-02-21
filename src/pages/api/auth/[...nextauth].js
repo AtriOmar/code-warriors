@@ -4,8 +4,15 @@ import { sequelize } from "@/lib/sequelize";
 import { DataTypes } from "sequelize";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
+import FacebookProvider from "next-auth/providers/facebook";
+import GoogleProvider from "next-auth/providers/google";
+import TwitterProvider from "next-auth/providers/twitter";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import axios from "axios";
+
+const fse = require("fs-extra");
+const uuidv4 = require("uuid").v4;
 
 const User = require("@/models/User");
 
@@ -22,6 +29,26 @@ export const authOptions = {
           email: profile.email,
           image: profile.avatar_url,
         };
+      },
+    }),
+    FacebookProvider({
+      clientId: process.env.FACEBOOK_ID,
+      clientSecret: process.env.FACEBOOK_SECRET,
+    }),
+    TwitterProvider({
+      clientId: process.env.TWITTER_ID,
+      clientSecret: process.env.TWITTER_SECRET,
+      version: "2.0",
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code",
+        },
       },
     }),
     CredentialsProvider({
@@ -69,10 +96,10 @@ export const authOptions = {
             console.log("success from login", user);
 
             // res.send(user);
-            user.method = "credentials";
 
             return user;
           } else {
+            if (user.password === "OAUTH") throw "signed in with oauth";
             // res.status(400).send("incorrect password");
             throw "incorrect password";
           }
@@ -98,27 +125,74 @@ export const authOptions = {
   },
   callbacks: {
     session: ({ session, token }) => {
+      console.log("-------------------- session,token from session  --------------------");
+      console.log(session, token);
+
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.sub,
+          id: token.user.id,
           accessId: token.accessId,
           email: token.email,
           username: token.user.username,
           bio: token.user.bio,
           address: token.user.address,
+          picture: token.user.picture,
         },
       };
     },
   },
   jwt: {
     encode: async ({ secret, token }) => {
-      // Fetch user data from the database using Sequelize
-      const user = await User.findOne({ where: { email: token.email } });
-
-      console.log("-------------------- token --------------------");
+      console.log("-------------------- token from jwt encode --------------------");
       console.log(token);
+
+      if (token?.user?.method !== "credentials") {
+        console.log("-------------------- creating user credentials --------------------");
+
+        const userData = {
+          username: token.name,
+          email: token.email,
+          password: "OAUTH",
+          accessId: 1,
+          active: 2,
+        };
+
+        console.log(userData);
+        var [user, created] = await User.findOrCreate({
+          where: {
+            email: token.email,
+          },
+          defaults: userData,
+        });
+
+        if (created && token.picture) {
+          const response = await axios.get(token.picture, { responseType: "arraybuffer" });
+
+          var newName = uuidv4().replaceAll("-", "").toString() + ".jpg";
+          const newPath = "./public/uploads/profile-pictures/" + newName;
+
+          console.log("-------------------- newPath --------------------");
+          console.log(newPath);
+
+          await fse.writeFile(newPath, Buffer.from(response.data, "binary"));
+
+          await User.update(
+            {
+              picture: newName,
+            },
+            {
+              where: {
+                id: user.id,
+              },
+            }
+          );
+        }
+      } else {
+        // Fetch user data from the database using Sequelize
+        var user = await User.findOne({ where: { email: token.email } });
+      }
 
       // Include additional user data in the token
       const payload = {
@@ -137,6 +211,9 @@ export const authOptions = {
       // Decode the token using your custom decode function
       const decodedToken = jwt.verify(token, secret);
 
+      console.log("-------------------- decoded token --------------------");
+      console.log(decodedToken);
+
       // Fetch user data from the database using Sequelize
       const user = await User.findOne({ where: { id: decodedToken.userId } });
 
@@ -146,6 +223,7 @@ export const authOptions = {
         user: {
           ...decodedToken.user,
           ...user.toJSON(),
+          method: "credentials",
           // Include any other user data you want in the session object
         },
       };

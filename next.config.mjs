@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
@@ -14,4 +15,16 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// export default nextConfig;
+
+import removeImports from "next-remove-imports";
+export default removeImports()({
+  ...nextConfig,
+  webpack: function (config) {
+    config.module.rules.push({
+      test: /\.md$/,
+      use: "raw-loader",
+    });
+    return config;
+  },
+});

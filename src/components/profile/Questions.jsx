@@ -6,8 +6,9 @@ export default function Questions({ questions }) {
     <div className="flex flex-col gap-2 px-8 pt-10 pb-20">
       <h2 className="font-bold text-slate-900 text-2xl">Questions</h2>
       {questions.map((question) => (
-        <Question question={question} />
+        <Question key={question.id} question={question} />
       ))}
+      {!questions?.length ? <p className="mt-4 text-slate-400 text-lg">You have not asked any question</p> : ""}
     </div>
   );
 }

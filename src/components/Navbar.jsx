@@ -17,8 +17,8 @@ export default function Navbar() {
   return (
     <div className="z-50 fixed top-0 h-[60px] w-full px-4 bg-white border-b-2 border-slate-300">
       <nav className="flex items-center justify-between max-w-[1300px] h-full mx-auto">
-        <Link href="/">
-          <Image src="/logo.png" alt="logo" height={40} width={100} />
+        <Link href="/" className="relative w-[100px] h-full">
+          <Image src="/logo.png" alt="logo" fill className="object-contain" />
         </Link>
         <ul className="hidden scr800:flex gap-12 items-center">
           <li className={`font-bold hover:text-purple-800 duration-300 ${pathname === "/" ? "text-purple-600" : "text-slate-700"}`}>
@@ -57,7 +57,7 @@ export default function Navbar() {
           </li>
           <li
             className={`hidden min-[1050px]:block font-bold hover:text-purple-800 duration-300 ${
-              pathname === "/questions" ? "text-purple-600" : "text-slate-700"
+              pathname.startsWith("/questions") ? "text-purple-600" : "text-slate-700"
             }`}
           >
             <Link href="/questions">Questions</Link>
@@ -106,7 +106,13 @@ export default function Navbar() {
           </div>
         ) : (
           <Link href="/profile" className="flex gap-2 items-center">
-            <FontAwesomeIcon icon={faCircleUser} className="text-3xl text-slate-500" />
+            {user.picture ? (
+              <div className="relative w-10 aspect-square rounded-full overflow-hidden">
+                <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
+              </div>
+            ) : (
+              <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
+            )}
             <p className="font-medium capitalize">{user.username}</p>
           </Link>
         )}

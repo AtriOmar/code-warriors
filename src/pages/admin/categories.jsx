@@ -3,10 +3,12 @@ import AdminLayout from "@/layouts/AdminLayout";
 import { faPlus, faSort } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
+import { getServerSession } from "next-auth";
 import React, { useEffect, useState } from "react";
+import { authOptions } from "../api/auth/[...nextauth]";
 
-export default function categories() {
-  const [categories, setCategories] = useState([]);
+export default function categories({ categories: ssrCategories }) {
+  const [categories, setCategories] = useState(ssrCategories);
 
   async function fetchCategories() {
     try {
@@ -34,3 +36,32 @@ export default function categories() {
 categories.getLayout = function getLayout(page) {
   return <AdminLayout>{page}</AdminLayout>;
 };
+
+export async function getServerSideProps(context) {
+  var db = require("@/lib/sequelize"),
+    sequelize = db.sequelize,
+    Sequelize = db.Sequelize;
+  const Category = require("@/models/Category");
+  const User = require("@/models/User");
+
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  if (!(session?.user?.accessId > 1)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
+
+  const categories = await Category.findAll();
+
+  return {
+    props: {
+      session: JSON.parse(JSON.stringify(session)),
+      categories: JSON.parse(JSON.stringify(categories)),
+    },
+  };
+}

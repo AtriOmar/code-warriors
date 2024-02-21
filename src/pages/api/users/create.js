@@ -19,6 +19,7 @@ export default async function handler(req, res) {
     password: hash,
     accessId: 1,
     active: 2,
+    picture: "avatar-" + Math.floor(Math.random() * 23 + 1) + ".png",
   };
 
   console.log(userData);

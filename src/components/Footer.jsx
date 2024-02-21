@@ -1,131 +1,42 @@
+import Image from "next/image";
 import React from "react";
-// import "./footer.css";
 
-const quickLinks01 = [
-  {
-    path: "#",
-    display: "Developpement web ",
-  },
-  {
-    path: "#",
-    display: "Developpement mobile",
-  },
-  {
-    path: "#",
-    display: "Intelligence artificielle",
-  },
-  {
-    path: "#",
-    display: "Cybercecurity",
-  },
-  {
-    path: "#",
-    display: "Data",
-  },
-];
-
-const quickLinks02 = [
-  {
-    path: "#",
-    display: "Stackoverflow",
-  },
-  {
-    path: "#",
-    display: "Udemy",
-  },
-  {
-    path: "#",
-    display: "Coursera",
-  },
-  {
-    path: "#",
-    display: "Paragraph 3 Semi bold",
-  },
-  {
-    path: "#",
-    display: "Paragraph 3 Semi bold",
-  },
-];
-
-const quickLinks03 = [
-  {
-    icon: "ri-home-line",
-    display: "Zeramadine monastir",
-  },
-  {
-    icon: "ri-mail-line",
-    display: "Mehrezhoussem@gmail.com",
-  },
-  {
-    icon: "ri-phone-fill",
-    display: "+216 26 868 733",
-  },
-];
-
-const Footer = () => {
-  const year = new Date().getFullYear;
+export default function Footer() {
   return (
-    <footer className="footer bg-purple-700 py-16">
-      <div className="container">
-        <div className="footer__wrapper flex justify-between gap-10">
-          <div className="footer__logo w-1/5">
-            <div className="logo h-full w-full">
-              <img src="/logo.png" alt="" />
-            </div>
-          </div>
-          <div className="footer__quick-links w-3/10">
-            <div className="quick__links-title text-2xl font-bold mb-10">Categories</div>
-            <ul className="quick__links">
-              {quickLinks01.map((item, index) => (
-                <li className="quick__links-item flex items-center mb-10" key={index}>
-                  <a href={item.path} className="text-sm font-light transition-colors duration-200 hover:text-white">
-                    {item.display}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="footer__quick-links w-3/10">
-            <div className="quick__links-title text-2xl font-bold mb-10">Ressources</div>
-            <ul className="quick__links">
-              {quickLinks02.map((item, index) => (
-                <li className="quick__links-item flex items-center mb-10" key={index}>
-                  <a href={item.path} className="text-sm font-light transition-colors duration-200 hover:text-white">
-                    {item.display}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="footer__quick-links w-3/10">
-            <div className="quick__links-title text-2xl font-bold mb-10">Contact</div>
-            <ul className="quick__links">
-              {quickLinks03.map((item, index) => (
-                <li className="quick__links-item flex items-center mb-10" key={index}>
-                  <i className={item.icon} style={{ fontSize: "1.5rem" }}></i>
-                  <p className="text-base">{item.display}</p>
-                </li>
-              ))}
-            </ul>
-            <div className="social flex items-center gap-4">
-              <div className="social_item w-8 h-8">
-                <a href=""></a>
-              </div>
-              <div className="social_item w-8 h-8">
-                <a href=""></a>
-              </div>
-              <div className="social_item w-8 h-8">
-                <a href=""></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p className="copyright text-sm">Copy Rights ENET’Com Junior Entreprise</p>
+    <div className="py-8 px-8 gap-6 items-center bg-purple grid grid-cols-2 scr1000:grid-cols-4">
+      <div className="relative mx-6 max-w-[250px] aspect-square">
+        <Image src="/logo_white.png" alt="logo" fill className="object-contain" />
       </div>
-    </footer>
+      <div>
+        <p className="font-bold text-xl">Categories</p>
+        <ul className="mt-4 flex flex-col gap-2 font-medium">
+          <li>Web development</li>
+          <li>Mobile development</li>
+          <li>Artificial Intelligence</li>
+          <li>Cyber Security</li>
+          <li>Data</li>
+        </ul>
+      </div>
+      <div>
+        <p className="font-bold text-xl">Resources</p>
+        <ul className="mt-4 flex flex-col gap-2 font-medium">
+          <li>StackOverflow</li>
+          <li>Udmey</li>
+          <li>Coursera</li>
+          <li>Coursera</li>
+          <li>Coursera</li>
+        </ul>
+      </div>
+      <div>
+        <p className="font-bold text-xl">Contact</p>
+        <ul className="mt-4 flex flex-col gap-2 font-medium">
+          <li>Home</li>
+          <li>Services</li>
+          <li>About</li>
+          <li>Team</li>
+          <li>Contact</li>
+        </ul>
+      </div>
+    </div>
   );
-};
-
-export default Footer;
+}

@@ -16,7 +16,7 @@ const Tag = sequelize.define(
   }
 );
 
-Tag.sync({ alter: true });
+// Tag.sync({ alter: true });
 
 // Category.update(
 //   {

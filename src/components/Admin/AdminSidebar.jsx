@@ -15,7 +15,9 @@ export default function AdminSidebar() {
           <li key={index}>
             <Link
               href={item.path || "/"}
-              className={`relative grid grid-cols-[20px_1fr] gap-3 items-center px-6 ${pathname === item.path ? "text-purple" : "text-slate-500"}`}
+              className={`relative grid grid-cols-[20px_1fr] gap-3 items-center px-6 ${
+                (item.strict && pathname === item.path) || (!item.strict && pathname.startsWith(item.path)) ? "text-purple" : "text-slate-500"
+              }`}
             >
               <div
                 className={`absolute top-1/2 -translate-y-1/2 left-0 w-1.5 h-[150%] rounded-r-3xl bg-purple ${
@@ -37,6 +39,7 @@ const items = [
     name: "Dashboard",
     Icon: <FontAwesomeIcon icon={faHome} className="" />,
     path: "/admin",
+    strict: true,
   },
   {
     name: "Categories",

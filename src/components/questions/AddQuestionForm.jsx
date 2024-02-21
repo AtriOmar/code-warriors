@@ -1,6 +1,4 @@
 import dynamic from "next/dynamic";
-// const Editor = dynamic(() => import("draft-js").then((mod) => mod.Editor), { ssr: false });
-// const EditorState = dynamic(() => import("draft-js").then((mod) => mod.EditorState), { ssr: false });
 import { useRef, useState } from "react";
 
 import { EditorState, convertToRaw } from "draft-js";
@@ -14,6 +12,7 @@ import { useSession } from "next-auth/react";
 import CategorySelect from "./CategorySelect";
 import axios from "axios";
 import { RingLoader } from "../Loading";
+import { useRouter } from "next/router";
 
 export default function AddQuestionForm({ categories = [] }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -26,6 +25,7 @@ export default function AddQuestionForm({ categories = [] }) {
     category: { value: categories[0]?.id, label: categories[0]?.name },
   });
   const [sending, setSending] = useState(false);
+  const router = useRouter();
 
   const categoriesOptions = categories.map((category) => ({ value: category.id, label: category.name }));
 
@@ -59,6 +59,7 @@ export default function AddQuestionForm({ categories = [] }) {
       const res = await axios.post("/api/questions/create", data);
 
       console.log(res.data);
+      router.push(`/questions/${res.data.id}`);
     } catch (err) {
       console.log(err);
     }
@@ -89,19 +90,13 @@ export default function AddQuestionForm({ categories = [] }) {
           editorState={editorState}
           onEditorStateChange={onEditorStateChange}
           toolbar={{
-            options: ["inline", "blockType", "fontSize", "list", "textAlign"],
+            options: ["colorPicker", "inline", "fontSize", "list", "textAlign", "link", "emoji", "image"],
             inline: { inDropdown: false },
             list: { inDropdown: false },
             textAlign: { inDropdown: false },
             link: { inDropdown: false },
           }}
         />
-        {/* <button
-          onClick={onSave}
-          className="block mt-10 ml-auto px-2 py-1 rounded-lg bg-purple hover:bg-purple-700 text-white font-bold cursor-pointer duration-300"
-          >
-          Save
-        </button> */}
       </div>
       <h1 className="mt-8 font-bold">Mention tags</h1>
       <input type="text" className="w-full mt-3 px-4 py-2 rounded-md border border-slate-300 outline-purple" placeholder="tags..." />

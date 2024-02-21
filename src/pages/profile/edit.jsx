@@ -9,26 +9,68 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
+import { faCircleUser, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { v4 as uuidv4 } from "uuid";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
-export default function edit() {
-  const { data: session, status } = useSession();
+export default function edit({ directory }) {
+  const { data: session, status, update } = useSession();
+  const { user } = session || {};
   const [input, setInput] = useState({
-    username: session?.user?.username || "",
-    bio: session?.user?.bio || "",
-    address: session?.user?.address || "",
+    username: user?.username || "",
+    bio: user?.bio || "",
+    address: user?.address || "",
+    picture: user?.picture || null,
   });
   const [error, setError] = useState("");
-  const [sending, setSending] = useState(false);
+  const [sending, setSending] = useState({ picture: false, info: false });
+  const [progress, setProgress] = useState(-1);
 
-  console.log(session);
+  useEffect(() => {
+    if (user.picture !== input.picture) {
+      setInput((prev) => ({ ...prev, picture: user.picture }));
+    }
+  }, [session]);
+
+  const config = {
+    onUploadProgress: (e) => {
+      const prog = Math.round((e.loaded * 100) / e.total);
+      setProgress(prog);
+    },
+  };
+
+  async function updatePicture() {
+    const formData = new FormData();
+
+    formData.append("picture", input.picture);
+
+    setSending((prev) => ({ ...prev, picture: true }));
+    try {
+      const res = await axios.post("/api/users/updatePicture", formData, config);
+
+      update();
+    } catch (err) {}
+    setSending((prev) => ({ ...prev, picture: false }));
+    setProgress(-1);
+  }
+
+  function resetPicture() {
+    setInput((prev) => ({ ...prev, picture: user?.picture }));
+  }
+
+  async function handlePictureChange(e) {
+    const file = e.target.files[0];
+    if (file?.type?.startsWith("image")) {
+      file.id = uuidv4().toString();
+      setInput((prev) => ({ ...prev, picture: file }));
+    }
+  }
 
   async function updateUser() {
-    if (sending) return;
+    if (sending.info) return;
 
-    setSending(true);
+    setSending((prev) => ({ ...prev, info: true }));
     try {
       const res = await axios.put("/api/users/update", {
         id: session?.user?.id,
@@ -37,73 +79,123 @@ export default function edit() {
         address: input.address,
       });
 
-      console.log(res.data);
+      update();
     } catch (err) {
       console.log(err);
     }
-    setSending(false);
+    setSending((prev) => ({ ...prev, info: false }));
   }
 
-  if (status === "loading")
-    return (
-      <div className="fixed inset-0 grid place-items-center">
-        <RingLoader />
-      </div>
-    );
+  // if (status === "loading")
+  //   return (
+  //     <div className="fixed inset-0 grid place-items-center">
+  //       <RingLoader />
+  //     </div>
+  //   );
 
   return (
     <div className={`${jakarta.className} py-4 px-8`}>
       <div className="max-w">
         <div className="relative w-full max-w-[250px] mx-auto">
-          <div className="relative rounded-full overflow-hidden aspect-square">
-            <Image
-              src="https://scontent.fnbe1-2.fna.fbcdn.net/v/t39.30808-6/425380187_906806031445898_6385821556288285441_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=d8d9c5&_nc_ohc=TJiyZoq2ZvEAX-hD6xg&_nc_ht=scontent.fnbe1-2.fna&oh=00_AfBBxLICakoHmRu8dHabaSMdWoDIKOwLr8I5AeWpgCzNow&oe=65D5001C"
-              layout="fill"
-              objectFit="cover"
-              alt="Profile Image"
-            />
-          </div>
-          <div className="absolute right-3 bottom-3 flex items-center justify-center w-9 h-9 bg-purple rounded-full">
+          {input.picture ? (
+            <div className="relative aspect-square">
+              <button
+                type="button"
+                className="z-10 absolute -right-2 -top-2"
+                onClick={() => {
+                  setInput((prev) => ({ ...prev, picture: null }));
+                }}
+              >
+                <i className="flex h-6 w-6 items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
+                  <FontAwesomeIcon icon={faXmark} className="text-white" size="lg" />
+                </i>
+              </button>
+              <div className="relative overflow-hidden w-full aspect-square border border-slate-300 rounded-[50%] overflow-hidden">
+                <Image
+                  // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
+                  src={typeof input.picture === "string" ? `/api/photo?path=/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
+                  fill
+                  alt="Profile Image"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          ) : (
+            <FontAwesomeIcon icon={faCircleUser} className="text-[250px] text-slate-500" />
+          )}
+          <label className="absolute right-3 bottom-3 flex items-center justify-center w-9 h-9 bg-purple hover:bg-purple-700 rounded-full duration-200 cursor-pointer">
+            <input type="file" hidden onChange={handlePictureChange} />
             <FontAwesomeIcon icon={faPen} className="text-white text-lg" />
-          </div>
+          </label>
         </div>
-        <section className="flex flex-col gap-4 max-w-[800px] mt-8 mx-auto">
+        <div className={`${input.picture !== user.picture ? "flex" : "hidden"} gap-2 mx-auto relative w-fit mt-2`}>
+          <button
+            className="px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+            onClick={updatePicture}
+          >
+            Save
+          </button>
+          <button
+            className="px-8 py-2 rounded-md bg-red-500 hover:bg-red-600 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+            onClick={resetPicture}
+          >
+            Cancel
+          </button>
+          {sending.picture ? (
+            <i className="absolute -right-8 top-1/2 -translate-y-1/2">
+              <RingLoader color="black" />
+            </i>
+          ) : (
+            ""
+          )}
+        </div>
+        {progress > -1 && (
+          <div className="relative w-full mx-auto max-w-[250px] rounded-full border border-green-500 overflow-hidden mt-2">
+            <div className="bg-green-500 h-8" style={{ width: progress + "%" }}></div>
+            <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">{progress}%</p>
+          </div>
+        )}
+        <section className="flex flex-col max-w-[800px] mt-8 mx-auto">
+          <h1 className="mt-2 font-bold">Username</h1>
           <input
             type="text"
             placeholder="Username"
             value={input.username}
             onChange={(e) => setInput({ ...input, username: e.target.value })}
-            className="w-full py-2 border-b border-slate-300 font-bold focus:border-slate-900 outline-none duration-200"
+            className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple"
           />
+          <h1 className="mt-2 font-bold">Bio</h1>
           <input
             type="text"
             placeholder="Bio"
             value={input.bio}
             onChange={(e) => setInput({ ...input, bio: e.target.value })}
-            className="w-full py-2 border-b border-slate-300 font-bold resize-none focus:border-slate-900 outline-none duration-200"
+            className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple"
           />
+          <h1 className="mt-2 font-bold">Address</h1>
           <input
             type="text"
             placeholder="Address"
             value={input.address}
             onChange={(e) => setInput({ ...input, address: e.target.value })}
-            className="w-full py-2 border-b border-slate-300 font-bold resize-none focus:border-slate-900 outline-none duration-200"
+            className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple"
           />
-          <div className="flex gap-3 ml-auto mt-8">
+          <div className="flex flex-col scr600:flex-row gap-3 scr600:ml-auto mt-8">
             <Link
               href="/profile"
-              className="block px-8 py-2 rounded-md bg-white hover:bg-slate-100 text-purple text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+              className="block px-8 py-2 rounded-md bg-white hover:bg-slate-100 text-purple text-sm text-center shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
             >
               Back to profile
             </Link>
             <div className="relative">
               <button
                 onClick={updateUser}
-                className="px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+                className="w-full px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm  shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
               >
                 Save changes
               </button>
-              {sending ? (
+              {sending.info ? (
                 <i className="absolute right-1.5 top-1/2 -translate-y-1/2">
                   <RingLoader color="white" />
                 </i>
@@ -125,9 +217,19 @@ edit.getLayout = function getLayout(page) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
 
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
+      directory: process.cwd(),
     },
   };
 }

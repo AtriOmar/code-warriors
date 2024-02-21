@@ -26,7 +26,7 @@ const User = sequelize.define(
   }
 );
 
-User.sync({ alter: true });
+// User.sync({ alter: true });
 
 // SubCategory.update({ categoryId: 5 }, { where: { id: { [Op.between]: [109, 115] } } });
 
