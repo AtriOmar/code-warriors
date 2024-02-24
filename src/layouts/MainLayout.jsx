@@ -15,6 +15,15 @@ export default function MainLayout({ children }) {
       {/* </main> */}
       {/* <Footer /> */}
       <ToastContainer position="bottom-right" autoClose={1000} hideProgressBar={true} theme="colored" />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={true}
+        containerId="top-right"
+        toastClassName={() =>
+          "!top-[80px] relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer shadow-[1px_1px_5px_rgb(0,0,0,.3)] bg-white"
+        }
+      />
     </div>
   );
 }

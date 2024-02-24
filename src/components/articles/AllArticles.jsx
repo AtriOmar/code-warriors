@@ -7,21 +7,21 @@ import Link from "next/link";
 export default function AllArticles({ articles }) {
   return (
     <article className="mt-10 mb-20">
-      <div className="flex pl-4 pr-8 py-4 mb-10 rounded-full bg-slate-100">
-        <input type="text" placeholder="What are you looking for ?" className="grow outline-none bg-transparent" />
+      <h1 className="font-bold text-xl">Articles</h1>
+      <div className="flex max-w-[800px] mx-auto pl-4 pr-8 py-4 mt-4 rounded-full bg-slate-100">
+        <input type="text" placeholder="Do you have an article in mind ?" className="grow outline-none bg-transparent" />
         <FontAwesomeIcon icon={faSearch} className="text-2xl text-slate-500" />
       </div>
-      <h1 className="font-bold text-xl">Articles</h1>
       <div className="mt-6 grid grid-cols-2 scr900:grid-cols-3 scr1200:grid-cols-4 gap-4">
         {articles?.map((article) => {
-          return <QuestionCard article={article} key={article.id} />;
+          return <ArticleCard article={article} key={article.id} />;
         })}
       </div>
     </article>
   );
 }
 
-function QuestionCard({ article }) {
+function ArticleCard({ article }) {
   return (
     <Link
       href={`/articles/${article.id}`}

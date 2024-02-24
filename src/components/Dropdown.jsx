@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
-function Dropdown({ children, items, renderItem = (item) => item.label, position = "left" }) {
+function Dropdown({ children, items = [], renderItem = (item) => item.label, position = "left" }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 

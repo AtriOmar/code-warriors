@@ -29,7 +29,7 @@ function Answer({ answer }) {
 
   return (
     <div className="mt-10 px-4 border-b border-purple-400">
-      <Link href="/profile" className="flex gap-2 items-center w-fit">
+      <Link href={"/profile/" + author.id} className="flex gap-2 items-center w-fit">
         {author.picture ? (
           <div className="relative w-8 aspect-square rounded-full overflow-hidden">
             <Image src={`/api/photo?path=/uploads/profile-pictures/${author.picture}`} fill alt="Profile Image" className="object-cover" priority />

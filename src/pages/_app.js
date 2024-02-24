@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import Head from "next/head";
+import ChatProvider from "@/contexts/ChatProvider";
 config.autoAddCss = false;
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
@@ -17,7 +18,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <link rel="icon" href="/favicon.png" />
         <title>Code Warriors</title>
       </Head>
-      <MainLayout>{getLayout(<Component {...pageProps} />)}</MainLayout>
+      <ChatProvider>
+        <MainLayout>{getLayout(<Component {...pageProps} />, pageProps)}</MainLayout>
+      </ChatProvider>
     </SessionProvider>
   );
 }

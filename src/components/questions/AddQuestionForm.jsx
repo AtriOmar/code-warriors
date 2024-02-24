@@ -13,6 +13,7 @@ import CategorySelect from "./CategorySelect";
 import axios from "axios";
 import { RingLoader } from "../Loading";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function AddQuestionForm({ categories = [] }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -69,9 +70,15 @@ export default function AddQuestionForm({ categories = [] }) {
   return (
     <article className="mt-10">
       <h1 className="font-bold text-xl">Ask a question</h1>
-      <div href="/profile" className="flex gap-2 items-center mt-8">
-        <FontAwesomeIcon icon={faCircleUser} className="text-3xl text-slate-500" />
-        <p className="font-medium capitalize">{user.username}</p>
+      <div href="/profile" className="flex gap-2 items-center mt-1">
+        {user.picture ? (
+          <div className="relative w-8 aspect-square rounded-full overflow-hidden">
+            <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
+          </div>
+        ) : (
+          <FontAwesomeIcon icon={faCircleUser} className="text-3xl text-slate-500" />
+        )}
+        <p className="font-medium capitalize">{user?.username}</p>
       </div>
       <h1 className="mt-4 font-bold">Title</h1>
       <input

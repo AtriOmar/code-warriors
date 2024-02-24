@@ -43,8 +43,6 @@ export async function getServerSideProps(context) {
     include: [{ model: User, attributes: ["id", "username", "picture"] }],
   });
 
-  console.log(questions[1]?.toJSON());
-
   console.log("-------------------- questions --------------------");
   console.log(questions);
 

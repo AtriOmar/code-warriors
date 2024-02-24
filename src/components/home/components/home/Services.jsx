@@ -45,7 +45,7 @@ const Services = () => {
           {serviceData.map((item, index) => (
             <div className="bg-white p-10  text-center border-1 border-black mx-auto w-80 md:w-31 lg:w-90 md:mb-8 lg:mb-0 sm:w-full" key={index}>
               <span className="relative w-20 h-20 p-1 flex items-center justify-center mx-auto rounded-full bg-blue-200 mb-8 border border-blue-600">
-                <Image fill src={item.icon} className="h-full w-full p-2" />
+                <Image fill src={item.icon} alt="" className="h-full w-full p-2" />
               </span>
               <h3 className="text-lg mb-8">{item.title}</h3>
               <p className="description">{item.desc}</p>

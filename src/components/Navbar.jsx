@@ -1,18 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import dynamic from "next/dynamic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronDown, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "@/components/Dropdown";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function Navbar() {
   const { data: session } = useSession();
   const { user } = session || {};
   const router = useRouter();
   const pathname = router.pathname;
+  const [categories, setCategories] = React.useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("/api/categories/getAll", { params: { type: "practices" } });
+        setCategories(res.data?.map((category) => ({ label: category.name, path: `/categories/${category.id}` })) || []);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
     <div className="z-50 fixed top-0 h-[60px] w-full px-4 bg-white border-b-2 border-slate-300">
@@ -105,32 +119,43 @@ export default function Navbar() {
             </Link>
           </div>
         ) : (
-          <Link href="/profile" className="flex gap-2 items-center">
-            {user.picture ? (
-              <div className="relative w-10 aspect-square rounded-full overflow-hidden">
-                <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
-              </div>
-            ) : (
-              <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
+          <Dropdown
+            items={userLinks}
+            position="right"
+            renderItem={(item) => (
+              <Link href={item.path || ""} className={`${item.className} block py-1 px-3 rounded font-normal hover:bg-slate-100 transition duration-300`}>
+                {item.label}
+              </Link>
             )}
-            <p className="font-medium capitalize">{user.username}</p>
-          </Link>
+          >
+            <div className="flex gap-2 items-center">
+              {user.picture ? (
+                <div className="relative w-10 aspect-square rounded-full overflow-hidden">
+                  <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
+                </div>
+              ) : (
+                <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
+              )}
+              <p className="font-medium capitalize">{user.username}</p>
+              <FontAwesomeIcon icon={faChevronDown} className="text-sm" />
+            </div>
+          </Dropdown>
         )}
       </nav>
     </div>
   );
 }
 
-const categories = [
-  { key: 1, label: "Cyber Panel" },
-  { key: 2, label: "HTML" },
-  { key: 3, label: "Javascript" },
-];
-
 const links = [
   { label: "Contact Us", className: "block scr1200:hidden" },
   { label: "FAQ", className: "block scr1100:hidden" },
-  { label: "Question", className: "block min-[1050px]:hidden" },
+  { label: "Question", className: "block min-[1050px]:hidden", path: "/questions" },
   { label: "Tips", className: "block scr900:hidden" },
   { label: "Articles", className: "block min-[850px]:hidden" },
+];
+
+const userLinks = [
+  { label: "Profile", path: "/profile" },
+  { label: "Friends", path: "/friends" },
+  { label: "Sign Out", path: "/api/logout" },
 ];

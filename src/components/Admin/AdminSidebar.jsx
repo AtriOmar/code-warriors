@@ -11,8 +11,8 @@ export default function AdminSidebar() {
   return (
     <div className="fixed bottom-0 top-[60px] left-0 w-[200px] py-10 border-r-2 border-slate-300">
       <ul className="flex flex-col gap-4 ">
-        {items.map((item, index) => (
-          <li key={index}>
+        {items.map((item) => (
+          <li key={item.name}>
             <Link
               href={item.path || "/"}
               className={`relative grid grid-cols-[20px_1fr] gap-3 items-center px-6 ${

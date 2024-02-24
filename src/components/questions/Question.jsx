@@ -35,7 +35,7 @@ export default function Question({ question }) {
       <div className="px-8 py-6 rounded-xl bg-slate-100">
         <div className="flex items-center justify-between">
           <p className="text-xs text-slate-700">Posted on {formatDate(new Date(question.createdAt), "date")}</p>
-          <Link href="/profile" className="flex gap-2 items-center">
+          <Link href={"/profile/" + author.id} className="flex gap-2 items-center">
             {author.picture ? (
               <div className="relative w-8 aspect-square rounded-full overflow-hidden">
                 <Image src={`/api/photo?path=/uploads/profile-pictures/${author.picture}`} fill alt="Profile Image" className="object-cover" priority />

@@ -9,17 +9,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Articles from "@/components/Admin/articles/Articles";
 import Link from "next/link";
-import SendEmailForm from "@/components/Admin/newsletter/SendEmailForm";
+import AddTip from "@/components/Admin/tips/AddTip";
 
-export default function newsletter({ subs }) {
+export default function index({ categories }) {
   return (
-    <div className=" px-8 scr1100:px-20 pt-12 pb-20">
-      <SendEmailForm />
+    <div className="max-w-[1100px] px-8 scr1100:px-20 pt-12 pb-20">
+      <AddTip categories={categories} />
     </div>
   );
 }
 
-newsletter.getLayout = function getLayout(page) {
+index.getLayout = function getLayout(page) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 
@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
   var db = require("@/lib/sequelize"),
     sequelize = db.sequelize,
     Sequelize = db.Sequelize;
-  const Subscription = require("@/models/Subscription");
+  const Category = require("@/models/Category");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -41,17 +41,16 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const subs = await Subscription.findAll({
+  const categories = await Category.findAll({
     where: {
-      active: true,
+      type: "practices",
     },
-    limit: 20,
   });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
-      subs: JSON.parse(JSON.stringify(subs)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }
