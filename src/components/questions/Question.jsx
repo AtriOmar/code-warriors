@@ -34,7 +34,12 @@ export default function Question({ question }) {
     <article className="mt-10 grow">
       <div className="px-8 py-6 rounded-xl bg-slate-100">
         <div className="flex items-center justify-between">
-          <p className="text-xs text-slate-700">Posted on {formatDate(new Date(question.createdAt), "date")}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-slate-700">Posted on {formatDate(new Date(question.createdAt), "date")}</p>
+            <p className="w-fit px-3 py-1 rounded-full bg-purple hover:bg-purple-700 text-white text-xs  shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300">
+              {question.Category.name}
+            </p>
+          </div>
           <Link href={"/profile/" + author.id} className="flex gap-2 items-center">
             {author.picture ? (
               <div className="relative w-8 aspect-square rounded-full overflow-hidden">

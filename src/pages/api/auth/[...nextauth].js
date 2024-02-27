@@ -21,15 +21,6 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-
-      profile: (profile) => {
-        return {
-          id: profile.id.toString(),
-          name: profile.name ?? profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-        };
-      },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID,
@@ -139,6 +130,7 @@ export const authOptions = {
           bio: token.user.bio,
           address: token.user.address,
           picture: token.user.picture,
+          cover: token.user.cover,
         },
       };
     },

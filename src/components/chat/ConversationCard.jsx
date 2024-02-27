@@ -34,7 +34,7 @@ export default function ConversationCard({ conversation }) {
         id === otherUser?.id + "" ? "bg-slate-200" : ""
       } relative block grow max-w-[400px] py-2 px-3 rounded-lg hover:bg-slate-300 hover:shadow-card2 duration-300`}
     >
-      <p className={`absolute top-1 right-2 font-bold text-xs ${conversation.seen === "both" || conversation.seen === user.id + "" ? "hidden" : ""}`}>Nouv</p>
+      <p className={`absolute top-1 right-2 font-bold text-xs ${conversation.seen === "both" || conversation.seen === user.id + "" ? "hidden" : ""}`}>New</p>
       <div className="flex items-center gap-3">
         {otherUser?.picture ? (
           <div className="shrink-0 relative w-[40px] aspect-square rounded-[50%] border bg-white overflow-hidden">

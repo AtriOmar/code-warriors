@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function TipsCategories({ categories }) {
   return (
-    <div className="flex items-center justify-center gap-3 mt-4">
+    <div className="flex items-center justify-center flex-wrap gap-3 mt-4">
       {categories.map((category) => (
         <Link
           key={category.id}

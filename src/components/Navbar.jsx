@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faChevronDown, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import Dropdown from "@/components/Dropdown";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { useChatContext } from "@/contexts/ChatProvider";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -15,6 +16,11 @@ export default function Navbar() {
   const router = useRouter();
   const pathname = router.pathname;
   const [categories, setCategories] = React.useState([]);
+  const { conversations } = useChatContext();
+  const unread = useMemo(
+    () => conversations?.reduce((total, conv) => (conv.seen === "both" || conv?.seen === user.id + "" ? total : total + 1), 0),
+    [conversations]
+  );
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -32,7 +38,7 @@ export default function Navbar() {
     <div className="z-50 fixed top-0 h-[60px] w-full px-4 bg-white border-b-2 border-slate-300">
       <nav className="flex items-center justify-between max-w-[1300px] h-full mx-auto">
         <Link href="/" className="relative w-[100px] h-full">
-          <Image src="/logo.png" alt="logo" fill className="object-contain" />
+          <Image src="/logo.png" alt="logo" fill className="object-contain" sizes="100px" />
         </Link>
         <ul className="hidden scr800:flex gap-12 items-center">
           <li className={`font-bold hover:text-purple-800 duration-300 ${pathname === "/" ? "text-purple-600" : "text-slate-700"}`}>
@@ -122,23 +128,48 @@ export default function Navbar() {
           <Dropdown
             items={userLinks}
             position="right"
-            renderItem={(item) => (
-              <Link href={item.path || ""} className={`${item.className} block py-1 px-3 rounded font-normal hover:bg-slate-100 transition duration-300`}>
-                {item.label}
-              </Link>
-            )}
-          >
-            <div className="flex gap-2 items-center">
-              {user.picture ? (
-                <div className="relative w-10 aspect-square rounded-full overflow-hidden">
-                  <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />
-                </div>
+            renderItem={(item) =>
+              item.action ? (
+                <button
+                  onClick={item.action}
+                  className={`${item.className} block w-full py-1 px-3 rounded font-normal text-left hover:bg-slate-100 transition duration-300`}
+                >
+                  {item.label}
+                </button>
               ) : (
-                <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
-              )}
-              <p className="font-medium capitalize">{user.username}</p>
-              <FontAwesomeIcon icon={faChevronDown} className="text-sm" />
-            </div>
+                <Link href={item.path || ""} className={`${item.className} block py-1 px-3 rounded font-normal hover:bg-slate-100 transition duration-300`}>
+                  {item.label}
+                </Link>
+              )
+            }
+          >
+            {(isOpen) => (
+              <div className="relative flex gap-2 items-center">
+                {user.picture ? (
+                  <div className="relative w-10 aspect-square rounded-full overflow-hidden">
+                    <Image
+                      src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`}
+                      fill
+                      alt="Profile Image"
+                      className="object-cover"
+                      priority
+                      sizes="40px"
+                    />
+                  </div>
+                ) : (
+                  <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
+                )}
+                <p className="font-medium capitalize">{user.username}</p>
+                <FontAwesomeIcon icon={faChevronDown} className={`${isOpen ? "rotate-180" : ""} duration-300 text-sm`} />
+                {unread ? (
+                  <span className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 grid place-items-center w-4 h-4 rounded-[50%] bg-red-500 text-white text-xs ">
+                    {unread}
+                  </span>
+                ) : (
+                  ""
+                )}
+              </div>
+            )}
           </Dropdown>
         )}
       </nav>
@@ -156,6 +187,6 @@ const links = [
 
 const userLinks = [
   { label: "Profile", path: "/profile" },
-  { label: "Friends", path: "/friends" },
-  { label: "Sign Out", path: "/api/logout" },
+  { label: "Conversations", path: "/chat" },
+  { label: "Sign Out", action: () => signOut() },
 ];

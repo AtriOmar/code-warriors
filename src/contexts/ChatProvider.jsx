@@ -4,12 +4,15 @@ import { socket } from "@/lib/socket";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
 const ChatContext = React.createContext();
 
 function playNotification() {
-  // const audio = new Audio("/notification.mp3");
-  // audio.play();
+  const audio = new Audio("/notification.mp3");
+  audio.play();
 }
 
 function ChatProvider({ children }) {
@@ -17,6 +20,7 @@ function ChatProvider({ children }) {
   const { user } = session || {};
 
   const [conversations, setConversations] = useState([]);
+  const [chatSettings, setChatSettings] = useState({ conversationsLoading: true });
   const [isConnected, setIsConnected] = useState(false);
   const [openConversations, setOpenConversations] = useState([]);
   const [preTitle, setPreTitle] = useState("");
@@ -78,6 +82,7 @@ function ChatProvider({ children }) {
     }
 
     async function onConversations(value) {
+      setChatSettings((prev) => ({ ...prev, conversationsLoading: false }));
       setConversations(value);
 
       socket.off("conversations", onConversations);
@@ -115,6 +120,7 @@ function ChatProvider({ children }) {
     unread,
     preTitle,
     setPreTitle,
+    chatSettings,
   };
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
@@ -128,15 +134,28 @@ export function useChatContext() {
 
 function FriendRequest({ user }) {
   return (
-    <div className="flex gap-3 items-center text-black">
-      <div className="relative w-10 aspect-square rounded-full overflow-hidden">
+    <Link
+      onClick={() => {
+        toast.dismiss({ containerId: "top-right" });
+      }}
+      href="/profile"
+      className="flex gap-3 items-center text-black"
+    >
+      {/* <div className="relative w-10 aspect-square rounded-full overflow-hidden">
         <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" />
-      </div>
+      </div> */}
+      {user?.picture ? (
+        <div className="shrink-0 relative size-[40px] rounded-[50%] border bg-white overflow-hidden">
+          <Image src={`/api/photo?path=/uploads/profile-pictures/${user?.picture}`} alt="Profile picture" className="object-cover" fill />
+        </div>
+      ) : (
+        <FontAwesomeIcon icon={faCircleUser} className="text-[40px] aspect-square text-slate-400" />
+      )}
       <div>
         <p className="font-bold text-sm">
           <span className="capitalize">{user.username}</span> wants to be your friend
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

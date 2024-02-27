@@ -6,7 +6,7 @@ export function removeFile(filePath) {
   return fse.remove(filePath);
 }
 
-export async function uploadFile(path, file) {
+export async function uploadFile(path, file, size = 300) {
   console.log("-------------------- file from upload file --------------------");
   console.log(file);
   const oldPath = file.filepath;
@@ -21,7 +21,7 @@ export async function uploadFile(path, file) {
     } else if (file.mimetype.endsWith("png")) {
       await sharp(oldPath)
         .resize({
-          width: 300,
+          width: size,
         })
         .flatten({ background: "white" })
         .jpeg({ mozjpeg: true, force: true })
@@ -29,7 +29,7 @@ export async function uploadFile(path, file) {
     } else {
       await sharp(oldPath)
         .resize({
-          width: 300,
+          width: size,
         })
         .jpeg({ mozjpeg: true, force: true })
         .toFile(newPath);

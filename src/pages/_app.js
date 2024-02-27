@@ -8,6 +8,9 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import Head from "next/head";
 import ChatProvider from "@/contexts/ChatProvider";
 config.autoAddCss = false;
+import { register } from "swiper/element/bundle";
+
+register();
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
   const getLayout = Component.getLayout ?? ((page) => page);

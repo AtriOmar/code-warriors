@@ -3,49 +3,49 @@ import React from "react";
 import aboutImg from "@/images/about-us.png";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
-const AboutPage = () => {
-  const valeurs = [
-    {
-      title: "Qualité",
-      content:
-        "Nous avons pour raison d’être la satisfaction de nos clients et nous nous assurons de toujours leur offrir un travail de la plus haute qualité.",
-    },
-    {
-      title: "Engagement",
-      content: "Nous embauchons des personnes motivées, engagées et passionnées par leur profession.",
-    },
-    {
-      title: "Innovation",
-      content:
-        "Nous cherchons constamment à nous améliorer dans toutes nos activités et encourageons une culture d’innovation afin d’assurer le développement continu de nouveaux produits et services répondant aux besoins de nos clients.",
-    },
-    {
-      title: "Collaboration",
-      content: "Nous croyons que la collaboration, l’esprit d’équipe et le travail d’équipe sont des ingrédients clés du succès en affaires.",
-    },
-    {
-      title: "Intégrité",
-      content:
-        "Nous croyons que le meilleur garant de notre réputation est le maintien d’un haut niveau d’intégrité et de déontologie dans toutes nos activités quotidiennes.",
-    },
-    {
-      title: "Intégrité",
-      content:
-        "Nous croyons que le meilleur garant de notre réputation est le maintien d’un haut niveau d’intégrité et de déontologie dans toutes nos activités quotidiennes.",
-    },
-  ];
+const AboutPage = ({ values }) => {
+  // const valeurs = [
+  //   {
+  //     title: "Qualité",
+  //     content:
+  //       "Nous avons pour raison d’être la satisfaction de nos clients et nous nous assurons de toujours leur offrir un travail de la plus haute qualité.",
+  //   },
+  //   {
+  //     title: "Engagement",
+  //     content: "Nous embauchons des personnes motivées, engagées et passionnées par leur profession.",
+  //   },
+  //   {
+  //     title: "Innovation",
+  //     content:
+  //       "Nous cherchons constamment à nous améliorer dans toutes nos activités et encourageons une culture d’innovation afin d’assurer le développement continu de nouveaux produits et services répondant aux besoins de nos clients.",
+  //   },
+  //   {
+  //     title: "Collaboration",
+  //     content: "Nous croyons que la collaboration, l’esprit d’équipe et le travail d’équipe sont des ingrédients clés du succès en affaires.",
+  //   },
+  //   {
+  //     title: "Intégrité",
+  //     content:
+  //       "Nous croyons que le meilleur garant de notre réputation est le maintien d’un haut niveau d’intégrité et de déontologie dans toutes nos activités quotidiennes.",
+  //   },
+  //   {
+  //     title: "Intégrité",
+  //     content:
+  //       "Nous croyons que le meilleur garant de notre réputation est le maintien d’un haut niveau d’intégrité et de déontologie dans toutes nos activités quotidiennes.",
+  //   },
+  // ];
   return (
-    <div className="max-w  mx-auto">
+    <div className="max-w pt-16 pb-32 mx-auto">
       <section className="flex justify-center items-center flex-col">
-        <h2 className="text-3xl w-3/4 text-center pb-4 ">Empowering the world to develop technology through collective knowledge.</h2>
-        <p className="text-base w-30 text-center">Our products and tools enable people to ask, share and learn at work or at home.</p>
+        <h2 className="font-bold text-3xl w-3/4 text-center pb-4 ">Empowering the world to develop technology through collective knowledge.</h2>
+        <p className="font-bold text-lg text-center">Our products and tools enable people to ask, share and learn at work or at home.</p>
       </section>
 
-      <p className="text-xl font-bold">Our Mission</p>
-      <section className="sets ">
-        <div className="text-xl font-bold py-4">What Sets Us Apart</div>
-        <ul className="pl-12 w-85">
+      <section className="mt-10 ">
+        <p className="text-2xl font-bold my-8">What Sets Us Apart</p>
+        <ul className="pl-12 ">
           <li className="pb-2">
             <span className="text-lg font-bold pr-2">Expertise:</span>
             Our forum is curated by IT professionals with extensive experience in various domains. You can trust the information and advice shared within our
@@ -64,18 +64,18 @@ const AboutPage = () => {
       </section>
 
       <section className="valeurs">
-        <div className="text-2xl font-bold pb-8">Nos valeurs</div>
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {valeurs.map((item, index) => (
-            <div className="h-64 w-5/6 mx-auto rounded-md shadow-md " key={index}>
-              <h4 className="text-lg py-4 text-center">{item.title}</h4>
+        <p className="text-2xl font-bold my-8">Nos valeurs</p>
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          {values.map((item, index) => (
+            <div className="w-full pt-4 pb-10 mx-auto rounded-md shadow-[2px_2px_10px_rgb(0,0,0,.2)] " key={index}>
+              <h4 className="text-lg py-4 text-center font-bold capitalize">{item.title}</h4>
               <p className="description px-4">{item.content}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="">
+      <section className="mt-8">
         <div className="flex flex-wrap">
           <div className="w-full md:w-1/2 lg:w-45% mt-20">
             <p className="text-xs mt-8 md:text-xl">
@@ -106,7 +106,9 @@ const AboutPage = () => {
             </div>
           </div>
           <div className="w-full md:w-1/2 lg:w-45% flex justify-center items-center">
-            <img src={aboutImg} alt="" className="w-80 h-90 object-fill rounded-md" />
+            <div className="relative size-[400px]  object-fill rounded-md">
+              <Image src={aboutImg} alt="" className="object-contain" fill />
+            </div>
           </div>
         </div>
       </section>

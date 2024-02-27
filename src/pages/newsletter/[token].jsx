@@ -1,9 +1,31 @@
+import Navbar from "@/components/Navbar";
+import { faEnvelopeOpenText } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 export default function index({ status }) {
   return (
-    <div className="fixed inset-0 grid place-items-center">
-      <h1 className="text-2xl font-bold">{status === "success" ? "You have successfully subscribed!" : "Invalid token"}</h1>
+    <div>
+      <Navbar />
+      <div className="fixed inset-0 grid place-items-center">
+        <div>
+          {status === "success" ? (
+            <div className="p-10 rounded-2xl shadow-[0_0_5px_rgb(0,0,0,.3)]">
+              <i className="block text-center">
+                <FontAwesomeIcon icon={faEnvelopeOpenText} className="text-[100px] text-purple" />
+              </i>
+              <p className="mt-10 font-bold text-xl">Thanks for subscribing to our newsletter</p>
+            </div>
+          ) : (
+            <div className="p-10 rounded-2xl shadow-[0_0_5px_rgb(0,0,0,.3)]">
+              <i className="block text-center">
+                <FontAwesomeIcon icon={faEnvelopeOpenText} className="text-[100px] text-red-500" />
+              </i>
+              <p className="mt-10 font-bold text-xl">Sorry, we can't recognize this token</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -45,16 +67,16 @@ export async function getServerSideProps(context) {
     };
 
     try {
+      sub.active = true;
+
+      await sub.save();
+
       const info = await transporter.sendMail(mailOptions);
       console.log(info);
     } catch (err) {
       console.log(err);
     }
   }
-
-  sub.active = true;
-
-  await sub.save();
 
   return {
     props: {

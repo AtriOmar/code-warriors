@@ -30,6 +30,13 @@ export default async function handler(req, res) {
       to: email,
       subject: "Subscription to Code Warriors Newsletter",
       html: emailBody(`${process.env.FRONTEND_URL}/newsletter/${token}`, "1 heure"),
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/logo.png",
+          cid: "unique@elcamba.net",
+        },
+      ],
     };
 
     try {
@@ -112,22 +119,26 @@ function emailBody(link, expiration) {
           border-radius:5px;
           padding:50px 30px;
         }
-        .logo-name{
-        }
-        .logo-icon{
-          margin-left:10px;
-        }
         .logo-container{
-          display:flex;
+          
+          position:relative;
+          height:50px;
           width:fit-content;
           margin:auto;
-          height:50px;
   
+        }
+        .logo-container img{
+          width:100%;
+          height:100%;
+          object-fit:contain;
         }
       </style>
     </head>
     <body>
       <section class="container"">
+          <div class="logo-container">
+              <img src="cid:unique@elcamba.net"  >
+          </div>
           <h2>Newsletter subscription</h2>
           <p>Hello,</p>
           <p>Vous avez demandé à rejoindre la Newsletter de Code Warriors. Pour confirmer, veuillez cliquer sur le lien ci-dessous:</p>

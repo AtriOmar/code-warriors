@@ -8,16 +8,13 @@ export default function TipsSidebar({ categories }) {
   const pathname = router.pathname;
 
   return (
-    <div className="absolute bottom-4 top-4 left-4 w-[200px] px-6 py-4 rounded-lg bg-slate-100">
+    <div className="shrink-0 w-[200px] rounded-lg px-6 py-4 bg-slate-100">
       <div className="sticky top-20">
-        <h2 className="font-bold text-purple">Tips Categories</h2>
-        <ul className=" flex flex-col gap-1 mt-3">
+        <h2 className="font-bold text-purple">Categories</h2>
+        <ul className="mt-2 flex flex-col gap-2 list-disc font-bold text-sm">
           {categories.map((category) => (
-            <li key={category.id}>
-              <Link
-                href={"/tips/" + category.id}
-                className={`block relative px-3 hover:text-purple ${pathname === "/tips/" + category.id ? "text-purple" : "text-slate-500"}`}
-              >
+            <li key={category.id} className={`ml-7 hover:text-purple ${pathname === "/tips/" + category.id ? "text-purple" : "text-black"}`}>
+              <Link href={"/tips/" + category.id} className={`block relative duration-200 `}>
                 <p>{category.name}</p>
               </Link>
             </li>

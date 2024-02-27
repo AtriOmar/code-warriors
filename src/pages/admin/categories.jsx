@@ -6,6 +6,8 @@ import axios from "axios";
 import { getServerSession } from "next-auth";
 import React, { useEffect, useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
+import Categories from "@/components/Admin/categories/Categories";
+import AddCategory from "@/components/Admin/categories/AddCategory";
 
 export default function categories({ categories: ssrCategories }) {
   const [categories, setCategories] = useState(ssrCategories);
@@ -25,10 +27,12 @@ export default function categories({ categories: ssrCategories }) {
   }, []);
 
   return (
-    <div className="px-20 pt-2 pb-20">
-      <CategorySection name="Articles Categories" categories={categories} type="articles" setCategories={setCategories} />
+    <div className="max-w-[900px] px-8 scr1100:px-20 pt-12 pb-20">
+      {/* <CategorySection name="Articles Categories" categories={categories} type="articles" setCategories={setCategories} />
       <CategorySection name="Questions Categories" categories={categories} type="questions" setCategories={setCategories} />
-      <CategorySection name="Best Practices Categories" categories={categories} type="practices" setCategories={setCategories} />
+      <CategorySection name="Best Practices Categories" categories={categories} type="practices" setCategories={setCategories} /> */}
+      <Categories categories={categories} setCategories={setCategories} type="articles" />
+      <AddCategory setCategories={setCategories} />
     </div>
   );
 }

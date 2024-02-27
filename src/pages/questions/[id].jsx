@@ -27,12 +27,14 @@ export async function getServerSideProps(context) {
   const Question = require("@/models/Question");
   const Answer = require("@/models/Answer");
   const User = require("@/models/User");
+  const Category = require("@/models/Category");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
   const question = await Question.findByPk(context.params.id, {
     include: [
       { model: User, attributes: ["id", "username", "picture"] },
+      { model: Category, attributes: ["id", "name"] },
       {
         model: Answer,
         include: {

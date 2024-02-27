@@ -43,14 +43,14 @@ export async function getServerSideProps(context) {
 
   const userId = context.params.id;
 
-  const user = (await User.findOne({ where: { id: userId }, attributes: ["id", "username", "picture", "email", "bio", "address"] })).toJSON();
+  const user = (await User.findOne({ where: { id: userId }, attributes: ["id", "username", "cover", "picture", "email", "bio", "address"] })).toJSON();
 
   if (authUser) {
     const friendship = await Friendship.findOne({
       where: {
         [Op.or]: [
-          { userId1: authUser.id, userId2: userId },
-          { userId1: userId, userId2: authUser.id },
+          { userId1: authUser?.id, userId2: userId },
+          { userId1: userId, userId2: authUser?.id },
         ],
       },
     });

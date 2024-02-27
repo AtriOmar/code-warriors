@@ -9,11 +9,11 @@ import { attachEvents } from "@/lib/attachEvents";
 export default function handler(req, res) {
   // It means that socket server was already initialised
 
-  //   if (res.socket.server.io) {
-  //     console.log("Already set up");
-  //     res.end("socket connected");
-  //     return;
-  //   }
+  if (res.socket.server.io) {
+    console.log("Already set up");
+    res.end("socket connected");
+    return;
+  }
 
   const io = new Server(res.socket.server);
   res.socket.server.io = io;

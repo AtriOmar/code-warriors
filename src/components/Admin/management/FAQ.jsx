@@ -5,7 +5,8 @@ import AdminLayout from "@/layouts/AdminLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import AllFAQ from "@/components/Admin/management/AllFAQ";
+import AllFAQ from "@/components/Admin/management/FAQList";
+import { toast } from "react-toastify";
 
 export default function FAQ({ faqs, setFaqs }) {
   return (
@@ -38,6 +39,8 @@ function AddFAQ({ setFaqs }) {
 
       setFaqs((prev) => [...prev, res.data]);
       setInput({ title: "", content: "" });
+
+      toast.success("FAQ added");
     } catch (err) {
       console.log(err);
     }
@@ -53,7 +56,7 @@ function AddFAQ({ setFaqs }) {
           setInput((prev) => ({ ...prev, title: e.target.value }));
         }}
         type="text"
-        className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 outline-purple"
+        className="w-full mt-1 px-2 py-1 rounded-md border border-slate-300 outline-purple text-sm"
         placeholder="Title"
       />
       <h1 className="mt-2 font-bold">Content</h1>
@@ -62,8 +65,8 @@ function AddFAQ({ setFaqs }) {
         onChange={(e) => {
           setInput((prev) => ({ ...prev, content: e.target.value }));
         }}
-        className="w-full mt-2 px-4 py-2 rounded-md border border-slate-300 outline-purple resize-none"
-        rows={8}
+        className="w-full mt-1 px-2 py-1 rounded-md border border-slate-300 outline-purple text-sm resize-none"
+        rows={4}
         placeholder="Content"
       />
       <button

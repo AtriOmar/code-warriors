@@ -5,7 +5,7 @@ import About from "./components/home/About";
 import About2 from "./components/home/About2";
 import Team from "./components/home/Team";
 import Testimonial from "./components/home/Testimonial";
-import Newsletter from "./components/home/Newsletter";
+import Newsletter from "../contact/Newsletter";
 
 const HomePage = () => {
   return (
@@ -15,7 +15,7 @@ const HomePage = () => {
       <About />
       <About2 />
       <Team />
-      <Testimonial />
+      {/* <Testimonial /> */}
       <Newsletter />
     </>
   );

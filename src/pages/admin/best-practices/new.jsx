@@ -41,11 +41,7 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const categories = await Category.findAll({
-    where: {
-      type: "practices",
-    },
-  });
+  const categories = await Category.findAll();
 
   return {
     props: {

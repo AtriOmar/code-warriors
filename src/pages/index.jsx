@@ -21,7 +21,6 @@ export default function Home({ directory }) {
       <div className={`p-24 ${jakarta.className}`}>
         <HomePage />
       </div>
-      {/* <Footer /> */}
     </>
   );
 }
@@ -32,6 +31,7 @@ Home.getLayout = function getLayout(page) {
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
+  const Category = require("@/models/Category");
 
   return {
     props: {

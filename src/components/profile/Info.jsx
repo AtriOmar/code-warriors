@@ -14,13 +14,25 @@ export default function Info() {
 
   return (
     <div className="w-full">
-      <div className="relative w-full h-[250px]">
-        <Image
-          src="https://scontent.fnbe1-2.fna.fbcdn.net/v/t39.30808-6/425380187_906806031445898_6385821556288285441_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=d8d9c5&_nc_ohc=TJiyZoq2ZvEAX-hD6xg&_nc_ht=scontent.fnbe1-2.fna&oh=00_AfBBxLICakoHmRu8dHabaSMdWoDIKOwLr8I5AeWpgCzNow&oe=65D5001C"
-          fill
-          className="object-cover"
-          alt="Profile Image"
-        />
+      <div className="relative w-full">
+        <div className="relative w-full aspect-[2/1] max-w-[800px] mx-auto">
+          {user.cover ? (
+            <div className="relative bg-white">
+              <div className="relative overflow-hidden w-full aspect-[2/1] border border-slate-300 overflow-hidden">
+                <Image
+                  // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
+                  src={`/api/photo?path=/uploads/profile-covers/${user.cover}`}
+                  fill
+                  alt="Profile Cover"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="absolute inset-0 bg-slate-200"></div>
+          )}
+        </div>
         <div className="absolute bottom-0 translate-y-1/3 left-4 w-[150px] aspect-square rounded-full overflow-hidden">
           {user.picture ? (
             <Image src={`/api/photo?path=/uploads/profile-pictures/${user.picture}`} fill alt="Profile Image" className="object-cover" priority />

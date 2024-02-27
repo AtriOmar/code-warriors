@@ -9,7 +9,6 @@ const Category = sequelize.define(
   {
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
 
-    type: DataTypes.TEXT,
     name: DataTypes.TEXT,
   },
   {

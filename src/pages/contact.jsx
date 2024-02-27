@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import Contact from "@/components/contact/Contact";
+import Newsletter from "@/components/contact/Newsletter";
 
 const inter = Inter({ subsets: ["latin"] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -14,7 +16,14 @@ export default function contact() {
 
   console.log("session from home", session);
 
-  return <div className={`flex flex-col items-center justify-between p-24 ${jakarta.className}`}>Home</div>;
+  return (
+    <div className={`px-4 py-8 ${jakarta.className}`}>
+      <div className="max-w">
+        <Contact />
+        <Newsletter />
+      </div>
+    </div>
+  );
 }
 
 contact.getLayout = function getLayout(page) {

@@ -12,7 +12,7 @@ import Link from "next/link";
 
 export default function articles({ articles }) {
   return (
-    <div className=" px-8 scr1100:px-20 pt-12 pb-20">
+    <div className="max-w-[1100px] px-8 scr1100:px-20 pt-12 pb-20">
       <div className="flex pl-4 pr-8 py-4 mb-10 rounded-full bg-slate-100">
         <input type="text" placeholder="What are you looking for ?" className="grow outline-none bg-transparent" />
         <FontAwesomeIcon icon={faSearch} className="text-2xl text-slate-500" />

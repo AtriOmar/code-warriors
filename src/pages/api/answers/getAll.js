@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       },
       include: {
         model: User,
-        attributes: ["id", "username"],
+        attributes: ["id", "username", "picture"],
       },
     });
 

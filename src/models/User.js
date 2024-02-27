@@ -15,6 +15,7 @@ const User = sequelize.define(
     accessId: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN,
     picture: DataTypes.TEXT,
+    cover: DataTypes.TEXT,
     address: DataTypes.TEXT,
     phone: DataTypes.TEXT,
     resetToken: DataTypes.TEXT,

@@ -5,7 +5,6 @@ export default async function create(req, res) {
 
   try {
     const data = {
-      type: body.type,
       name: body.name,
     };
 

@@ -6,19 +6,21 @@ import axios from "axios";
 import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function AllFAQ({ faqs, setFaqs }) {
+export default function ValuesList({ values, setValues }) {
+  if (!values?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no values</p>;
+
   return (
     <div className="flex flex-col gap-2 mt-2">
-      {faqs?.map((faq) => (
-        <FAQItem key={faq.id} faq={faq} setFaqs={setFaqs} />
+      {values?.map((value) => (
+        <ValueItem key={value.id} value={value} setValues={setValues} />
       ))}
     </div>
   );
 }
 
-function FAQItem({ faq, setFaqs }) {
+function ValueItem({ value, setValues }) {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState({ title: faq.title, content: faq.content });
+  const [input, setInput] = useState({ title: value.title, content: value.content });
   const [edit, setEdit] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -26,18 +28,18 @@ function FAQItem({ faq, setFaqs }) {
     if (sending) return;
 
     const data = {
-      id: faq.id,
+      id: value.id,
       title: input.title,
       content: input.content,
     };
 
     setSending(true);
     try {
-      const res = await axios.post("/api/faq/update", data);
+      const res = await axios.post("/api/values/update", data);
 
       toast.success("Changes saved");
       setEdit(false);
-      setFaqs((prev) => prev.map((faq) => (faq.id === res.data.id ? res.data : faq)));
+      setValues((prev) => prev.map((faq) => (faq.id === res.data.id ? res.data : faq)));
     } catch (err) {
       toast.error("An error occurred");
       console.log(err);
@@ -61,13 +63,10 @@ function FAQItem({ faq, setFaqs }) {
               className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md"
             />
           ) : (
-            <>
-              {faq.title}
-              <FontAwesomeIcon icon={faChevronDown} />
-            </>
+            <>{value.title}</>
           )}
         </button>
-        <div className={`${open || edit ? "mt-2" : ""}`} style={{ transition: ".3s", gridTemplateRows: open || edit ? "1fr" : "0fr", display: "grid" }}>
+        <div className={`mt-2`}>
           {edit ? (
             <input
               value={input.content}
@@ -75,7 +74,7 @@ function FAQItem({ faq, setFaqs }) {
               className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
             />
           ) : (
-            <div className={` overflow-hidden text-[13px] text-slate-500`}>{faq.content}</div>
+            <div className={` text-[13px] text-slate-500`}>{value.content}</div>
           )}
         </div>
       </div>
@@ -89,7 +88,7 @@ function FAQItem({ faq, setFaqs }) {
           >
             Edit
           </button>
-          <DeleteFAQMenu faq={faq} setFaqs={setFaqs} />
+          <DeleteValueMenu value={value} setValues={setValues} />
         </>
       ) : (
         <>
@@ -101,7 +100,7 @@ function FAQItem({ faq, setFaqs }) {
           </button>
           <button
             onClick={() => {
-              setInput({ title: faq.title, content: faq.content });
+              setInput({ title: value.title, content: value.content });
               setEdit(false);
             }}
             className="self-center px-3 border border-red-500 rounded-full hover:bg-red-100 text-red-500 text-sm font-semibold duration-300"
@@ -121,7 +120,7 @@ function FAQItem({ faq, setFaqs }) {
   );
 }
 
-function DeleteFAQMenu({ faq, setFaqs }) {
+function DeleteValueMenu({ value, setValues }) {
   const [sending, setSending] = useState(false);
 
   async function handleDelete(e) {
@@ -131,10 +130,10 @@ function DeleteFAQMenu({ faq, setFaqs }) {
 
     setSending(true);
     try {
-      const res = await axios.delete("/api/faq/deleteById", { params: { id: faq.id } });
+      const res = await axios.delete("/api/values/deleteById", { params: { id: value.id } });
 
-      setFaqs((prev) => prev.filter((q) => q.id !== faq.id));
-      toast.success("FAQ deleted");
+      setValues((prev) => prev.filter((q) => q.id !== value.id));
+      toast.success("Value deleted");
     } catch (err) {
       toast.error("An error occurred");
       console.log(err);

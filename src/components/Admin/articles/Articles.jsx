@@ -32,7 +32,7 @@ export default function Articles({ articles }) {
   }
 
   return (
-    <section className=" max-w-[1000px] py-4 rounded-lg shadow-md ">
+    <section className="py-4 rounded-lg shadow-md ">
       <h2 className="font-medium text-xl text-slate-900 px-4">Articles</h2>
       <div className="grid grid-cols-[1fr_100px_100px_100px_100px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
         <div className=" py-3 text-slate-900">Name</div>

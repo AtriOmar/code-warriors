@@ -40,6 +40,13 @@ export default async function handler(req, res) {
       to: email,
       subject: "Réintialisation de mot de passe Code Warriors",
       html: emailBody(user.username, `${process.env.FRONTEND_URL}/reset-password/${resetToken}`, "1 heure"),
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/logo.png",
+          cid: "unique@elcamba.net",
+        },
+      ],
     };
 
     try {
@@ -101,15 +108,15 @@ function emailBody(name, link, expiration) {
         a {
           display:block;
           width:fit-content;
-          color: #648415 !important;
-          background-color: #a5da24;
+          color: #3b0764 !important;
+          background-color: #a855f7;
           text-decoration: none;
           padding: 10px 20px;
           border-radius: 5px;
           transition: background-color 150ms;
         }
         a:hover {
-          background-color: #97c520;
+          background-color: #9333ea;
         }
         .ps {
           font-size: 12px;
@@ -122,22 +129,26 @@ function emailBody(name, link, expiration) {
           border-radius:5px;
           padding:50px 30px;
         }
-        .logo-name{
-        }
-        .logo-icon{
-          margin-left:10px;
-        }
         .logo-container{
-          display:flex;
+          
+          position:relative;
+          height:50px;
           width:fit-content;
           margin:auto;
-          height:50px;
   
+        }
+        .logo-container img{
+          width:100%;
+          height:100%;
+          object-fit:contain;
         }
       </style>
     </head>
     <body>
       <section class="container"">
+          <div class="logo-container">
+              <img src="cid:unique@elcamba.net"  >
+          </div>
           <h2>Réinitialisation de mot de passe</h2>
           <p>Bonjour ${name},</p>
           <p>Vous avez demandé à réinitialiser votre mot de passe sur Code Warriors. Pour accéder à votre compte, veuillez cliquer sur le lien ci-dessous:</p>

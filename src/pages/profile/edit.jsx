@@ -22,6 +22,7 @@ export default function edit({ directory }) {
     bio: user?.bio || "",
     address: user?.address || "",
     picture: user?.picture || null,
+    cover: user?.cover || null,
   });
   const [error, setError] = useState("");
   const [sending, setSending] = useState({ picture: false, info: false });
@@ -30,6 +31,10 @@ export default function edit({ directory }) {
   useEffect(() => {
     if (user.picture !== input.picture) {
       setInput((prev) => ({ ...prev, picture: user.picture }));
+    }
+
+    if (user.cover !== input.cover) {
+      setInput((prev) => ({ ...prev, cover: user.cover }));
     }
   }, [session]);
 
@@ -43,7 +48,13 @@ export default function edit({ directory }) {
   async function updatePicture() {
     const formData = new FormData();
 
-    formData.append("picture", input.picture);
+    if (input.picture !== user.picture) {
+      formData.append("picture", input.picture);
+    }
+
+    if (input.cover !== user.cover) {
+      formData.append("cover", input.cover);
+    }
 
     setSending((prev) => ({ ...prev, picture: true }));
     try {
@@ -56,15 +67,17 @@ export default function edit({ directory }) {
   }
 
   function resetPicture() {
-    setInput((prev) => ({ ...prev, picture: user?.picture }));
+    setInput((prev) => ({ ...prev, picture: user?.picture, cover: user?.cover }));
   }
 
-  async function handlePictureChange(e) {
+  async function handlePictureChange(e, type = "picture") {
     const file = e.target.files[0];
     if (file?.type?.startsWith("image")) {
       file.id = uuidv4().toString();
-      setInput((prev) => ({ ...prev, picture: file }));
+      setInput((prev) => ({ ...prev, [type]: file }));
     }
+
+    e.target.value = "";
   }
 
   async function updateUser() {
@@ -94,23 +107,45 @@ export default function edit({ directory }) {
   //   );
 
   return (
-    <div className={`${jakarta.className} py-4 px-8`}>
+    <div className={`${jakarta.className} pb-4 scr800:px-8 px-2`}>
       <div className="max-w">
-        <div className="relative w-full max-w-[250px] mx-auto">
+        <div className="relative w-full aspect-[2/1] max-w-[600px] mx-auto">
+          {input.cover ? (
+            <div className="relative bg-white">
+              <div className="relative overflow-hidden w-full aspect-[2/1] border border-slate-300 overflow-hidden">
+                <Image
+                  // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
+                  src={typeof input.cover === "string" ? `/api/photo?path=/uploads/profile-covers/${input.cover}` : URL.createObjectURL(input.cover)}
+                  fill
+                  alt="Profile Image"
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="absolute inset-0 bg-slate-200"></div>
+          )}
+          <button
+            type="button"
+            className="z-10 absolute right-3 top-3"
+            onClick={() => {
+              setInput((prev) => ({ ...prev, cover: null }));
+            }}
+          >
+            <i className="flex h-6 w-6 items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
+              <FontAwesomeIcon icon={faXmark} className="text-white" size="lg" />
+            </i>
+          </button>
+          <label className="absolute right-3 bottom-3 flex items-center justify-center w-9 h-9 bg-purple hover:bg-purple-700 rounded-full duration-200 cursor-pointer">
+            <input type="file" hidden onChange={(e) => handlePictureChange(e, "cover")} />
+            <FontAwesomeIcon icon={faPen} className="text-white text-lg" />
+          </label>
+        </div>
+        <div className="relative w-full max-w-[175px] scr700:max-w-[250px] mt-[-75px] scr500:mt-[-100px] scr700:mt-[-125px] mx-auto">
           {input.picture ? (
             <div className="relative aspect-square">
-              <button
-                type="button"
-                className="z-10 absolute -right-2 -top-2"
-                onClick={() => {
-                  setInput((prev) => ({ ...prev, picture: null }));
-                }}
-              >
-                <i className="flex h-6 w-6 items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
-                  <FontAwesomeIcon icon={faXmark} className="text-white" size="lg" />
-                </i>
-              </button>
-              <div className="relative overflow-hidden w-full aspect-square border border-slate-300 rounded-[50%] overflow-hidden">
+              <div className="relative overflow-hidden w-full aspect-square border border-slate-300 rounded-[50%] overflow-hidden bg-white">
                 <Image
                   // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
                   src={typeof input.picture === "string" ? `/api/photo?path=/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
@@ -122,14 +157,25 @@ export default function edit({ directory }) {
               </div>
             </div>
           ) : (
-            <FontAwesomeIcon icon={faCircleUser} className="text-[250px] text-slate-500" />
+            <FontAwesomeIcon icon={faCircleUser} className="text-[250px] text-slate-500 bg-white rounded-full" />
           )}
+          <button
+            type="button"
+            className="z-10 absolute right-5 top-5"
+            onClick={() => {
+              setInput((prev) => ({ ...prev, picture: null }));
+            }}
+          >
+            <i className="flex h-6 w-6 items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
+              <FontAwesomeIcon icon={faXmark} className="text-white" size="lg" />
+            </i>
+          </button>
           <label className="absolute right-3 bottom-3 flex items-center justify-center w-9 h-9 bg-purple hover:bg-purple-700 rounded-full duration-200 cursor-pointer">
-            <input type="file" hidden onChange={handlePictureChange} />
+            <input type="file" hidden onChange={(e) => handlePictureChange(e, "picture")} />
             <FontAwesomeIcon icon={faPen} className="text-white text-lg" />
           </label>
         </div>
-        <div className={`${input.picture !== user.picture ? "flex" : "hidden"} gap-2 mx-auto relative w-fit mt-2`}>
+        <div className={`${input.picture !== user.picture || input.cover !== user.cover ? "flex" : "hidden"} gap-2 mx-auto relative w-fit mt-2`}>
           <button
             className="px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
             onClick={updatePicture}
@@ -166,12 +212,13 @@ export default function edit({ directory }) {
             className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple"
           />
           <h1 className="mt-2 font-bold">Bio</h1>
-          <input
+          <textarea
             type="text"
             placeholder="Bio"
             value={input.bio}
             onChange={(e) => setInput({ ...input, bio: e.target.value })}
-            className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple"
+            className="w-full mt-1 px-4 py-2 rounded-md border border-slate-300 outline-purple resize-none"
+            rows={2}
           />
           <h1 className="mt-2 font-bold">Address</h1>
           <input

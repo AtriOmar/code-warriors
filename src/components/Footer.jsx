@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div className="py-8 px-8 gap-6 items-center bg-purple grid grid-cols-2 scr1000:grid-cols-4">
       <div className="relative mx-6 max-w-[250px] aspect-square">
-        <Image src="/logo_white.png" alt="logo" fill className="object-contain" />
+        <Image src="/logo_white.png" alt="logo" fill className="object-contain" sizes="(max-width: 600px) 150px, 250px" />
       </div>
       <div>
         <p className="font-bold text-xl">Categories</p>

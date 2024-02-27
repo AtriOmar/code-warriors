@@ -18,46 +18,49 @@ export default async function handler(req, res) {
 
   var form = new formidable.IncomingForm({ multiples: true });
 
-  await new Promise((resolve) => {
-    form.parse(req, async function (err, fields, files) {
-      if (err) {
-        res.writeHead(err.httpCode || 400, { "Content-Type": "text/plain" });
-        res.end(String(err));
-        return;
+  const [fields, files] = await parseForm(req);
+
+  try {
+    const cover = files.cover?.[0] || null;
+    const picture = files.picture?.[0] || null;
+
+    if (files.hasOwnProperty("picture") || fields.hasOwnProperty("picture")) {
+      if (user.picture) {
+        console.log("-------------------- deleting user picture --------------------");
+        await removeFile("./public/uploads/profile-pictures/" + user.picture);
       }
-      try {
-        const picture = Object.values(files)[0]?.[0];
 
-        console.log("-------------------- picture --------------------");
-        console.log(picture);
-
-        if (user.picture) {
-          await removeFile("./public/uploads/profile-pictures/" + user.picture);
-        }
-
-        var pictureName = picture ? await uploadFile("./public/uploads/profile-pictures/", picture) : null;
-
-        // console.log("-------------------- pictureName --------------------");
-        // console.log(pictureName);
-
-        await User.update(
-          { picture: pictureName },
-          {
-            where: {
-              id: user.id,
-            },
-          }
-        );
-
-        // const userData = (await User.findByPk(user.id)).toJSON();
-
-        resolve(res.status(200).send("hey"));
-      } catch (err) {
-        res.status(400).send(err);
-        console.log(err);
+      var pictureName = picture ? await uploadFile("./public/uploads/profile-pictures/", picture) : null;
+    }
+    if (files.hasOwnProperty("cover") || fields.hasOwnProperty("cover")) {
+      if (user.cover) {
+        await removeFile("./public/uploads/profile-covers/" + user.cover);
       }
+
+      var coverName = cover ? await uploadFile("./public/uploads/profile-covers/", cover, 1000) : null;
+    }
+
+    const options = {};
+
+    if (files.hasOwnProperty("cover") || fields.hasOwnProperty("cover")) options.cover = coverName;
+    if (files.hasOwnProperty("picture") || fields.hasOwnProperty("picture")) options.picture = pictureName;
+
+    console.log("-------------------- options --------------------");
+    console.log(options);
+
+    await User.update(options, {
+      where: {
+        id: user.id,
+      },
     });
-  });
+
+    // const userData = (await User.findByPk(user.id)).toJSON();
+
+    res.status(200).send("hey");
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
 }
 
 const parseForm = async (req) =>

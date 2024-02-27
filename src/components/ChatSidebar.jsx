@@ -21,6 +21,7 @@ import { useDebounce, useDebouncedCallback } from "use-debounce";
 import axios from "axios";
 import Image from "next/image";
 import useSWR from "swr";
+import { RingLoader } from "./Loading";
 
 async function fetchUsers(search) {
   if (!search) return [];
@@ -37,7 +38,7 @@ async function fetchUsers(search) {
 export default function ChatSidebar() {
   const router = useRouter();
   const pathname = router.pathname;
-  const { conversations } = useChatContext();
+  const { conversations, chatSettings } = useChatContext();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [fetching, setFetching] = useState(false);
@@ -63,7 +64,7 @@ export default function ChatSidebar() {
 
   const debouncedUpdateSearch = useDebouncedCallback(() => {
     setDebouncedSearch(search);
-  }, 1000);
+  }, 500);
 
   useEffect(() => {
     debouncedUpdateSearch();
@@ -76,7 +77,7 @@ export default function ChatSidebar() {
   // }, [search]);
 
   return (
-    <div className="fixed bottom-0 top-[60px] left-0 w-[300px] py-4 px-2 border-r-2 border-slate-300">
+    <div className="flex flex-col fixed bottom-0 top-[60px] left-0 w-[300px] py-4 px-2 border-r-2 border-slate-300">
       <div className="flex items-center gap-2 px-4 py-2 rounded-md border border-slate-300 bg-slate-100">
         <FontAwesomeIcon icon={faSearch} className="text-sm text-slate-500" />
         <input
@@ -89,29 +90,43 @@ export default function ChatSidebar() {
           className="grow outline-none bg-transparent"
         />
       </div>
-      {data?.length ? (
-        <ul className="flex flex-col gap-2 mt-2">
-          {data.map((person) => (
-            <li
-              onClick={() => {
-                setSearch("");
-                setDebouncedSearch("");
-              }}
-              key={person.id}
-            >
-              <PersonCard person={person} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <ul className="flex flex-col gap-2 mt-2">
-          {conversations.map((conversation) => (
-            <li key={conversation.id}>
-              <ConversationCard conversation={conversation} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="grow overflow-y-auto scrollbar1">
+        {data?.length ? (
+          <ul className="flex flex-col gap-2 mt-2 ">
+            {data.map((person) => (
+              <li
+                onClick={() => {
+                  setSearch("");
+                  setDebouncedSearch("");
+                }}
+                key={person.id}
+              >
+                <PersonCard person={person} />
+              </li>
+            ))}
+          </ul>
+        ) : chatSettings?.conversationsLoading ? (
+          <div className="flex flex-col items-center gap-1 py-20">
+            <RingLoader />
+            <h2 className="font-bold text-lg">Loading ...</h2>
+          </div>
+        ) : conversations?.length ? (
+          <ul className="flex flex-col gap-2 mt-2">
+            {conversations.map((conversation) => (
+              <li key={conversation.id}>
+                <ConversationCard conversation={conversation} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="flex flex-col items-center gap-1 py-10">
+            <div className="relative size-[80px]">
+              <Image src={"/chat.svg"} fill className="object-contain" />
+            </div>
+            <h2 className="font-bold text-lg">No conversations yet</h2>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

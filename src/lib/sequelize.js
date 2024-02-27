@@ -10,7 +10,6 @@ const sequelize = new Sequelize(database, user, password, {
   host,
   dialect: "mysql",
   logging: false,
-  raw: true,
 });
 
 var db = {};

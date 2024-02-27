@@ -18,7 +18,21 @@ function Question({ question }) {
     <Link href={`/questions/${question.id}`} className="p-4 border border-slate-200 hover:bg-slate-100 rounded-lg duration-200">
       <p className="text-xs text-slate-400">Posted on {formatDate(new Date(question.createdAt), "date")}</p>
       <h2 className="mt-1 font-bold text-slate-900 line-clamp-2">{question.title}</h2>
-      <div className="mt-2 text-slate-400 line-clamp-4" dangerouslySetInnerHTML={{ __html: question.content }}></div>
+      {console.log(
+        question.content
+          // .replace(/(<br>)+/g, "\n")
+          .replace(/<[^>]+>/g, "")
+          .replace(/\n+/g, "\n")
+      )}
+      <div
+        className="mt-2 text-slate-400 line-clamp-4 whitespace-pre-wrap"
+        dangerouslySetInnerHTML={{
+          __html: question.content
+            // .replace(/(<br>)+/g, "\n")
+            .replace(/<[^>]+>/g, "")
+            .replace(/\n+/g, "\n"),
+        }}
+      ></div>
     </Link>
   );
 }

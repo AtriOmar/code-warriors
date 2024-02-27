@@ -43,6 +43,13 @@ export default async function handler(req, res) {
       to: email,
       subject: "Vérification de compte Code Warriors",
       html: verificationEmailBody(name || "Mr/Mme,", verificationCode, "1 heure"),
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/logo.png",
+          cid: "unique@elcamba.net",
+        },
+      ],
     };
 
     try {
@@ -61,11 +68,11 @@ export default async function handler(req, res) {
 
 function verificationEmailBody(name, code, expiration) {
   return `
-    <!DOCTYPE html>
+  <!DOCTYPE html>
   <html>
     <head>
       <meta charset="UTF-8" />
-      <title>Vérification de compte Code Warriors</title>
+      <title>Vérification de compte ELCAMBA</title>
       <style>
         * {
           box-sizing: border-box;
@@ -79,7 +86,7 @@ function verificationEmailBody(name, code, expiration) {
         h1{
           font-size:32px;
           font-weight:bold;
-          color:#7c3aed;
+          color:#dc2626;
           text-align:center;
           border-bottom:1px solid #e2e8f0;
           padding-bottom:10px;
@@ -90,7 +97,7 @@ function verificationEmailBody(name, code, expiration) {
         h2 {
           font-size: 20px;
           font-weight: bold;
-          margin-top: 0;
+          margin-top: 30px;
           margin-bottom: 20px;
         }
         p {
@@ -102,19 +109,15 @@ function verificationEmailBody(name, code, expiration) {
         }
         .code {
           width:fit-content;
-          color: #4c1d95;
-          background-color: #8b5cf6;
+          color: #3b0764;
+          background-color: #a855f7;
           padding: 10px 20px;
           border-radius: 5px;
           transition: background-color 150ms;
-          margin-inline:auto;
+          margin:10px auto;
         }
         .code:hover {
-          background-color: #facc15;
-        }
-        .ps {
-          font-size: 12px;
-          margin-top: 20px;
+          background-color: #9333ea;
         }
         .container{
           max-width:600px;
@@ -123,18 +126,32 @@ function verificationEmailBody(name, code, expiration) {
           border-radius:5px;
           padding:50px 30px;
         }
+        .logo-container{
+          
+          position:relative;
+          height:50px;
+          width:fit-content;
+          margin:auto;
+  
+        }
+        .logo-container img{
+          width:100%;
+          height:100%;
+          object-fit:contain;
+        }
       </style>
     </head>
     <body>
       <section class="container"">
-          <h1>Code Warriors</h1>
-          <h2>Vérification de compte Code Warriors</h2>
-          <p>Bonjour ${name},</p>
-          <p>Pour compléter la création de votre compte Code Warriors, voici votre code:</p>
+          <div class="logo-container">
+              <img src="cid:unique@elcamba.net"  >
+          </div>
+          <h2>Code Warriors account verification</h2>
+          <p>Hello ${name},</p>
+          <p>Welcome to code warriors, to continue creating your account, here is your code:</p>
           <p class="code">${code}</p>
-          <p>Si vous n'avez pas essayer de créer un compte, veuillez ignorer cet email.</p>
-          <p>Cordialement,<br />L'équipe de Code Warriors</p>
-          <p class="ps">PS: Ce lien expirera dans ${expiration}. Veuillez le réinitialiser à nouveau si nécessaire.</p>
+          <p>If you are not trying to create an account, you may ignore this email.</p>
+          <p>Best regards,<br/>Code Warriors.</p>
       </section>
     </body>
   </html>

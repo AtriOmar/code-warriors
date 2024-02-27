@@ -26,7 +26,7 @@ import Category from "@/models/Category";
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
-  const categories = await Category.findAll({ where: { type: "questions" } });
+  const categories = await Category.findAll();
 
   return {
     props: {

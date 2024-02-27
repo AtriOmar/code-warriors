@@ -13,7 +13,7 @@ if (!socket) {
   socket = io(URL, {
     forceNew: true,
     autoConnect: false,
-    transports: ["websocket"],
+    // transports: ["websocket"],
   });
 
   socket.on("connect", () => console.log("connecting"));

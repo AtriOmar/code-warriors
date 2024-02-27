@@ -45,3 +45,21 @@ html {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* scrollbars */
+:is(.scrollbar1)::-webkit-scrollbar-track {
+  background: #eee;
+  border-radius: 20px;
+}
+:is(.scrollbar1)::-webkit-scrollbar {
+  width: 8px;
+  height: 4px;
+}
+:is(.scrollbar1)::-webkit-scrollbar-thumb:hover {
+  background: #bbb;
+  border-radius: 20px;
+}
+:is(.scrollbar1)::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 20px;
+}

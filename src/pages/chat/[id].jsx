@@ -30,6 +30,7 @@ export default function Chat() {
   const [limit, setLimit] = useState(30);
   const [newLimit, setNewLimit] = useState(true);
   const [visible, setVisible] = useState(true);
+  const [toggle, setToggle] = useState(false);
   const observing = useRef(-1);
   const resizeObserver = useRef(
     typeof window !== "undefined" &&
@@ -77,13 +78,13 @@ export default function Chat() {
     if (el) observer.current.observe(el);
   }, [conversation?.Messages]);
 
-  // useEffect(() => {
-  //   setVisible(false);
+  useEffect(() => {
+    setToggle(false);
 
-  //   setTimeout(() => {
-  //     setVisible(true);
-  //   }, 100);
-  // }, []);
+    setTimeout(() => {
+      setToggle(true);
+    }, 100);
+  }, []);
 
   useEffect(() => {
     setNewLimit(false);
@@ -111,20 +112,20 @@ export default function Chat() {
       });
     }
 
-    setTimeout(() => {
-      socket.emit("watchSingle", id, limit);
+    // setTimeout(() => {
+    socket.emit("watchSingle", id, limit);
 
-      socket.on("messages", onMessages);
+    socket.on("messages", onMessages);
 
-      socket.on("message", onMessage);
-    }, 100);
+    socket.on("message", onMessage);
+    // }, 100);
 
     return () => {
       socket.emit("unwatchSingle", id);
       socket.off("messages");
       socket.off("message");
     };
-  }, [isConnected, id, newLimit]);
+  }, [isConnected, id, newLimit, toggle]);
 
   useEffect(() => {
     function handleVisibilityChange(e) {
@@ -184,11 +185,11 @@ export default function Chat() {
   return (
     <div className="h-full flex pb-2  rounded-lg bg-whit shadow-md">
       <div className="relative w-full flex flex-col">
-        <div className="relative flex  items-center w-full py-2 px-4 bg-white shadow break-anywhere">
+        <div className="relative flex  items-center w-full py-1 px-4 bg-white shadow break-anywhere">
           {/* <button onClick={() => {}}>
             <FontAwesomeIcon icon={faArrowLeft} size="lg" className="text-white hover:scale-125 duration-300" />
           </button> */}
-          <div className="flex items-center gap-2">
+          <Link href={`/profile/${receiver.id}`} className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-slate-200 duration-200">
             {receiver?.picture ? (
               <div className="relative w-[30px] aspect-square rounded-[50%] border bg-white overflow-hidden">
                 <Image src={`/api/photo?path=/uploads/profile-pictures/${receiver?.picture}`} alt="Profile picture" fill className="object-cover" />
@@ -200,7 +201,7 @@ export default function Chat() {
             <span className="text-sm scr700:text-base font-medium scr700:font-bold  text-black text-lg text-center  capitalize line-clamp-1">
               {receiver?.username}
             </span>
-          </div>
+          </Link>
         </div>
         <MessagesBox user={receiver} messages={conversation?.Messages} limit={limit} />
         <SendMessageInput socket={socket} user={receiver} />
@@ -219,6 +220,16 @@ export async function getServerSideProps(context) {
 
   const session = await getServerSession(context.req, context.res, authOptions);
   const article = await Article.findByPk(context.params.id, { include: { model: Category } });
+
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/",
+      },
+      props: {},
+    };
+  }
 
   return {
     props: {
