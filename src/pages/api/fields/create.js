@@ -1,4 +1,4 @@
-import Team from "@/models/Team";
+import Field from "@/models/Field";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { uploadFile } from "@/lib/manageFiles";
@@ -20,20 +20,20 @@ export default async function create(req, res) {
   try {
     const [fields, files] = await parseForm(req);
 
-    const picture = Object.values(files)[0]?.[0];
+    const icon = files.icon?.[0];
 
-    var pictureName = picture ? await uploadFile("./public/uploads/team/", picture, 600) : null;
+    var iconName = icon ? await uploadFile("./public/uploads/fields/", icon) : null;
 
     console.log("-------------------- posterName --------------------");
-    console.log(pictureName);
+    console.log(iconName);
 
     const data = {
-      name: fields.name[0],
-      role: fields.role[0],
-      picture: pictureName,
+      title: fields.title[0],
+      content: fields.content[0],
+      icon: iconName,
     };
 
-    const result = await Team.create(data);
+    const result = await Field.create(data);
     res.status(200).send(result);
   } catch (err) {
     res.status(400).send(err);

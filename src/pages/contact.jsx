@@ -17,7 +17,7 @@ export default function contact() {
   console.log("session from home", session);
 
   return (
-    <div className={`px-4 py-8 ${jakarta.className}`}>
+    <div className={`px-4 pt-8 ${jakarta.className}`}>
       <div className="max-w">
         <Contact />
         <Newsletter />

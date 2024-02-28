@@ -3,7 +3,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <div className="py-8 px-8 gap-6 items-center bg-purple grid grid-cols-2 scr1000:grid-cols-4">
+    <div className="py-20 px-8 gap-6 items-center bg-gradient-to-tr from-purple-700 to-purple-600 grid grid-cols-2 scr1000:grid-cols-4">
       <div className="relative mx-6 max-w-[250px] aspect-square">
         <Image src="/logo_white.png" alt="logo" fill className="object-contain" sizes="(max-width: 600px) 150px, 250px" />
       </div>

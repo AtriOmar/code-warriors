@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function AddCategory({ setCategories }) {
   const [sending, setSending] = useState(false);
   const [input, setInput] = useState({
-    name: "",
+    title: "",
   });
 
   async function addCategory(e) {
@@ -24,7 +24,7 @@ export default function AddCategory({ setCategories }) {
       const res = await axios.post("/api/categories/create", data);
 
       setCategories((prev) => [...prev, res.data]);
-      setInput({ name: "" });
+      setInput({ title: "" });
     } catch (err) {
       console.log(err);
     }

@@ -7,7 +7,15 @@ import Link from "next/link";
 export default function AllQuestions({ questions }) {
   return (
     <article className="mt-10 mb-20">
-      <h1 className="font-bold text-xl">Questions</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="font-bold text-xl">Questions</h1>
+        <Link
+          href="/questions/new"
+          className="relative block mt-8 ml-auto px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+        >
+          Ask Question
+        </Link>
+      </div>
       <div className="mt-6 grid grid-cols-3 gap-4">
         {questions?.map((question) => {
           return <QuestionCard question={question} key={question.id} />;

@@ -1,138 +1,193 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 import ava01 from "@/images/ava-1.jpg";
 import ava02 from "@/images/ava-2.jpg";
 import ava03 from "@/images/ava-3.jpg";
 
-import dynamic from "next/dynamic";
-const Swiper = dynamic(() => import("swiper/react").then((mod) => mod.Swiper), { ssr: false });
-const SwiperSlide = dynamic(() => import("swiper/react").then((mod) => mod.SwiperSlide), { ssr: false });
-
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { Autoplay, Navigation } from "swiper/modules";
-import Image from "next/image";
 const Testimonial = () => {
+  const swiperRef = useRef(null);
+  useEffect(() => {
+    const swiperEl = swiperRef.current;
+
+    const params = {
+      spaceBetween: 30,
+      autoplay: {
+        delay: 2500,
+        disableOnInteraction: false,
+      },
+      slidesPerView: 3,
+      navigation: {
+        nextEl: ".swiper-custom-button-next",
+        prevEl: ".swiper-custom-button-prev",
+      },
+      breakpoints: {
+        100: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        640: {
+          slidesPerView: 1,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 2,
+          spaceBetween: 40,
+        },
+        1024: {
+          slidesPerView: 3,
+          spaceBetween: 50,
+        },
+      },
+    };
+    Object.assign(swiperEl, params);
+
+    // and now initialize it
+    swiperEl.initialize();
+  }, []);
+
   return (
-    <>
-      <section className="bg-purple-600 bg-opacity-60">
+    <div className="bg-purple-600 bg-opacity-60 px-4 py-8">
+      <section className="max-w mx-auto">
         <div className="container">
           <div className="w-75 mb-10">
-            <h6 className="text-gray-400 text-2xl"> Testimonials</h6>
-            <h2 className="mt-4 text-4xl">Customers Talk About Us</h2>
-            <p className="mt-4 text-gray-700 text-2xl">
+            <h6 className="font-semibold text-gray-800 text-2xl"> Testimonials</h6>
+            <h2 className="font-bold mt-4 text-4xl text-slate-900">Customers Talk About Us</h2>
+            <p className="mt-4 text-gray-700 text-lg font-semibold">
               Customer support represents the resources within your company that provide technical assistance to consumers after they purchase a product or
               service.
             </p>
           </div>
 
-          <div className="m-auto md:w-90">
-            <Swiper
-              spaceBetween={30}
-              autoplay={{
-                delay: 2500,
-                disableOnInteraction: false,
-              }}
-              slidesPerView={3}
-              navigation={true}
-              modules={[Autoplay, Navigation]}
-              className="mySwiper"
-              breakpoints={{
-                100: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                640: {
-                  slidesPerView: 1,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  spaceBetween: 40,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  spaceBetween: 50,
-                },
-              }}
+          <div className="m-auto flex justify-center items-center gap-2 relative ">
+            <div className="swiper-custom-button-prev text-black-500 absolute left-0 text-base cursor-pointer  top-0 bottom-0 flex items-center justify-center z-10">
+              <FontAwesomeIcon icon={faArrowLeft} />
+            </div>
+            <div className="grid grid-cols-1 w-full">
+              <swiper-container ref={swiperRef} init="false" class="w-full">
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava01} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava03} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+                <swiper-slide>
+                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
+                    <p className="description">
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
+                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
+                    </p>
+                    <div className="flex items-center justify-center gap-x-4 mt-10">
+                      <div className="w-12 h-12 rounded-full">
+                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h5 className="text-white text-lg font-medium">John Doe</h5>
+                        <p className="description">CEO , Workcreation</p>
+                      </div>
+                    </div>
+                  </div>
+                </swiper-slide>
+                <div className="swiper-button-prev " style={{ display: "none" }}></div>
+                <div className="swiper-button-next " style={{ display: "none" }}></div>
+              </swiper-container>
+            </div>
+            <div
+              style={{ right: "0" }}
+              className="swiper-custom-button-next text-black-500 absolute top-0 bottom-0 text-base cursor-pointer flex items-center justify-center z-10"
             >
-              <SwiperSlide>
-                <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                  <p className="description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem, recusandae
-                    qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                  </p>
-                  <div className="flex items-center justify-center gap-x-4 mt-10">
-                    <div className="w-12 h-12 rounded-full">
-                      <Image src={ava01} alt="" width={100} height={100} className="object-cover rounded-full" />
-                    </div>
-                    <div>
-                      <h5 className="text-white text-lg font-medium">John Doe</h5>
-                      <p className="description">CEO , Workcreation</p>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide>
-                <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                  <p className="description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem, recusandae
-                    qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                  </p>
-                  <div className="flex items-center justify-center gap-x-4 mt-10">
-                    <div className="w-12 h-12 rounded-full">
-                      <Image src={ava02} alt="" width={100} height={100} className="object-cover rounded-full" />
-                    </div>
-                    <div>
-                      <h5 className="text-white text-lg font-medium">John Doe</h5>
-                      <p className="description">CEO , Workcreation</p>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                  <p className="description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem, recusandae
-                    qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                  </p>
-                  <div className="flex items-center justify-center gap-x-4 mt-10">
-                    <div className="w-12 h-12 rounded-full">
-                      <Image src={ava03} alt="" width={100} height={100} className="object-cover rounded-full" />
-                    </div>
-                    <div>
-                      <h5 className="text-white text-lg font-medium">John Doe</h5>
-                      <p className="description">CEO , Workcreation</p>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-
-              <SwiperSlide>
-                <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                  <p className="description">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem, recusandae
-                    qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                  </p>
-                  <div className="flex items-center justify-center gap-x-4 mt-10">
-                    <div className="w-12 h-12 rounded-full">
-                      <Image src={ava02} alt="" width={100} height={100} className="object-cover rounded-full" />
-                    </div>
-                    <div>
-                      <h5 className="text-white text-lg font-medium">John Doe</h5>
-                      <p className="description">CEO , Workcreation</p>
-                    </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            </Swiper>
+              <FontAwesomeIcon icon={faArrowRight} />
+            </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 };
 

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 export default function Contact() {
   const [sending, setSending] = useState(false);
   const [input, setInput] = useState({
-    name: "",
+    title: "",
     email: "",
     phone: "",
     message: "",
@@ -16,6 +16,8 @@ export default function Contact() {
 
   async function sendMessage() {
     if (sending) return;
+
+    if (!input.name || !input.email || !input.phone || !input.message) return toast.error("Please fill all the fields");
 
     const data = {
       name: input.name,
@@ -36,8 +38,8 @@ export default function Contact() {
   }
 
   return (
-    <section className="flex gap-10 max-w-[1200px]">
-      <article className="flex flex-col w-[400px] aspect-[2046/2696] py-4 px-6 bg-[url(/purple-background.jpg)] bg-[length:100%_100%]  bg-no-repeat rounded-lg text-white">
+    <section className="flex flex-col-reverse scr800:flex-row gap-10 max-w-[1200px]">
+      <article className="flex flex-col w-full max-w-[400px] aspect-[2046/2696] mx-auto py-4 px-6 bg-[url(/purple-background.jpg)] bg-[length:100%_100%]  bg-no-repeat rounded-lg text-white">
         <p className="text-center font-bold text-xl ">Contact Information</p>
         <div className="grow flex items-center">
           <div className="grid grid-cols-[30px_1fr] items-center gap-y-6">
@@ -51,12 +53,13 @@ export default function Contact() {
         </div>
       </article>
       <article className="grow flex flex-col justify-center">
+        <p className="text-center font-bold text-xl ">Contact Us</p>
         <h1 className="mt-2 font-semibold text-sm text-slate-800">Name</h1>
         <input
           type="text"
           placeholder="Name"
           value={input.name}
-          onChange={(e) => setInput({ ...input, name: e.target.value })}
+          onChange={(e) => setInput({ ...input, title: e.target.value })}
           className="w-full mt-1 px-3 py-1 rounded-md border border-slate-300 outline-purple text-slate-600 text-sm"
         />
         <h1 className="mt-4 font-semibold text-sm text-slate-800">Phone number</h1>

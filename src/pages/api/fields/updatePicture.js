@@ -9,7 +9,7 @@ export const config = {
   },
 };
 
-const Team = require("@/models/Team");
+const Field = require("@/models/Field");
 const formidable = require("formidable");
 
 export default async function handler(req, res) {
@@ -21,38 +21,38 @@ export default async function handler(req, res) {
   try {
     const [fields, files] = await parseForm(req);
 
-    const memberId = fields.id[0];
+    const fieldId = fields.id[0];
 
-    const member = await Team.findByPk(memberId);
+    const field = await Field.findByPk(fieldId);
 
-    if (!member) return res.status(400).send("member not found");
+    if (!field) return res.status(400).send("field not found");
 
-    const picture = Object.values(files)[0]?.[0];
+    const icon = Object.values(files)[0]?.[0];
 
     console.log("-------------------- picture --------------------");
-    console.log(picture);
+    console.log(icon);
 
-    if (member.picture) {
-      await removeFile("./public/uploads/team/" + member.picture);
+    if (field.icon) {
+      await removeFile("./public/uploads/fields/" + field.icon);
     }
 
-    var pictureName = picture ? await uploadFile("./public/uploads/team/", picture, 600) : null;
+    var iconName = icon ? await uploadFile("./public/uploads/fields/", icon, 600) : null;
 
     // console.log("-------------------- pictureName --------------------");
     // console.log(pictureName);
 
-    await Team.update(
-      { picture: pictureName },
+    await Field.update(
+      { icon: iconName },
       {
         where: {
-          id: memberId,
+          id: fieldId,
         },
       }
     );
 
-    const memberData = await Team.findByPk(memberId);
+    const fieldData = await Field.findByPk(fieldId);
 
-    res.status(200).send(memberData);
+    res.status(200).send(fieldData);
   } catch (err) {
     res.status(400).send(err);
     console.log(err);

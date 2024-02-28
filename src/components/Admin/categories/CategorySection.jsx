@@ -10,7 +10,7 @@ const { useState, useEffect } = require("react");
 export default function CategorySection({ name, categories, type, setCategories }) {
   const [addCategoryOpen, setAddCategoryOpen] = useState(false);
   const [input, setInput] = useState({
-    name: "",
+    title: "",
   });
   const [sending, setSending] = useState(false);
   const [showDelete, setShowDelete] = useState(-1);
@@ -32,7 +32,7 @@ export default function CategorySection({ name, categories, type, setCategories 
       const res = await axios.post("/api/categories/create", data);
 
       setCategories((prev) => [...prev, res.data]);
-      setInput({ name: "" });
+      setInput({ title: "" });
     } catch (err) {
       console.log(err);
     }

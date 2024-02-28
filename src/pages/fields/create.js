@@ -1,4 +1,4 @@
-import Team from "@/models/Team";
+import Field from "@/models/Field";
 import { authOptions } from "../auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { uploadFile } from "@/lib/manageFiles";
@@ -33,7 +33,7 @@ export default async function create(req, res) {
       picture: pictureName,
     };
 
-    const result = await Team.create(data);
+    const result = await Field.create(data);
     res.status(200).send(result);
   } catch (err) {
     res.status(400).send(err);

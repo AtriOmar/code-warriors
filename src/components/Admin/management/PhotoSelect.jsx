@@ -4,12 +4,12 @@ import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { v4 as uuidv4 } from "uuid";
 
-function PhotoSelect({ input, setInput }) {
+function PhotoSelect({ picture, setPicture = () => {} }) {
   const onDrop = useCallback((acceptedFiles) => {
     const file = acceptedFiles[0];
     if (file?.type?.startsWith("image")) {
       file.id = uuidv4().toString();
-      setInput((prev) => ({ ...prev, photo: file }));
+      setPicture(file);
     }
   }, []);
 
@@ -17,8 +17,8 @@ function PhotoSelect({ input, setInput }) {
 
   return (
     <div
-      className={`mt-3 relative w-full max-w-[200px] rounded-lg border border-slate-300 aspect-square ${input.photo ? "" : "cursor-pointer"}`}
-      {...(input.photo ? {} : getRootProps())}
+      className={`mt-3 relative w-full max-w-[200px] rounded-lg border border-slate-300 aspect-square ${picture ? "" : "cursor-pointer"}`}
+      {...(picture ? {} : getRootProps())}
     >
       <div
         className={`absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-blue-500 bg-opacity-75 font-bold text-white ${
@@ -27,7 +27,7 @@ function PhotoSelect({ input, setInput }) {
       >
         Déposer le fichier
       </div>
-      {input.photo ? (
+      {picture ? (
         ""
       ) : (
         <>
@@ -40,21 +40,21 @@ function PhotoSelect({ input, setInput }) {
         </>
       )}
       <input {...getInputProps()} type="file" name="poster" id="poster" hidden />
-      {input.photo ? (
+      {picture ? (
         <>
           <div className="relative h-full w-full">
             <button
               type="button"
               className="absolute -right-2 -top-2"
               onClick={() => {
-                setInput((prev) => ({ ...prev, photo: null }));
+                setPicture(null);
               }}
             >
               <i className="flex h-6 w-6 items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
                 <FontAwesomeIcon icon={faXmark} className="text-white" size="lg" />
               </i>
             </button>
-            <img src={URL.createObjectURL(input.photo)} alt="" className="h-full w-full rounded-lg object-cover" />
+            <img src={URL.createObjectURL(picture)} alt="" className="h-full w-full rounded-lg object-cover" />
           </div>
         </>
       ) : (

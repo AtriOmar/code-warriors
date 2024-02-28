@@ -18,7 +18,7 @@ export default function faq({ faqs }) {
 
   return (
     <div
-      className={`min-h-[calc(100vh_-_60px)] p-24 bg-black bg-[url(../../public/faq.png)] bg-contain bg-no-repeat bg-right-bottom bg-fixed ${jakarta.className}`}
+      className={`min-h-[calc(100vh_-_60px)] py-24 px-4 scr700:px-24 bg-black bg-[url(../../public/faq.png)] bg-contain bg-no-repeat bg-right-bottom bg-fixed ${jakarta.className}`}
     >
       <div className="flex flex-col gap-4 max-w-[700px]">
         {faqs?.map((faq) => (
@@ -38,7 +38,7 @@ function FAQItem({ faq }) {
         onClick={() => {
           setOpen((prev) => !prev);
         }}
-        className="w-full flex justify-between items-center text-xl font-bold"
+        className="w-full flex justify-between items-center text-xl font-bold text-left"
       >
         {faq.title}
         <FontAwesomeIcon icon={faChevronDown} />

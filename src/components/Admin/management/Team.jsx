@@ -55,6 +55,11 @@ function AddMember({ setTeam }) {
       console.log(res.data);
       setTeam((prev) => [...prev, res.data]);
       setProgress(-1);
+      setInput({
+        name: "",
+        role: "",
+        photo: null,
+      });
       toast.success("Member added");
     } catch (err) {
       console.log(err);
@@ -65,7 +70,12 @@ function AddMember({ setTeam }) {
   return (
     <div>
       <h2 className="mt-4 font-bold">Photo</h2>
-      <PhotoSelect input={input} setInput={setInput} />
+      <PhotoSelect
+        picture={input.photo}
+        setPicture={(photo) => {
+          setInput((prev) => ({ ...prev, photo }));
+        }}
+      />
       {progress > -1 && (
         <div className="relative w-full max-w-[200px] rounded-full border border-green-500 overflow-hidden mt-2">
           <div className="bg-green-500 h-4" style={{ width: progress + "%" }}></div>

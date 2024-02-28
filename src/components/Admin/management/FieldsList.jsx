@@ -8,21 +8,21 @@ import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
-export default function TeamList({ team, setTeam }) {
-  if (!team?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no team members</p>;
+export default function FieldsList({ fields, setFields }) {
+  if (!fields?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no fields</p>;
 
   return (
     <div className="flex flex-col gap-2 mt-2">
-      {team?.map((member) => (
-        <MemberItem key={member.id} member={member} setTeam={setTeam} />
+      {fields?.map((field) => (
+        <FieldItem key={field.id} field={field} setFields={setFields} />
       ))}
     </div>
   );
 }
 
-function MemberItem({ member, setTeam }) {
+function FieldItem({ field, setFields }) {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState({ name: member.name, role: member.role, picture: member.picture });
+  const [input, setInput] = useState({ title: field.title, content: field.content, icon: field.icon });
   const [edit, setEdit] = useState(false);
   const [sending, setSending] = useState(false);
   const [progress, setProgress] = useState(-1);
@@ -35,44 +35,44 @@ function MemberItem({ member, setTeam }) {
   };
 
   console.log("-------------------- member, input --------------------");
-  console.log(member, input);
+  console.log(field, input);
 
   async function updatePicture() {
     const formData = new FormData();
 
-    formData.append("id", member.id);
-    formData.append("picture", input.picture);
+    formData.append("id", field.id);
+    formData.append("icon", input.icon);
 
     try {
-      const res = await axios.post("/api/team/updatePicture", formData, config);
+      const res = await axios.post("/api/fields/updatePicture", formData, config);
 
-      setTeam((prev) => prev.map((member) => (member.id === res.data.id ? res.data : member)));
-      setInput({ title: res.data.name, role: res.data.role, picture: res.data.picture });
+      setFields((prev) => prev.map((field) => (field.id === res.data.id ? res.data : field)));
+      setInput({ title: res.data.title, content: res.data.content, icon: res.data.icon });
     } catch (err) {}
     setProgress(-1);
   }
 
-  async function updateMember() {
+  async function updateField() {
     if (sending) return;
 
-    if (input.picture !== member.picture) updatePicture();
+    if (input.icon !== field.icon) updatePicture();
 
-    if (!input.name || !input.role) return;
+    if (!input.title || !input.content) return;
 
-    if (input.name === member.name && input.role === member.role) return;
+    if (input.title === field.title && input.content === field.content) return;
 
     const data = {
-      id: member.id,
-      name: input.name,
-      role: input.role,
+      id: field.id,
+      title: input.title,
+      content: input.content,
     };
 
     setSending(true);
     try {
-      const res = await axios.post("/api/team/update", data);
+      const res = await axios.post("/api/fields/update", data);
       toast.success("Changes saved");
       setEdit(false);
-      setTeam((prev) => prev.map((member) => (member.id === res.data.id ? res.data : member)));
+      setFields((prev) => prev.map((field) => (field.id === res.data.id ? res.data : field)));
     } catch (err) {
       toast.error("An error occurred");
 
@@ -85,7 +85,7 @@ function MemberItem({ member, setTeam }) {
     const file = e.target.files[0];
     if (file?.type?.startsWith("image")) {
       file.id = uuidv4().toString();
-      setInput((prev) => ({ ...prev, picture: file }));
+      setInput((prev) => ({ ...prev, icon: file }));
     }
 
     e.target.value = "";
@@ -96,7 +96,7 @@ function MemberItem({ member, setTeam }) {
       <div className="flex gap-2">
         <div className="grow flex gap-4 items-center px-3 py-2 rounded-lg border border-slate-300 shadow bg-white">
           <div className="relative size-[50px] border border-slate-300 rounded-lg">
-            {input.picture ? (
+            {input.icon ? (
               <div className="relative aspect-square">
                 {/* <button
                 type="button"
@@ -112,7 +112,7 @@ function MemberItem({ member, setTeam }) {
                 <div className="relative w-full rounded-lg aspect-square border border-slate-300 overflow-hidden">
                   <Image
                     // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
-                    src={typeof input.picture === "string" ? `/api/photo?path=/uploads/team/${input.picture}` : URL.createObjectURL(input.picture)}
+                    src={typeof input.icon === "string" ? `/api/photo?path=/uploads/fields/${input.icon}` : URL.createObjectURL(input.icon)}
                     fill
                     sizes="50px"
                     alt="Profile Image"
@@ -130,36 +130,31 @@ function MemberItem({ member, setTeam }) {
             </label>
           </div>
           <div className=" ">
-            <button
-              onClick={() => {
-                setOpen((prev) => !prev);
-              }}
-              className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize"
-            >
+            <div className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize">
               {edit ? (
                 <input
-                  value={input.name}
-                  onChange={(e) => setInput((prev) => ({ ...prev, name: e.target.value }))}
+                  value={input.title}
+                  onChange={(e) => setInput((prev) => ({ ...prev, title: e.target.value }))}
                   className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md"
                 />
               ) : (
-                <>{member.name}</>
+                <>{field.title}</>
               )}
-            </button>
+            </div>
             <div className={`mt-1`}>
               {edit ? (
                 <input
-                  value={input.role}
-                  onChange={(e) => setInput((prev) => ({ ...prev, role: e.target.value }))}
+                  value={input.content}
+                  onChange={(e) => setInput((prev) => ({ ...prev, content: e.target.value }))}
                   className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
                 />
               ) : (
-                <div className={` text-[13px] text-slate-500`}>{member.role}</div>
+                <div className={` text-[13px] text-slate-500`}>{field.content}</div>
               )}
             </div>
           </div>
         </div>
-        {!edit && input.picture === member.picture ? (
+        {!edit && input.icon === field.icon ? (
           <>
             <button
               onClick={() => {
@@ -169,19 +164,19 @@ function MemberItem({ member, setTeam }) {
             >
               Edit
             </button>
-            <DeleteMemberMenu member={member} setTeam={setTeam} />
+            <DeleteFieldMenu field={field} setFields={setFields} />
           </>
         ) : (
           <>
             <button
-              onClick={updateMember}
+              onClick={updateField}
               className="self-center px-3 border border-purple rounded-full hover:bg-violet-100 text-purple text-sm font-semibold duration-300"
             >
               Save
             </button>
             <button
               onClick={() => {
-                setInput({ title: member.name, role: member.role, picture: member.picture });
+                setInput({ title: field.title, content: field.content, icon: field.icon });
                 setEdit(false);
               }}
               className="self-center px-3 border border-red-500 rounded-full hover:bg-red-100 text-red-500 text-sm font-semibold duration-300"
@@ -208,7 +203,7 @@ function MemberItem({ member, setTeam }) {
   );
 }
 
-function DeleteMemberMenu({ member, setTeam }) {
+function DeleteFieldMenu({ field, setFields }) {
   const [sending, setSending] = useState(false);
 
   async function handleDelete(e) {
@@ -218,9 +213,9 @@ function DeleteMemberMenu({ member, setTeam }) {
 
     setSending(true);
     try {
-      const res = await axios.delete("/api/team/deleteById", { params: { id: member.id } });
+      const res = await axios.delete("/api/fields/deleteById", { params: { id: field.id } });
 
-      setTeam((prev) => prev.filter((m) => m.id !== member.id));
+      setFields((prev) => prev.filter((f) => f.id !== field.id));
       toast.success("Member deleted");
     } catch (err) {
       toast.error("An error occurred");

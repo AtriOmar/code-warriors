@@ -33,7 +33,7 @@ export default function Categories({ categories, setCategories }) {
 function CategoryItem({ category, setCategories }) {
   const [sending, setSending] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [input, setInput] = useState({ name: category.name });
+  const [input, setInput] = useState({ title: category.name });
 
   async function updateCategory() {
     if (sending) return;
@@ -85,7 +85,7 @@ function CategoryItem({ category, setCategories }) {
             </button>
             <button
               onClick={() => {
-                setInput({ name: category.name });
+                setInput({ title: category.name });
                 setEdit(false);
               }}
               className="w-fit px-3 border border-red-600 rounded-full hover:bg-violet-100 text-red-600 text-sm font-semibold duration-300"

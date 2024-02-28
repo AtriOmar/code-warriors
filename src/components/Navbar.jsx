@@ -36,10 +36,15 @@ export default function Navbar() {
 
   return (
     <div className="z-50 fixed top-0 h-[60px] w-full px-4 bg-white border-b-2 border-slate-300">
-      <nav className="flex items-center justify-between max-w-[1300px] h-full mx-auto">
-        <Link href="/" className="relative w-[100px] h-full">
-          <Image src="/logo.png" alt="logo" fill className="object-contain" sizes="100px" />
-        </Link>
+      <nav className="flex items-center justify-between max-w h-full">
+        <div className="flex items-center gap-4 h-full">
+          <i className="scr800:hidden">
+            <FontAwesomeIcon icon={faBars} className="text-xl" />
+          </i>
+          <Link href="/" className="relative block w-[100px] h-full">
+            <Image src="/logo.png" alt="logo" fill className="object-contain" sizes="100px" />
+          </Link>
+        </div>
         <ul className="hidden scr800:flex gap-12 items-center">
           <li className={`font-bold hover:text-purple-800 duration-300 ${pathname === "/" ? "text-purple-600" : "text-slate-700"}`}>
             <Link href="/">Home</Link>
@@ -178,11 +183,11 @@ export default function Navbar() {
 }
 
 const links = [
-  { label: "Contact Us", className: "block scr1200:hidden" },
-  { label: "FAQ", className: "block scr1100:hidden" },
+  { label: "Contact Us", className: "block scr1200:hidden", path: "/contact" },
+  { label: "FAQ", className: "block scr1100:hidden", path: "/faq" },
   { label: "Question", className: "block min-[1050px]:hidden", path: "/questions" },
-  { label: "Tips", className: "block scr900:hidden" },
-  { label: "Articles", className: "block min-[850px]:hidden" },
+  { label: "Tips", className: "block scr900:hidden", path: "/tips" },
+  { label: "Articles", className: "block min-[850px]:hidden", path: "/articles" },
 ];
 
 const userLinks = [

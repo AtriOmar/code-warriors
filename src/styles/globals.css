@@ -4,6 +4,7 @@
 
 html {
   scroll-padding-top: 55px;
+  /* overflow-x: clip; */
 }
 * {
   scroll-behavior: smooth;
