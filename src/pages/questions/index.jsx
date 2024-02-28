@@ -8,7 +8,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function index({ questions }) {
   return (
-    <div className={`${jakarta.className} py-4 px-8`}>
+    <div className={`${jakarta.className} py-4 px-4 scr800:px-8`}>
       <div className="flex gap-14 max-w">
         <QuestionsSidebar />
         <AllQuestions questions={questions} />
@@ -17,8 +17,8 @@ export default function index({ questions }) {
   );
 }
 
-index.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+index.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import { getServerSession } from "next-auth";
@@ -31,6 +31,7 @@ export async function getServerSideProps(context) {
   const Question = require("@/models/Question");
   const User = require("@/models/User");
   const Answer = require("@/models/Answer");
+  const Setting = require("@/models/Setting");
 
   const session = await getServerSession(context.req, context.res, authOptions);
   const questions = await Question.findAll({
@@ -42,6 +43,7 @@ export async function getServerSideProps(context) {
     ],
     include: [{ model: User, attributes: ["id", "username", "picture"] }],
   });
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   console.log("-------------------- questions --------------------");
   console.log(questions);
@@ -50,6 +52,7 @@ export async function getServerSideProps(context) {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       questions: JSON.parse(JSON.stringify(questions)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

@@ -26,16 +26,19 @@ export default function contact() {
   );
 }
 
-contact.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+contact.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
+  const Setting = require("@/models/Setting");
 
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

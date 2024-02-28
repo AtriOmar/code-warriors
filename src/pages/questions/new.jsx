@@ -18,20 +18,25 @@ export default function about({ categories }) {
   );
 }
 
-about.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+about.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import Category from "@/models/Category";
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
+  const Setting = require("@/models/Setting");
+
   const categories = await Category.findAll();
+
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       categories: JSON.parse(JSON.stringify(categories)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

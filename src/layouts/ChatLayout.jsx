@@ -6,9 +6,8 @@ import Navbar from "@/components/Navbar";
 export default function ChatLayout({ children }) {
   return (
     <>
-      <Navbar />
       <ChatSidebar />
-      <main className="mt-[60px] ml-[300px] h-[calc(100vh_-_60px)]">{children}</main>
+      <main className="mt-[60px] scr800:ml-[300px] duration-300 h-[calc(100vh_-_60px)]">{children}</main>
     </>
   );
 }

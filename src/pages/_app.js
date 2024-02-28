@@ -9,6 +9,7 @@ import Head from "next/head";
 import ChatProvider from "@/contexts/ChatProvider";
 config.autoAddCss = false;
 import { register } from "swiper/element/bundle";
+import UIProvider from "@/contexts/UIProvider";
 
 register();
 
@@ -22,7 +23,9 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
         <title>Code Warriors</title>
       </Head>
       <ChatProvider>
-        <MainLayout>{getLayout(<Component {...pageProps} />, pageProps)}</MainLayout>
+        <UIProvider>
+          <MainLayout>{getLayout(<Component {...pageProps} />, pageProps)}</MainLayout>
+        </UIProvider>
       </ChatProvider>
     </SessionProvider>
   );

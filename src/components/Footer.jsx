@@ -1,7 +1,12 @@
 import Image from "next/image";
 import React from "react";
 
-export default function Footer() {
+export default function Footer({ settings: settingsArr }) {
+  const settings = settingsArr?.reduce((acc, setting) => {
+    acc[setting.name] = setting.value;
+    return acc;
+  }, {});
+
   return (
     <div className="py-20 px-8 gap-6 items-center bg-gradient-to-tr from-purple-700 to-purple-600 grid grid-cols-2 scr1000:grid-cols-4">
       <div className="relative mx-6 max-w-[250px] aspect-square">
@@ -30,11 +35,9 @@ export default function Footer() {
       <div>
         <p className="font-bold text-xl">Contact</p>
         <ul className="mt-4 flex flex-col gap-2 font-medium">
-          <li>Home</li>
-          <li>Services</li>
-          <li>About</li>
-          <li>Team</li>
-          <li>Contact</li>
+          {settingsArr?.map?.((setting) => (
+            <li key={setting.id}>{setting.value}</li>
+          ))}
         </ul>
       </div>
     </div>

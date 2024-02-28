@@ -24,7 +24,7 @@ export default function categories({ tips, categories, category, articles, quest
   console.log("session from home", session);
 
   return (
-    <div className={`px-6 scr1100:px- pt-12 pb-20 ${jakarta.className}`}>
+    <div className={`px-4 scr1100:px- pt-12 pb-20 ${jakarta.className}`}>
       <div className="max-w">
         <p className="w-fit mx-auto px-8 py-2 rounded-lg bg-purple hover:bg-purple-700 text-white text-lg  shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300">
           {category.name}

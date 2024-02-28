@@ -23,8 +23,8 @@ export default function profile({ questions, user }) {
   );
 }
 
-profile.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+profile.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import { getServerSession } from "next-auth";
@@ -40,6 +40,7 @@ export async function getServerSideProps(context) {
 
   const session = await getServerSession(context.req, context.res, authOptions);
   const { user: authUser } = session || {};
+  const Setting = require("@/models/Setting");
 
   const userId = context.params.id;
 
@@ -60,14 +61,14 @@ export async function getServerSideProps(context) {
 
   const questions = await Question.findAll({ where: { userId: userId } });
 
-  console.log("-------------------- session from get server side --------------------");
-  console.log(session);
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       questions: JSON.parse(JSON.stringify(questions)),
       user: JSON.parse(JSON.stringify(user)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

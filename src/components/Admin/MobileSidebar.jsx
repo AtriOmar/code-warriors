@@ -1,11 +1,25 @@
 import { useUIContext } from "@/contexts/UIProvider";
-import { faCircleQuestion, faComments, faDesktop, faEnvelope, faHome, faList, faMedal, faNewspaper, faUser, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleQuestion,
+  faComments,
+  faDesktop,
+  faEnvelope,
+  faHome,
+  faLightbulb,
+  faList,
+  faMedal,
+  faNewspaper,
+  faPhone,
+  faQuestion,
+  faUser,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 
-export default function AdminSidebar() {
+export default function MobileSidebar() {
   const router = useRouter();
   const pathname = router.pathname;
   const { mobileNavbarOpen, setMobileNavbarOpen } = useUIContext();
@@ -13,15 +27,17 @@ export default function AdminSidebar() {
   return (
     <>
       <div
-        className={`fixed inset-0 z-50 bg-opacity-25 duration-300 cursor-pointer ${mobileNavbarOpen ? "bg-black" : "bg-transparent invisible"}`}
+        className={`fixed inset-0 z-[100] scr800:z-0 bg-opacity-25 duration-300 cursor-pointer scr800:bg-transparent scr800:invisible ${
+          mobileNavbarOpen ? "bg-black" : "bg-transparent invisible"
+        }`}
         onClick={() => setMobileNavbarOpen(false)}
       ></div>
       <div
         className={`${
           mobileNavbarOpen ? "" : "-translate-x-full"
-        } scr800:translate-x-0 fixed z-50 scr800:z-0 bottom-0 top-0 scr800:top-[60px] left-0 w-[200px] py-16 scr800:py-10 border-r-2 border-slate-300 bg-white duration-300`}
+        } scr800:-translate-x-full fixed z-[100] scr800:z-0 bottom-0 top-0 scr800:top-[60px] left-0 w-[200px] py-16 scr800:py-10 border-r-2 border-slate-300 bg-white duration-300 `}
       >
-        <button className={`scr1200:hidden absolute top-3 right-3 z-10`} onClick={() => setMobileNavbarOpen(false)}>
+        <button className={`scr800:hidden absolute top-3 right-3 z-10`} onClick={() => setMobileNavbarOpen(false)}>
           <FontAwesomeIcon icon={faXmark} className="text-lg text-black" />
         </button>
         <ul className="flex flex-col gap-4 ">
@@ -51,49 +67,44 @@ export default function AdminSidebar() {
 
 const items = [
   {
-    name: "Dashboard",
+    name: "Home",
     Icon: <FontAwesomeIcon icon={faHome} className="" />,
-    path: "/admin",
+    path: "/",
     strict: true,
+  },
+  {
+    name: "About",
+    Icon: <FontAwesomeIcon icon={faCircleQuestion} className="" />,
+    path: "/about",
   },
   {
     name: "Categories",
     Icon: <FontAwesomeIcon icon={faList} className="" />,
-    path: "/admin/categories",
-  },
-  {
-    name: "Newsletter",
-    Icon: <FontAwesomeIcon icon={faEnvelope} className="" />,
-    path: "/admin/newsletter",
+    path: "/categories",
   },
   {
     name: "Articles",
     Icon: <FontAwesomeIcon icon={faNewspaper} className="" />,
-    path: "/admin/articles",
+    path: "/articles",
   },
   {
-    name: "Comments",
-    Icon: <FontAwesomeIcon icon={faComments} className="" />,
-    path: "/admin/comments",
+    name: "Tips",
+    Icon: <FontAwesomeIcon icon={faLightbulb} className="" />,
+    path: "/tips",
   },
   {
     name: "Questions",
     Icon: <FontAwesomeIcon icon={faCircleQuestion} className="" />,
-    path: "/admin/questions",
+    path: "/questions",
   },
   {
-    name: "Accounts",
-    Icon: <FontAwesomeIcon icon={faUser} className="" />,
-    path: "/admin/accounts",
+    name: "FAQ",
+    Icon: <FontAwesomeIcon icon={faQuestion} className="" />,
+    path: "/faq",
   },
   {
-    name: "Best Practices",
-    Icon: <FontAwesomeIcon icon={faMedal} className=" rotate-180" />,
-    path: "/admin/best-practices",
-  },
-  {
-    name: "Website Management",
-    Icon: <FontAwesomeIcon icon={faDesktop} className="" />,
-    path: "/admin/website-management",
+    name: "Contact Us",
+    Icon: <FontAwesomeIcon icon={faPhone} className="" />,
+    path: "/contact",
   },
 ];

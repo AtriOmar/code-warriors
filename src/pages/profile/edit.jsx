@@ -14,7 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
-export default function edit({ directory }) {
+export default function edit({}) {
   const { data: session, status, update } = useSession();
   const { user } = session || {};
   const [input, setInput] = useState({
@@ -257,12 +257,13 @@ export default function edit({ directory }) {
   );
 }
 
-edit.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+edit.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
+  const Setting = require("@/models/Setting");
 
   if (!session) {
     return {
@@ -273,10 +274,13 @@ export async function getServerSideProps(context) {
       props: {},
     };
   }
+
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
-      directory: process.cwd(),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

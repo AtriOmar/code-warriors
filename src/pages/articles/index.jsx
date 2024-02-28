@@ -17,7 +17,7 @@ export default function articles({ articles }) {
   console.log("session from home", session);
 
   return (
-    <div className={`${jakarta.className} py-4 px-8`}>
+    <div className={`${jakarta.className} py-4 px-4`}>
       <div className="flex gap-14 max-w">
         <QuestionsSidebar />
         <AllArticles articles={articles} />
@@ -26,21 +26,24 @@ export default function articles({ articles }) {
   );
 }
 
-articles.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+articles.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
   const Article = require("@/models/Article");
   const Category = require("@/models/Category");
+  const Setting = require("@/models/Setting");
 
   const session = await getServerSession(context.req, context.res, authOptions);
   const articles = await Article.findAll({ include: { model: Category } });
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       articles: JSON.parse(JSON.stringify(articles)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

@@ -4,14 +4,15 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import SettingsList from "@/components/Admin/management/SettingsList";
 
-export default function Values({ values: initialValues }) {
-  const [values, setValues] = useState(initialValues);
+export default function Settings({ settings: initialSettings }) {
+  const [settings, setSettings] = useState(initialSettings);
 
   return (
     <div className="max-w-[800px]">
-      <ValuesList values={values} setValues={setValues} />
-      <AddValue setValues={setValues} />
+      <SettingsList settings={settings} setSettings={setSettings} />
+      {/* <AddValue setValues={setValues} /> */}
     </div>
   );
 }

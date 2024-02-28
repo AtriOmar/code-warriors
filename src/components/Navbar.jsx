@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useChatContext } from "@/contexts/ChatProvider";
+import { useUIContext } from "@/contexts/UIProvider";
 
 export default function Navbar() {
   const { data: session } = useSession();
@@ -21,6 +22,7 @@ export default function Navbar() {
     () => conversations?.reduce((total, conv) => (conv.seen === "both" || conv?.seen === user.id + "" ? total : total + 1), 0),
     [conversations]
   );
+  const { mobileNavbarOpen, setMobileNavbarOpen } = useUIContext();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -38,9 +40,14 @@ export default function Navbar() {
     <div className="z-50 fixed top-0 h-[60px] w-full px-4 bg-white border-b-2 border-slate-300">
       <nav className="flex items-center justify-between max-w h-full">
         <div className="flex items-center gap-4 h-full">
-          <i className="scr800:hidden">
+          <button
+            className="scr800:hidden"
+            onClick={() => {
+              setMobileNavbarOpen(true);
+            }}
+          >
             <FontAwesomeIcon icon={faBars} className="text-xl" />
-          </i>
+          </button>
           <Link href="/" className="relative block w-[100px] h-full">
             <Image src="/logo.png" alt="logo" fill className="object-contain" sizes="100px" />
           </Link>

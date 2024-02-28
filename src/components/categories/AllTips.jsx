@@ -3,9 +3,9 @@ import Image from "next/image";
 
 export default function AllTips({ tips, category }) {
   return (
-    <div className="flex flex-col gap-8 mt-4">
+    <div className="grow flex flex-col gap-8 mt-4">
       {tips?.map((tip, index) => (
-        <div>
+        <div key={tip.id}>
           <div className="flex gap-4 justify-center items-center">
             <div className="block scr800:hidden relative w-10 aspect-square">
               <Image src={lampImg} alt={"Tip" + index} fill className="object-contain" />

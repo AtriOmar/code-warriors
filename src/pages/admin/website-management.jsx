@@ -13,14 +13,15 @@ import Fields from "@/components/Admin/management/Fields";
 import { Scrollspy } from "@makotot/ghostui";
 import TOCNav from "@/components/Admin/management/TOCNav";
 import Feedbacks from "@/components/Admin/management/Feedbacks";
+import Settings from "@/components/Admin/management/Settings";
 
-const SIZE = 5;
+const SIZE = 6;
 const list = new Array(SIZE).fill(0);
-export default function index({ faqs, values, team, fields, feedbacks }) {
-  const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
+export default function index({ faqs, values, team, fields, feedbacks, settings }) {
+  const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
   return (
-    <div className="px-20 pt-12 pb-20">
+    <div className="px-4 scr1000:px-20 pt-12 pb-20">
       <div data-cy="section-wrapper">
         <Scrollspy sectionRefs={sectionRefs}>
           {({ currentElementIndexInViewport }) => (
@@ -52,9 +53,9 @@ export default function index({ faqs, values, team, fields, feedbacks }) {
                 <Feedbacks feedbacks={feedbacks} />
               </div>
               <div className="max-w-[800px] h-px my-8 bg-slate-400"></div>
-              <div id={`info`} data-cy={`section-item`} ref={sectionRefs[4]} className={currentElementIndexInViewport === 4 ? "active" : ""}>
-                <h1 className="font-bold text-xl">Info</h1>
-                <Feedbacks feedbacks={feedbacks} />
+              <div id={`settings`} data-cy={`section-item`} ref={sectionRefs[5]} className={currentElementIndexInViewport === 5 ? "active" : ""}>
+                <h1 className="font-bold text-xl">Settings</h1>
+                <Settings settings={settings} />
               </div>
             </>
           )}
@@ -77,6 +78,7 @@ export async function getServerSideProps(context) {
   const Team = require("@/models/Team");
   const Field = require("@/models/Field");
   const Feedback = require("@/models/Feedback");
+  const Setting = require("@/models/Setting");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -105,6 +107,9 @@ export async function getServerSideProps(context) {
   const feedbacks = await Feedback.findAll({
     attributes: ["id", "name", "role", "feedback", "picture"],
   });
+  const settings = await Setting.findAll({
+    attributes: ["id", "name", "value"],
+  });
 
   return {
     props: {
@@ -114,6 +119,7 @@ export async function getServerSideProps(context) {
       team: JSON.parse(JSON.stringify(team)),
       fields: JSON.parse(JSON.stringify(fields)),
       feedbacks: JSON.parse(JSON.stringify(feedbacks)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

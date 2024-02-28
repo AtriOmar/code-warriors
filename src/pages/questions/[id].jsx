@@ -15,8 +15,8 @@ export default function index({ question }) {
   );
 }
 
-index.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+index.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import { getServerSession } from "next-auth";
@@ -28,6 +28,7 @@ export async function getServerSideProps(context) {
   const Answer = require("@/models/Answer");
   const User = require("@/models/User");
   const Category = require("@/models/Category");
+  const Setting = require("@/models/Setting");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -44,11 +45,13 @@ export async function getServerSideProps(context) {
       },
     ],
   });
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       question: JSON.parse(JSON.stringify(question)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

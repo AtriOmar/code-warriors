@@ -10,7 +10,7 @@ const Setting = sequelize.define(
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     name: DataTypes.TEXT,
     value: DataTypes.TEXT,
-    required: DataTypes.BOOLEAN,
+    required: { type: DataTypes.BOOLEAN, defaultValue: false },
   },
   {
     tableName: "settings",

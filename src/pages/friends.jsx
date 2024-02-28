@@ -20,8 +20,8 @@ export default function profile({ questions }) {
   );
 }
 
-profile.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+profile.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import { getServerSession } from "next-auth";

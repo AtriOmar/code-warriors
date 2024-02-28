@@ -29,8 +29,8 @@ export default function profile({ questions, friendships }) {
   );
 }
 
-profile.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+profile.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 import { getServerSession } from "next-auth";
@@ -44,6 +44,7 @@ export async function getServerSideProps(context) {
   const User = require("@/models/User");
   const Friendship = require("@/models/Friendship");
   const { Op } = require("sequelize");
+  const Setting = require("@/models/Setting");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -73,11 +74,14 @@ export async function getServerSideProps(context) {
   console.log("-------------------- session from get server side --------------------");
   console.log(session);
 
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       questions: JSON.parse(JSON.stringify(questions)),
       friendships: JSON.parse(JSON.stringify(friendships)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

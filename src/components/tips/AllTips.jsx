@@ -17,7 +17,7 @@ export default function AllTips({ tips }) {
       {tips?.map((tip, index) => (
         <div key={tip.id}>
           <div className="flex gap-4 justify-center items-center">
-            <div className="block scr800:hidden relative w-10 aspect-square">
+            <div className="block scr600:hidden relative w-10 aspect-square">
               <Image src={lampImg} alt={"Tip" + index} fill className="object-contain" sizes="40px" />
             </div>
             <p className="font-bold text-center text-xl">Tip {index + 1}</p>
@@ -27,7 +27,7 @@ export default function AllTips({ tips }) {
           </div>
 
           <div className={`${index % 2 !== 0 ? "flex-row-reverse" : ""} flex gap-1 w-full max-w-[800px] mx-auto mt-2 mb-4`}>
-            <div className="hidden scr800:block relative min-h-[150px] self-stretch aspect-square">
+            <div className="hidden scr600:block relative min-h-[150px] self-stretch aspect-square">
               <Image src={lampImg} alt={"Tip" + index} fill className="object-contain" sizes="150px" />
             </div>
             <div className="grow flex flex-col items-center justify-center gap-2 px-6 py-3 border-4 border-white rounded-xl bg-gray-200 text-pretty text-center shadow-[2px_2px_5px_rgb(0,0,0,.3)]">

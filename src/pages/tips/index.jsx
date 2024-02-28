@@ -20,7 +20,7 @@ export default function tips({ tips, categories }) {
   console.log("session from home", session);
 
   return (
-    <div className={`px-8 scr1100:px-20 pt-12 pb-20 ${jakarta.className}`}>
+    <div className={`px-4 scr1100:px-20 pt-12 pb-20 ${jakarta.className}`}>
       <h1 className="font-bold text-xl">Tips</h1>
       <div className="flex w-full max-w-[800px] mx-auto pl-4 pr-8 py-4 mt-4 rounded-full bg-slate-100">
         <input type="text" placeholder="Looking for a specific tip ?" className="grow outline-none bg-transparent" />
@@ -33,10 +33,10 @@ export default function tips({ tips, categories }) {
   );
 }
 
-tips.getLayout = function getLayout(page, { categories }) {
+tips.getLayout = function getLayout(page, pageProps) {
   return (
     <Layout>
-      <TipsLayout categories={categories}>{page}</TipsLayout>
+      <TipsLayout {...pageProps}>{page}</TipsLayout>
     </Layout>
   );
 };
@@ -45,6 +45,7 @@ export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const Tip = require("@/models/Tip");
   const Category = require("@/models/Category");
+  const Setting = require("@/models/Setting");
 
   const tips = await Tip.findAll({
     include: [
@@ -56,12 +57,14 @@ export async function getServerSideProps(context) {
   });
 
   const categories = await Category.findAll();
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       tips: JSON.parse(JSON.stringify(tips)),
       categories: JSON.parse(JSON.stringify(categories)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

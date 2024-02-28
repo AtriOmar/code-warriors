@@ -50,7 +50,7 @@ export default function Articles({ articles, category }) {
           <NextButton />
           <swiper-container ref={swiperRef} init="false">
             {articles?.map((article) => (
-              <swiper-slide key={article.id} class="p-2 h-auto">
+              <swiper-slide key={article.id} class="p-2 h-auto w-full">
                 <ArticleCard article={article} category={category} />
               </swiper-slide>
             ))}

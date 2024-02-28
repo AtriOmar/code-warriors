@@ -6,13 +6,13 @@ import Link from "next/link";
 
 export default function AllArticles({ articles }) {
   return (
-    <article className="mt-10 mb-20">
+    <article className="mt-10 mb-20 w-full">
       <h1 className="font-bold text-xl">Articles</h1>
       <div className="flex max-w-[800px] mx-auto pl-4 pr-8 py-4 mt-4 rounded-full bg-slate-100">
         <input type="text" placeholder="Do you have an article in mind ?" className="grow outline-none bg-transparent" />
         <FontAwesomeIcon icon={faSearch} className="text-2xl text-slate-500" />
       </div>
-      <div className="mt-6 grid grid-cols-2 scr900:grid-cols-3 scr1200:grid-cols-4 gap-4">
+      <div className="mt-6 grid scr500:grid-cols-2 scr700:grid-cols-3 scr1200:grid-cols-4 gap-4">
         {articles?.map((article) => {
           return <ArticleCard article={article} key={article.id} />;
         })}
@@ -25,7 +25,7 @@ function ArticleCard({ article }) {
   return (
     <Link
       href={`/articles/${article.id}`}
-      className="flex flex-col bg-white hover:bg-slate-100 rounded-lg overflow-hidden shadow-md hover:shadow-[2px_2px_10px_rgb(0,0,0,.3)] duration-200"
+      className="flex flex-col w-full max-w-[300px] mx-auto bg-black bg-white hover:bg-slate-100 rounded-lg overflow-hidden shadow-md hover:shadow-[2px_2px_10px_rgb(0,0,0,.3)] duration-200"
     >
       <div className="relative w-full aspect-square overflow-hidden">
         <Image src={`/api/photo?path=/uploads/articles/${article.poster}`} fill alt="Article Poster" className="object-cover" priority />

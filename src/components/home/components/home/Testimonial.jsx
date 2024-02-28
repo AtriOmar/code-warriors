@@ -72,7 +72,7 @@ export default function Testimonial({ feedbacks }) {
             <div className="grid grid-cols-1 w-full">
               <swiper-container ref={swiperRef} init="false" class="w-full">
                 {feedbacks.map((feedback, index) => (
-                  <swiper-slide class="h-auto">
+                  <swiper-slide class="h-auto" key={feedback.id}>
                     <div className="h-full flex flex-col bg-slate-100 py-10 px-5 rounded-xl text-center cursor-pointer">
                       <p className="description mb-10">{feedback.feedback}</p>
                       <div className="mt-auto flex items-center justify-center gap-x-4 mt-10">

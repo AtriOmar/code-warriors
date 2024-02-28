@@ -50,8 +50,12 @@ function FAQItem({ faq }) {
   );
 }
 
-faq.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+faq.getLayout = function getLayout(page, pageProps) {
+  return (
+    <Layout showFooter={false} {...pageProps}>
+      {page}
+    </Layout>
+  );
 };
 
 export async function getServerSideProps(context) {

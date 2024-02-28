@@ -13,6 +13,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Layout from "@/layouts/Layout";
 
 let currentBoxHeight;
 
@@ -31,7 +32,7 @@ export default function Chat() {
       <div className="relative w-full grid place-items-center">
         <div className="flex flex-col items-center gap-1">
           <div className="relative size-[200px]">
-            <Image src={"/chat.svg"} fill className="object-contain" />
+            <Image src={"/chat.svg"} fill className="object-contain" alt="" />
           </div>
           <h2 className="font-bold text-2xl">No chat selected</h2>
         </div>
@@ -41,7 +42,11 @@ export default function Chat() {
 }
 
 Chat.getLayout = function getLayout(page) {
-  return <ChatLayout>{page}</ChatLayout>;
+  return (
+    <Layout showFooter={false}>
+      <ChatLayout>{page}</ChatLayout>
+    </Layout>
+  );
 };
 
 export async function getServerSideProps(context) {

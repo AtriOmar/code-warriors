@@ -48,6 +48,7 @@ export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const Tip = require("@/models/Tip");
   const Category = require("@/models/Category");
+  const Setting = require("@/models/Setting");
 
   const tips = await Tip.findAll({
     include: [
@@ -63,6 +64,7 @@ export async function getServerSideProps(context) {
 
   const categories = await Category.findAll();
   const category = await Category.findByPk(context.params.id);
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
@@ -70,6 +72,7 @@ export async function getServerSideProps(context) {
       tips: JSON.parse(JSON.stringify(tips)),
       categories: JSON.parse(JSON.stringify(categories)),
       category: JSON.parse(JSON.stringify(category)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

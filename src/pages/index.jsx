@@ -41,8 +41,8 @@ export default function Home({ team, fields, feedbacks }) {
   );
 }
 
-Home.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+Home.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
@@ -50,10 +50,12 @@ export async function getServerSideProps(context) {
   const Team = require("@/models/Team");
   const Field = require("@/models/Field");
   const Feedback = require("@/models/Feedback");
+  const Setting = require("@/models/Setting");
 
   const team = await Team.findAll({ attributes: ["id", "name", "role", "picture"] });
   const fields = await Field.findAll({ attributes: ["id", "title", "content", "icon"] });
   const feedbacks = await Feedback.findAll({ attributes: ["id", "name", "role", "feedback", "picture"] });
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
@@ -61,6 +63,7 @@ export async function getServerSideProps(context) {
       team: JSON.parse(JSON.stringify(team)),
       fields: JSON.parse(JSON.stringify(fields)),
       feedbacks: JSON.parse(JSON.stringify(feedbacks)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

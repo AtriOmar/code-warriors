@@ -7,7 +7,7 @@ export default function TipsLayout({ children, categories }) {
   const router = useRouter();
 
   return (
-    <div className="relative py- px-6">
+    <div className="relative scr900:px-4 py-4">
       <div className="flex gap-14 max-w">
         <TipsSidebar categories={categories} />
         <div className="grow">{children}</div>

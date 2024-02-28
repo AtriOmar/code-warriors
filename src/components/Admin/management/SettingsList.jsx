@@ -6,21 +6,21 @@ import axios from "axios";
 import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 
-export default function InfoList({ info, setInfo }) {
-  if (!info?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no Info</p>;
+export default function SettingsList({ settings, setSettings }) {
+  if (!settings?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no settings</p>;
 
   return (
     <div className="flex flex-col gap-2 mt-2">
-      {info?.map((info) => (
-        <InfoItem key={info.id} value={info} setValues={setInfo} />
+      {settings?.map((setting) => (
+        <SettingItem key={setting.id} setting={setting} setSettings={setSettings} />
       ))}
     </div>
   );
 }
 
-function InfoItem({ value, setValues }) {
+function SettingItem({ setting, setSettings }) {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState({ title: value.title, content: value.content });
+  const [input, setInput] = useState({ name: setting.name, value: setting.value });
   const [edit, setEdit] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -28,18 +28,17 @@ function InfoItem({ value, setValues }) {
     if (sending) return;
 
     const data = {
-      id: value.id,
-      title: input.title,
-      content: input.content,
+      id: setting.id,
+      value: input.value,
     };
 
     setSending(true);
     try {
-      const res = await axios.post("/api/values/update", data);
+      const res = await axios.post("/api/settings/update", data);
 
       toast.success("Changes saved");
       setEdit(false);
-      setValues((prev) => prev.map((faq) => (faq.id === res.data.id ? res.data : faq)));
+      setSettings((prev) => prev.map((faq) => (faq.id === res.data.id ? res.data : faq)));
     } catch (err) {
       toast.error("An error occurred");
       console.log(err);
@@ -50,31 +49,16 @@ function InfoItem({ value, setValues }) {
   return (
     <div className="flex gap-2">
       <div className="grow px-3 py-2 bg-white  border border-slate-300 shadow rounded-lg" suppressHydrationWarning>
-        <button
-          onClick={() => {
-            setOpen((prev) => !prev);
-          }}
-          className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize"
-        >
+        <div className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize">{setting.name}</div>
+        <div className={`mt-1`}>
           {edit ? (
             <input
-              value={input.title}
-              onChange={(e) => setInput((prev) => ({ ...prev, title: e.target.value }))}
-              className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md"
-            />
-          ) : (
-            <>{value.title}</>
-          )}
-        </button>
-        <div className={`mt-2`}>
-          {edit ? (
-            <input
-              value={input.content}
-              onChange={(e) => setInput((prev) => ({ ...prev, content: e.target.value }))}
+              value={input.value}
+              onChange={(e) => setInput((prev) => ({ ...prev, value: e.target.value }))}
               className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
             />
           ) : (
-            <div className={` text-[13px] text-slate-500`}>{value.content}</div>
+            <div className={` text-[13px] text-slate-500`}>{setting.value}</div>
           )}
         </div>
       </div>
@@ -88,7 +72,7 @@ function InfoItem({ value, setValues }) {
           >
             Edit
           </button>
-          <DeleteValueMenu value={value} setValues={setValues} />
+          {/* <DeleteValueMenu value={setting} setValues={setSettings} /> */}
         </>
       ) : (
         <>
@@ -100,7 +84,7 @@ function InfoItem({ value, setValues }) {
           </button>
           <button
             onClick={() => {
-              setInput({ title: value.title, content: value.content });
+              setInput({ name: setting.name, value: setting.value });
               setEdit(false);
             }}
             className="self-center px-3 border border-red-500 rounded-full hover:bg-red-100 text-red-500 text-sm font-semibold duration-300"

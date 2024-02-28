@@ -4,7 +4,7 @@ import { RingLoader } from "@/components/Loading";
 import MessagesBox from "@/components/chat/MessagesBox";
 import SendMessageInput from "@/components/chat/SendMessageInput";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faCircleUser } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { useChatContext } from "@/contexts/ChatProvider";
 import ChatLayout from "@/layouts/ChatLayout";
 import Link from "next/link";
@@ -13,6 +13,8 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Layout from "@/layouts/Layout";
+import { useUIContext } from "@/contexts/UIProvider";
 // import sad from "../../../assets/images/sad.png";
 
 let currentBoxHeight;
@@ -56,6 +58,7 @@ export default function Chat() {
         }
       })
   );
+  const { setChatSidebarOpen } = useUIContext();
 
   useEffect(() => {
     const box2 = document.querySelector(".messagesContainer");
@@ -185,10 +188,15 @@ export default function Chat() {
   return (
     <div className="h-full flex pb-2  rounded-lg bg-whit shadow-md">
       <div className="relative w-full flex flex-col">
-        <div className="relative flex  items-center w-full py-1 px-4 bg-white shadow break-anywhere">
-          {/* <button onClick={() => {}}>
-            <FontAwesomeIcon icon={faArrowLeft} size="lg" className="text-white hover:scale-125 duration-300" />
-          </button> */}
+        <div className="relative flex  items-center gap-2 w-full py-1 px-4 bg-white shadow break-anywhere">
+          <button
+            className="scr800:hidden"
+            onClick={() => {
+              setChatSidebarOpen(true);
+            }}
+          >
+            <FontAwesomeIcon icon={faBars} className="text-xl" />
+          </button>
           <Link href={`/profile/${receiver.id}`} className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-slate-200 duration-200">
             {receiver?.picture ? (
               <div className="relative w-[30px] aspect-square rounded-[50%] border bg-white overflow-hidden">
@@ -211,7 +219,11 @@ export default function Chat() {
 }
 
 Chat.getLayout = function getLayout(page) {
-  return <ChatLayout>{page}</ChatLayout>;
+  return (
+    <Layout showFooter={false}>
+      <ChatLayout>{page}</ChatLayout>
+    </Layout>
+  );
 };
 
 export async function getServerSideProps(context) {

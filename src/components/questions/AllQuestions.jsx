@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function AllQuestions({ questions }) {
   return (
-    <article className="mt-10 mb-20">
+    <article className="grow mt-10 mb-20">
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl">Questions</h1>
         <Link
@@ -16,7 +16,7 @@ export default function AllQuestions({ questions }) {
           Ask Question
         </Link>
       </div>
-      <div className="mt-6 grid grid-cols-3 gap-4">
+      <div className="mt-6 grid grid-cols-1 scr500:grid-cols-2 scr700:grid-cols-3 gap-4">
         {questions?.map((question) => {
           return <QuestionCard question={question} key={question.id} />;
         })}

@@ -44,6 +44,14 @@ export default function TOCNav({ currentElementIndexInViewport }) {
       >
         <a href={`#feedbacks`}>Feedbacks</a>
       </li>
+      <li
+        data-cy={`nav-item`}
+        className={`active w-full text-center hover:bg-purple-100 rounded-lg px-3 py-0.5 duration-200 ${
+          currentElementIndexInViewport === 5 ? "!bg-purple text-white" : ""
+        }`}
+      >
+        <a href={`#settings`}>Settings</a>
+      </li>
     </ul>
   );
 }

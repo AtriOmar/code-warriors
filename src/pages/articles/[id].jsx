@@ -32,8 +32,8 @@ export default function articles({ article }) {
   );
 }
 
-articles.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
+articles.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
