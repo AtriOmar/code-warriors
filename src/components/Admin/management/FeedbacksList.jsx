@@ -8,21 +8,21 @@ import { Fragment, useState } from "react";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from "uuid";
 
-export default function FieldsList({ fields, setFields }) {
-  if (!fields?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no fields</p>;
+export default function FeedbacksList({ feedbacks, setFeedbacks }) {
+  if (!feedbacks?.length) return <p className="ml-3 mt-2 font-medium text-sm text-slate-500">There are no feedbacks</p>;
 
   return (
     <div className="flex flex-col gap-2 mt-2">
-      {fields?.map((field) => (
-        <FieldItem key={field.id} field={field} setFields={setFields} />
+      {feedbacks?.map((feedback) => (
+        <FeedbackItem key={feedback.id} feedback={feedback} setFeedbacks={setFeedbacks} />
       ))}
     </div>
   );
 }
 
-function FieldItem({ field, setFields }) {
+function FeedbackItem({ feedback, setFeedbacks }) {
   const [open, setOpen] = useState(false);
-  const [input, setInput] = useState({ title: field.title, content: field.content, icon: field.icon });
+  const [input, setInput] = useState({ name: feedback.name, role: feedback.role, feedback: feedback.feedback, picture: feedback.picture });
   const [edit, setEdit] = useState(false);
   const [sending, setSending] = useState(false);
   const [progress, setProgress] = useState(-1);
@@ -35,44 +35,45 @@ function FieldItem({ field, setFields }) {
   };
 
   console.log("-------------------- member, input --------------------");
-  console.log(field, input);
+  console.log(feedback, input);
 
   async function updatePicture() {
     const formData = new FormData();
 
-    formData.append("id", field.id);
-    formData.append("icon", input.icon);
+    formData.append("id", feedback.id);
+    formData.append("picture", input.picture);
 
     try {
-      const res = await axios.post("/api/fields/updatePicture", formData, config);
+      const res = await axios.post("/api/feedbacks/updatePicture", formData, config);
 
-      setFields((prev) => prev.map((field) => (field.id === res.data.id ? res.data : field)));
-      setInput({ title: res.data.title, content: res.data.content, icon: res.data.icon });
+      setFeedbacks((prev) => prev.map((feedback) => (feedback.id === res.data.id ? res.data : feedback)));
+      setInput({ name: res.data.name, role: res.data.role, feedback: res.data.feedback, picture: res.data.picture });
     } catch (err) {}
     setProgress(-1);
   }
 
-  async function updateField() {
+  async function updateFeedback() {
     if (sending) return;
 
-    if (input.icon !== field.icon) updatePicture();
+    if (input.picture !== feedback.picture) updatePicture();
 
-    if (!input.title || !input.content) return;
+    if (!input.name || !input.role) return;
 
-    if (input.title === field.title && input.content === field.content) return;
+    if (input.name === feedback.name && input.role === feedback.role) return;
 
     const data = {
-      id: field.id,
-      title: input.title,
-      content: input.content,
+      id: feedback.id,
+      name: input.name,
+      role: input.role,
+      feedback: input.feedback,
     };
 
     setSending(true);
     try {
-      const res = await axios.post("/api/fields/update", data);
+      const res = await axios.post("/api/feedbacks/update", data);
       toast.success("Changes saved");
       setEdit(false);
-      setFields((prev) => prev.map((field) => (field.id === res.data.id ? res.data : field)));
+      setFeedbacks((prev) => prev.map((feedback) => (feedback.id === res.data.id ? res.data : feedback)));
     } catch (err) {
       toast.error("An error occurred");
 
@@ -85,7 +86,7 @@ function FieldItem({ field, setFields }) {
     const file = e.target.files[0];
     if (file?.type?.startsWith("image")) {
       file.id = uuidv4().toString();
-      setInput((prev) => ({ ...prev, icon: file }));
+      setInput((prev) => ({ ...prev, picture: file }));
     }
 
     e.target.value = "";
@@ -96,12 +97,12 @@ function FieldItem({ field, setFields }) {
       <div className="flex gap-2">
         <div className="grow flex gap-4 items-center px-3 py-2 rounded-lg border border-slate-300 shadow bg-white">
           <div className="shrink-0 relative size-[50px] border border-slate-300 rounded-lg">
-            {input.icon ? (
+            {input.picture ? (
               <div className="relative aspect-square">
                 <div className="relative w-full rounded-lg aspect-square border border-slate-300 overflow-hidden">
                   <Image
                     // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
-                    src={typeof input.icon === "string" ? `/api/photo?path=/uploads/fields/${input.icon}` : URL.createObjectURL(input.icon)}
+                    src={typeof input.picture === "string" ? `/api/photo?path=/uploads/feedbacks/${input.picture}` : URL.createObjectURL(input.picture)}
                     fill
                     sizes="50px"
                     alt="Profile Image"
@@ -118,32 +119,48 @@ function FieldItem({ field, setFields }) {
               <FontAwesomeIcon icon={faPen} className="text-white text-[9px]" />
             </label>
           </div>
-          <div className="w-full">
-            <div className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize">
+          <div className="w-full ">
+            <button
+              onClick={() => {
+                setOpen((prev) => !prev);
+              }}
+              className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize"
+            >
               {edit ? (
                 <input
-                  value={input.title}
-                  onChange={(e) => setInput((prev) => ({ ...prev, title: e.target.value }))}
+                  value={input.name}
+                  onChange={(e) => setInput((prev) => ({ ...prev, name: e.target.value }))}
                   className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md"
                 />
               ) : (
-                <>{field.title}</>
+                <>{feedback.name}</>
+              )}
+            </button>
+            <div className={`mt-1`}>
+              {edit ? (
+                <input
+                  value={input.role}
+                  onChange={(e) => setInput((prev) => ({ ...prev, role: e.target.value }))}
+                  className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
+                />
+              ) : (
+                <div className={` text-[13px] text-slate-500`}>{feedback.role}</div>
               )}
             </div>
             <div className={`mt-1`}>
               {edit ? (
                 <input
-                  value={input.content}
-                  onChange={(e) => setInput((prev) => ({ ...prev, content: e.target.value }))}
+                  value={input.feedback}
+                  onChange={(e) => setInput((prev) => ({ ...prev, feedback: e.target.feedback }))}
                   className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
                 />
               ) : (
-                <div className={` text-[13px] text-slate-500`}>{field.content}</div>
+                <div className={` text-[13px] text-slate-500`}>{feedback.feedback}</div>
               )}
             </div>
           </div>
         </div>
-        {!edit && input.icon === field.icon ? (
+        {!edit && input.picture === feedback.picture ? (
           <>
             <button
               onClick={() => {
@@ -153,19 +170,19 @@ function FieldItem({ field, setFields }) {
             >
               Edit
             </button>
-            <DeleteFieldMenu field={field} setFields={setFields} />
+            <DeleteFeedbackMenu feedback={feedback} setFeedbacks={setFeedbacks} />
           </>
         ) : (
           <>
             <button
-              onClick={updateField}
+              onClick={updateFeedback}
               className="self-center px-3 border border-purple rounded-full hover:bg-violet-100 text-purple text-sm font-semibold duration-300"
             >
               Save
             </button>
             <button
               onClick={() => {
-                setInput({ title: field.title, content: field.content, icon: field.icon });
+                setInput({ name: feedback.name, role: feedback.role, feedback: feedback.feedback, picture: feedback.picture });
                 setEdit(false);
               }}
               className="self-center px-3 border border-red-500 rounded-full hover:bg-red-100 text-red-500 text-sm font-semibold duration-300"
@@ -192,7 +209,7 @@ function FieldItem({ field, setFields }) {
   );
 }
 
-function DeleteFieldMenu({ field, setFields }) {
+function DeleteFeedbackMenu({ feedback, setFeedbacks }) {
   const [sending, setSending] = useState(false);
 
   async function handleDelete(e) {
@@ -202,9 +219,9 @@ function DeleteFieldMenu({ field, setFields }) {
 
     setSending(true);
     try {
-      const res = await axios.delete("/api/fields/deleteById", { params: { id: field.id } });
+      const res = await axios.delete("/api/feedbacks/deleteById", { params: { id: feedback.id } });
 
-      setFields((prev) => prev.filter((f) => f.id !== field.id));
+      setFeedbacks((prev) => prev.filter((f) => f.id !== feedback.id));
       toast.success("Member deleted");
     } catch (err) {
       toast.error("An error occurred");

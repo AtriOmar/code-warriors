@@ -1,25 +1,22 @@
-import AdminAccounts from "@/components/Admin/accounts/AdminAccounts";
-import UsersAccounts from "@/components/Admin/accounts/UsersAccounts";
+import ValuesList from "@/components/Admin/management/ValuesList";
 import { RingLoader } from "@/components/Loading";
-import AdminLayout from "@/layouts/AdminLayout";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import AllFAQ from "@/components/Admin/management/FAQList";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
-export default function FAQ({ faqs: initialFaqs }) {
-  const [faqs, setFaqs] = useState(initialFaqs);
+export default function Values({ values: initialValues }) {
+  const [values, setValues] = useState(initialValues);
 
   return (
     <div className="max-w-[800px]">
-      <AllFAQ faqs={faqs} setFaqs={setFaqs} />
-      <AddFAQ setFaqs={setFaqs} />
+      <ValuesList values={values} setValues={setValues} />
+      <AddValue setValues={setValues} />
     </div>
   );
 }
 
-function AddFAQ({ setFaqs }) {
+function AddValue({ setValues }) {
   const [input, setInput] = useState({
     title: "",
     content: "",
@@ -27,7 +24,7 @@ function AddFAQ({ setFaqs }) {
   const [sending, setSending] = useState(false);
   const router = useRouter();
 
-  async function createFAQ() {
+  async function createValue() {
     if (sending) return;
 
     const data = {
@@ -37,12 +34,12 @@ function AddFAQ({ setFaqs }) {
 
     setSending(true);
     try {
-      const res = await axios.post("/api/faq/create", data);
+      const res = await axios.post("/api/values/create", data);
 
-      setFaqs((prev) => [...prev, res.data]);
+      setValues((prev) => [...prev, res.data]);
       setInput({ title: "", content: "" });
 
-      toast.success("FAQ added");
+      toast.success("Value added");
     } catch (err) {
       console.log(err);
     }
@@ -51,7 +48,7 @@ function AddFAQ({ setFaqs }) {
 
   return (
     <div>
-      <h1 className="mt-4 font-bold">Title</h1>
+      <h1 className="mt-4 font-bold text-sm">Title</h1>
       <input
         value={input.title}
         onChange={(e) => {
@@ -61,7 +58,7 @@ function AddFAQ({ setFaqs }) {
         className="w-full mt-1 px-2 py-1 rounded-md border border-slate-300 outline-purple text-sm"
         placeholder="Title"
       />
-      <h1 className="mt-2 font-bold">Content</h1>
+      <h1 className="mt-2 font-bold text-sm">Content</h1>
       <textarea
         value={input.content}
         onChange={(e) => {
@@ -72,10 +69,10 @@ function AddFAQ({ setFaqs }) {
         placeholder="Content"
       />
       <button
-        onClick={createFAQ}
-        className="relative block mt-8 ml-auto px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
+        onClick={createValue}
+        className="relative block mt-2 ml-auto px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
       >
-        Add FAQ
+        Add Value
         {sending ? (
           <i className="absolute right-1 top-1/2 -translate-y-1/2">
             <RingLoader color="white" />

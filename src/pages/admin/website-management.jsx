@@ -12,11 +12,11 @@ import Team from "@/components/Admin/management/Team";
 import Fields from "@/components/Admin/management/Fields";
 import { Scrollspy } from "@makotot/ghostui";
 import TOCNav from "@/components/Admin/management/TOCNav";
+import Feedbacks from "@/components/Admin/management/Feedbacks";
 
 const SIZE = 5;
 const list = new Array(SIZE).fill(0);
-export default function index({ faqs: ssrFaqs, values, team, fields }) {
-  const [faqs, setFaqs] = useState(ssrFaqs);
+export default function index({ faqs, values, team, fields, feedbacks }) {
   const sectionRefs = [useRef(null), useRef(null), useRef(null), useRef(null), useRef(null)];
 
   return (
@@ -34,7 +34,7 @@ export default function index({ faqs: ssrFaqs, values, team, fields }) {
               <div className="max-w-[800px] h-px my-8 bg-slate-400"></div>
               <div id={`faq`} data-cy={`section-item`} ref={sectionRefs[1]} className={currentElementIndexInViewport === 1 ? "active" : ""}>
                 <h1 className="font-bold text-xl">FAQ</h1>
-                <FAQ faqs={faqs} setFaqs={setFaqs} />
+                <FAQ faqs={faqs} />
               </div>
               <div className="max-w-[800px] h-px my-8 bg-slate-400"></div>
               <div id={`team`} data-cy={`section-item`} ref={sectionRefs[2]} className={currentElementIndexInViewport === 2 ? "active" : ""}>
@@ -45,6 +45,16 @@ export default function index({ faqs: ssrFaqs, values, team, fields }) {
               <div id={`fields`} data-cy={`section-item`} ref={sectionRefs[3]} className={currentElementIndexInViewport === 3 ? "active" : ""}>
                 <h1 className="font-bold text-xl">Fields</h1>
                 <Fields fields={fields} />
+              </div>
+              <div className="max-w-[800px] h-px my-8 bg-slate-400"></div>
+              <div id={`feedbacks`} data-cy={`section-item`} ref={sectionRefs[4]} className={currentElementIndexInViewport === 4 ? "active" : ""}>
+                <h1 className="font-bold text-xl">Feedbacks</h1>
+                <Feedbacks feedbacks={feedbacks} />
+              </div>
+              <div className="max-w-[800px] h-px my-8 bg-slate-400"></div>
+              <div id={`info`} data-cy={`section-item`} ref={sectionRefs[4]} className={currentElementIndexInViewport === 4 ? "active" : ""}>
+                <h1 className="font-bold text-xl">Info</h1>
+                <Feedbacks feedbacks={feedbacks} />
               </div>
             </>
           )}
@@ -66,6 +76,7 @@ export async function getServerSideProps(context) {
   const Value = require("@/models/Value");
   const Team = require("@/models/Team");
   const Field = require("@/models/Field");
+  const Feedback = require("@/models/Feedback");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -91,6 +102,9 @@ export async function getServerSideProps(context) {
   const fields = await Field.findAll({
     attributes: ["id", "title", "content", "icon"],
   });
+  const feedbacks = await Feedback.findAll({
+    attributes: ["id", "name", "role", "feedback", "picture"],
+  });
 
   return {
     props: {
@@ -99,6 +113,7 @@ export async function getServerSideProps(context) {
       values: JSON.parse(JSON.stringify(values)),
       team: JSON.parse(JSON.stringify(team)),
       fields: JSON.parse(JSON.stringify(fields)),
+      feedbacks: JSON.parse(JSON.stringify(feedbacks)),
     },
   };
 }

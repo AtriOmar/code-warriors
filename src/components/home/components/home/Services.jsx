@@ -24,7 +24,7 @@ export default function Services({ fields }) {
     });
   }, []);
   return (
-    <div className="px-4 py-8">
+    <div className="px-4 py-32">
       <div className="services_section max-w" id="service">
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 " data-aos="fade-up">
           {fields.map((item, index) => (

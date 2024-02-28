@@ -9,8 +9,9 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Image from "next/image";
 
-const Testimonial = () => {
+export default function Testimonial({ feedbacks }) {
   const swiperRef = useRef(null);
   useEffect(() => {
     const swiperEl = swiperRef.current;
@@ -70,110 +71,22 @@ const Testimonial = () => {
             </div>
             <div className="grid grid-cols-1 w-full">
               <swiper-container ref={swiperRef} init="false" class="w-full">
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava01} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
+                {feedbacks.map((feedback, index) => (
+                  <swiper-slide class="h-auto">
+                    <div className="h-full flex flex-col bg-slate-100 py-10 px-5 rounded-xl text-center cursor-pointer">
+                      <p className="description mb-10">{feedback.feedback}</p>
+                      <div className="mt-auto flex items-center justify-center gap-x-4 mt-10">
+                        <div className="relative w-12 h-12 rounded-full overflow-hidden">
+                          <Image src={`/api/photo?path=/uploads/feedbacks/${feedback.picture}`} alt="" fill className="object-cover" />
+                        </div>
+                        <div>
+                          <h5 className=" text-lg font-medium">{feedback.name}</h5>
+                          <p className="text-sm font-bold text-slate-500">{feedback.role}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </swiper-slide>
-
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava03} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
-                <swiper-slide>
-                  <div className="bg-gray-200 py-10 px-5 rounded-md text-center cursor-pointer">
-                    <p className="description">
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit. In voluptates veritatis modi eveniet similique voluptatum a voluptatem,
-                      recusandae qui rem quod voluptatibus dolores ullam illum dignissimos accusamus ratione repellat officiis?
-                    </p>
-                    <div className="flex items-center justify-center gap-x-4 mt-10">
-                      <div className="w-12 h-12 rounded-full">
-                        <img src={ava02} alt="" className="w-full h-full object-cover rounded-full" />
-                      </div>
-                      <div>
-                        <h5 className="text-white text-lg font-medium">John Doe</h5>
-                        <p className="description">CEO , Workcreation</p>
-                      </div>
-                    </div>
-                  </div>
-                </swiper-slide>
+                  </swiper-slide>
+                ))}
                 <div className="swiper-button-prev " style={{ display: "none" }}></div>
                 <div className="swiper-button-next " style={{ display: "none" }}></div>
               </swiper-container>
@@ -189,6 +102,4 @@ const Testimonial = () => {
       </section>
     </div>
   );
-};
-
-export default Testimonial;
+}

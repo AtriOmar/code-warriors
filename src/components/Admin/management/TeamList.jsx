@@ -95,20 +95,9 @@ function MemberItem({ member, setTeam }) {
     <div>
       <div className="flex gap-2">
         <div className="grow flex gap-4 items-center px-3 py-2 rounded-lg border border-slate-300 shadow bg-white">
-          <div className="relative size-[50px] border border-slate-300 rounded-lg">
+          <div className="shrink-0 relative size-[50px] border border-slate-300 rounded-lg">
             {input.picture ? (
               <div className="relative aspect-square">
-                {/* <button
-                type="button"
-                className="z-10 absolute -right-2 -top-2"
-                onClick={() => {
-                  setInput((prev) => ({ ...prev, picture: null }));
-                }}
-              >
-              <i className="flex size-[13px] items-center justify-center rounded bg-blue-500 hover:bg-red-600 duration-150 ">
-              <FontAwesomeIcon icon={faXmark} className="text-[11px] text-white" />
-                </i>
-              </button> */}
                 <div className="relative w-full rounded-lg aspect-square border border-slate-300 overflow-hidden">
                   <Image
                     // src={typeof input.picture === "string" ? `/uploads/profile-pictures/${input.picture}` : URL.createObjectURL(input.picture)}
@@ -129,7 +118,7 @@ function MemberItem({ member, setTeam }) {
               <FontAwesomeIcon icon={faPen} className="text-white text-[9px]" />
             </label>
           </div>
-          <div className=" ">
+          <div className="w-full ">
             <button
               onClick={() => {
                 setOpen((prev) => !prev);
