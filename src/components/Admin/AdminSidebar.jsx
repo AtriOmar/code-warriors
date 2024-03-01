@@ -5,10 +5,20 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 
+const styles = {
+  div: "scr1000:translate-x-0 scr1000:z-0 scr1000:top-[60px] scr1000:hidden",
+  div: "scr800:translate-x-0 scr800:z-0 scr800:top-[60px] scr800:hidden",
+};
+
 export default function AdminSidebar() {
   const router = useRouter();
   const pathname = router.pathname;
   const { mobileNavbarOpen, setMobileNavbarOpen } = useUIContext();
+
+  let scr;
+  if (pathname === "/admin/articles") scr = "scr1000";
+  else if (pathname === "/admin/questions") scr = "scr1000";
+  else scr = "scr800";
 
   return (
     <>
@@ -19,9 +29,9 @@ export default function AdminSidebar() {
       <div
         className={`${
           mobileNavbarOpen ? "" : "-translate-x-full"
-        } scr800:translate-x-0 fixed z-50 scr800:z-0 bottom-0 top-0 scr800:top-[60px] left-0 w-[200px] py-16 scr800:py-10 border-r-2 border-slate-300 bg-white duration-300`}
+        } ${scr}:translate-x-0 fixed z-50 ${scr}:z-0 bottom-0 top-0 ${scr}:top-[60px] left-0 w-[200px] py-16 scr800:py-10 border-r-2 border-slate-300 bg-white duration-300 `}
       >
-        <button className={`scr1200:hidden absolute top-3 right-3 z-10`} onClick={() => setMobileNavbarOpen(false)}>
+        <button className={`${scr}:hidden absolute top-3 right-3 z-10`} onClick={() => setMobileNavbarOpen(false)}>
           <FontAwesomeIcon icon={faXmark} className="text-lg text-black" />
         </button>
         <ul className="flex flex-col gap-4 ">

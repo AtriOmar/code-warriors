@@ -22,9 +22,9 @@ export default function categories({ categories: ssrCategories }) {
     }
   }
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+  // useEffect(() => {
+  //   fetchCategories();
+  // }, []);
 
   return (
     <div className="max-w-[900px] px-8 scr1100:px-20 pt-12 pb-20">

@@ -45,6 +45,12 @@ export default function SendEmailForm({}) {
     setSending(false);
   }
 
+  function sanitizeHtml(html) {
+    const sanitizedInput = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+
+    return sanitizedInput;
+  }
+
   return (
     <article className="">
       <h1 className="font-bold text-xl">Send a letter</h1>
@@ -71,7 +77,7 @@ export default function SendEmailForm({}) {
         rows={8}
       />
       <p className="mt-4 font-bold">Preview</p>
-      {input.body ? <iframe title="Custom Iframe" srcDoc={input.body} className="w-full h-[300px] rounded-md border border-slate-300" /> : ""}
+      {input.body ? <iframe title="Custom Iframe" srcDoc={sanitizeHtml(input.body)} className="w-full h-[300px] rounded-md border border-slate-300" /> : ""}
       <p className="mt-4 font-bold">Target</p>
       <div className="flex gap-2 mt-3">
         <button

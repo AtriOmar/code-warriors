@@ -1,3 +1,5 @@
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 
@@ -15,6 +17,18 @@ import { RingLoader } from "../Loading";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
+import * as commands from "@uiw/react-md-editor/commands";
+import { toast } from "react-toastify";
+
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+const Markdown = dynamic(
+  () =>
+    import("@uiw/react-md-editor").then((mod) => {
+      return mod.default.Markdown;
+    }),
+  { ssr: false }
+);
+
 export default function AddQuestionForm({ categories = [] }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const { data: session } = useSession();
@@ -22,6 +36,7 @@ export default function AddQuestionForm({ categories = [] }) {
   const editor = useRef(null);
   const [input, setInput] = useState({
     title: "",
+    content: "",
     tags: [],
     category: { value: categories[0]?.id, label: categories[0]?.name },
   });
@@ -30,27 +45,14 @@ export default function AddQuestionForm({ categories = [] }) {
 
   const categoriesOptions = categories.map((category) => ({ value: category.id, label: category.name }));
 
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-  };
-
-  const onSave = () => {
-    const rawContentState = convertToRaw(editorState.getCurrentContent());
-
-    const markup = draftToHtml(rawContentState);
-
-    console.log(markup);
-  };
-
   async function handleSubmit() {
     if (sending) return;
 
-    const rawContentState = convertToRaw(editorState.getCurrentContent());
-    const markup = draftToHtml(rawContentState);
+    if (!input.title || !input.content) return toast.error("Title and content are required");
 
     const data = {
       title: input.title,
-      content: markup,
+      content: input.content,
       categoryId: input.category.value,
       userId: user.id,
     };
@@ -68,7 +70,7 @@ export default function AddQuestionForm({ categories = [] }) {
   }
 
   return (
-    <article className="mt-10">
+    <article className="grow mt-10">
       <h1 className="font-bold text-xl">Ask a question</h1>
       <div href="/profile" className="flex gap-2 items-center mt-1">
         {user.picture ? (
@@ -90,20 +92,13 @@ export default function AddQuestionForm({ categories = [] }) {
         className="w-full mt-3 px-4 py-2 rounded-md border border-slate-300 outline-purple"
         placeholder="Title"
       />
-      <div className="mt-8 px-4 pt-4 pb-20 rounded-md border border-slate-300 focus-within:ring-1 ring-purple">
-        <Editor
-          ref={editor}
-          placeholder="Write your question here..."
-          editorState={editorState}
-          onEditorStateChange={onEditorStateChange}
-          toolbar={{
-            options: ["colorPicker", "inline", "fontSize", "list", "textAlign", "link", "emoji", "image"],
-            inline: { inDropdown: false },
-            list: { inDropdown: false },
-            textAlign: { inDropdown: false },
-            link: { inDropdown: false },
-          }}
-        />
+      <h3 className="mt-8 mb-2 font-bold">Content</h3>
+      <div className="">
+        <MDEditor value={input.content} onChange={(value) => setInput((prev) => ({ ...prev, content: value }))} preview="edit" extraCommands={[]} />
+      </div>
+      <h3 className="mt-4 mb-2 font-bold">Preview</h3>
+      <div className=" px-2 py-4 rounded border border-slate-300">
+        <Markdown source={input.content} />
       </div>
       <h1 className="mt-8 font-bold">Mention tags</h1>
       <input type="text" className="w-full mt-3 px-4 py-2 rounded-md border border-slate-300 outline-purple" placeholder="tags..." />

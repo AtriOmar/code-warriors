@@ -6,7 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import QuestionsSidebar from "@/components/QuestionsSidebar";
-import AllArticles from "@/components/articles/AllArticles";
+import ArticlesList from "@/components/articles/ArticlesList";
 
 const inter = Inter({ subsets: ["latin"] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -20,7 +20,7 @@ export default function articles({ articles }) {
     <div className={`${jakarta.className} py-4 px-4`}>
       <div className="flex gap-14 max-w">
         <QuestionsSidebar />
-        <AllArticles articles={articles} />
+        <ArticlesList articles={articles} />
       </div>
     </div>
   );

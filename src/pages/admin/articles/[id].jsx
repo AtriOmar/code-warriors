@@ -7,11 +7,9 @@ import { useEffect, useState } from "react";
 import { authOptions } from "../../api/auth/[...nextauth]";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faSearch } from "@fortawesome/free-solid-svg-icons";
-import Articles from "@/components/Admin/articles/Articles";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 
-import { EditorState, convertToRaw } from "draft-js";
+import { ContentState, EditorState, convertToRaw } from "draft-js";
 const Editor = dynamic(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), { ssr: false });
 
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -23,15 +21,21 @@ import Select from "@/components/questions/CategorySelect";
 import PosterSelect from "@/components/Admin/articles/PosterSelect";
 import PhotoSelect from "@/components/Admin/management/PhotoSelect";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
-export default function articles({ categories = [] }) {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+const htmlToDraft = typeof window !== "undefined" ? require("html-to-draftjs").default : null;
+export default function articles({ categories = [], article }) {
+  const blocksFromHtml = htmlToDraft?.(article.content);
+  const { contentBlocks, entityMap } = blocksFromHtml || {};
+  const contentState = typeof window !== "undefined" && ContentState.createFromBlockArray(contentBlocks, entityMap);
+  const [editorState, setEditorState] = useState(typeof window !== "undefined" ? EditorState.createWithContent(contentState) : null);
+
   const { data: session } = useSession();
   const { user } = session || {};
   const [input, setInput] = useState({
-    title: "",
-    poster: null,
-    category: { value: categories[0]?.id, label: categories[0]?.name },
+    title: article.title,
+    poster: article.poster,
+    category: { value: article?.Category?.id, label: article?.Category?.name },
   });
   const [sending, setSending] = useState(false);
   const router = useRouter();
@@ -50,41 +54,64 @@ export default function articles({ categories = [] }) {
     setEditorState(editorState);
   };
 
-  async function handleSubmit() {
+  async function updatePicture() {
+    const formData = new FormData();
+
+    formData.append("id", article.id);
+    formData.append("poster", input.poster);
+
+    setSending(true);
+    try {
+      const res = await axios.post("/api/articles/updatePicture", formData, config);
+    } catch (err) {}
+    setSending(false);
+    setProgress(-1);
+  }
+
+  async function updateArticle() {
     if (sending) return;
 
     const rawContentState = convertToRaw(editorState.getCurrentContent());
     const markup = draftToHtml(rawContentState);
 
-    if (!input.poster || !input.title || !input.category || !markup) {
-      return toast.error("Please fill all fields");
-    }
+    if (input.poster !== article.poster) await updatePicture();
 
-    const formData = new FormData();
+    if (!input.title || !input.category?.value) return;
 
-    formData.append("poster", input.poster);
-    formData.append("title", input.title);
-    formData.append("content", markup);
-    formData.append("categoryId", input.category.value);
+    if (input.title === article.title && input.category?.value === article.Category?.id) return router.push("/admin/articles");
+
+    const data = {
+      id: article.id,
+      title: input.title,
+      content: markup,
+      categoryId: input.category.value,
+    };
 
     setSending(true);
     try {
-      const res = await axios.post("/api/articles/create", formData, config);
-
-      console.log(res.data);
+      const res = await axios.post("/api/articles/update", data);
       router.push(`/admin/articles`);
+      toast.success("Changes saved");
     } catch (err) {
+      toast.error("An error occurred");
+
       console.log(err);
     }
     setSending(false);
   }
 
   return (
-    <div className="px-20 pt-12 pb-20">
-      <h1 className="font-bold text-xl">Add a new article</h1>
+    <div className="px-4 scr1100:px-20 pt-12 pb-20">
+      <h1 className="font-bold text-xl">Article</h1>
       <h1 className="mt-4 font-bold">Poster</h1>
       {/* <PosterSelect input={input} setInput={setInput} /> */}
-      <PhotoSelect picture={input.poster} setPicture={(photo) => setInput((prev) => ({ ...prev, poster: photo }))} aspectRatio={"2 / 1"} maxWidth="400px" />
+      <PhotoSelect
+        picture={input.poster}
+        picturePath="/api/photo?path=/uploads/articles/"
+        setPicture={(photo) => setInput((prev) => ({ ...prev, poster: photo }))}
+        aspectRatio={"2 / 1"}
+        maxWidth="400px"
+      />
       <h1 className="mt-8 font-bold">Title</h1>
       <input
         value={input.title}
@@ -134,10 +161,10 @@ export default function articles({ categories = [] }) {
           Back
         </Link>
         <button
-          onClick={handleSubmit}
+          onClick={updateArticle}
           className="relative block px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
         >
-          Post Article
+          Update Article
           {sending ? (
             <i className="absolute right-1 top-1/2 -translate-y-1/2">
               <RingLoader color="white" />
@@ -160,6 +187,7 @@ export async function getServerSideProps(context) {
     sequelize = db.sequelize,
     Sequelize = db.Sequelize;
   const Category = require("@/models/Category");
+  const Article = require("@/models/Article");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -174,11 +202,13 @@ export async function getServerSideProps(context) {
   }
 
   const categories = await Category.findAll();
+  const article = await Article.findByPk(context.params.id, { include: { model: Category } });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       categories: JSON.parse(JSON.stringify(categories)),
+      article: JSON.parse(JSON.stringify(article)),
     },
   };
 }

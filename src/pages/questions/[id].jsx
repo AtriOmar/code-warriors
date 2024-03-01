@@ -6,7 +6,7 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export default function index({ question }) {
   return (
-    <div className={`${jakarta.className} py-4 px-8`}>
+    <div className={`${jakarta.className} py-4 px-4`}>
       <section className="flex gap-14 max-w">
         <QuestionsSidebar />
         <Question question={question} />

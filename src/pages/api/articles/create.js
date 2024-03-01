@@ -25,7 +25,7 @@ export default async function create(req, res) {
     console.log("-------------------- poster --------------------");
     console.log(poster);
 
-    var posterName = poster ? await uploadFile("./public/uploads/articles/", poster) : null;
+    var posterName = poster ? await uploadFile("./public/uploads/articles/", poster, 600) : null;
 
     console.log("-------------------- posterName --------------------");
     console.log(posterName);
@@ -47,6 +47,4 @@ export default async function create(req, res) {
 }
 
 const parseForm = async (req) =>
-  new Promise((resolve, reject) =>
-    new formidable.IncomingForm({ maxFileSize: 1024 * 1024 * 1024 }).parse(req, (err, fields, files) => (err ? reject(err) : resolve([fields, files])))
-  );
+  new Promise((resolve, reject) => new formidable.IncomingForm().parse(req, (err, fields, files) => (err ? reject(err) : resolve([fields, files]))));

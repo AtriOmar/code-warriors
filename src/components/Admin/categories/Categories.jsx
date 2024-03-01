@@ -33,7 +33,7 @@ export default function Categories({ categories, setCategories }) {
 function CategoryItem({ category, setCategories }) {
   const [sending, setSending] = useState(false);
   const [edit, setEdit] = useState(false);
-  const [input, setInput] = useState({ title: category.name });
+  const [input, setInput] = useState({ name: category.name });
 
   async function updateCategory() {
     if (sending) return;

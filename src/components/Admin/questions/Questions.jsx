@@ -6,7 +6,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import useSWR, { mutate as mutateArticles } from "swr";
+import useSWR, { mutate as mutateQuestions } from "swr";
 import { useDebouncedCallback } from "use-debounce";
 
 const { faSort, faPlus, faCircleUser, faImage } = require("@fortawesome/free-solid-svg-icons");
@@ -14,7 +14,7 @@ const { FontAwesomeIcon } = require("@fortawesome/react-fontawesome");
 const { useState, useEffect, Fragment, useRef } = require("react");
 
 async function fetcher({ limit, search, categoryId, sort }) {
-  const res = await axios.get("/api/articles/getAll", { params: { limit, search, categoryId, sort } });
+  const res = await axios.get("/api/questions/getAll", { params: { limit, search, categoryId, sort } });
 
   return res.data;
 }
@@ -27,7 +27,7 @@ const sortOptions = [
   { value: "title-desc", label: "Title Desc" },
 ];
 
-export default function Articles({ articles: initialArticles, search, categories }) {
+export default function Questions({ questions: initialQuestions, search, categories }) {
   const [sending, setSending] = useState(false);
   // const [articles, setArticles] = useState(initialArticles);
   const [filter, setFilter] = useState({
@@ -35,13 +35,13 @@ export default function Articles({ articles: initialArticles, search, categories
     categoryId: 0,
     sort: "newest",
   });
-  const { data: articles, isLoading } = useSWR(
-    { url: "/api/articles/getAll", limit: filter.limit, search, categoryId: filter.categoryId, sort: filter.sort },
+  const { data: questions, isLoading } = useSWR(
+    { url: "/api/questions/getAll", limit: filter.limit, search, categoryId: filter.categoryId, sort: filter.sort },
     () => fetcher({ limit: filter.limit, search, categoryId: filter.categoryId, sort: filter.sort }),
     {
       keepPreviousData: true,
       revalidateOnMount: false,
-      fallbackData: initialArticles,
+      fallbackData: initialQuestions,
     }
   );
 
@@ -57,7 +57,7 @@ export default function Articles({ articles: initialArticles, search, categories
   const categoriesOptions = categories.map((category) => ({ value: category.id, label: category.name }));
 
   useEffect(() => {
-    if (articles?.length < filter.limit) return;
+    if (questions?.length < filter.limit) return;
 
     observer.current = new IntersectionObserver(
       (entries) => {
@@ -79,17 +79,17 @@ export default function Articles({ articles: initialArticles, search, categories
         observer.current.disconnect();
       }
     };
-  }, [articles]);
+  }, [questions]);
 
-  function setArticles(value) {
-    if (typeof value === "function") mutateArticles({ url: "/api/articles/getAll", limit: filter.limit, search }, value(articles), false);
-    else mutateArticles({ url: "/api/articles/getAll", limit: filter.limit, search }, articles, false);
+  function setQuestions(value) {
+    if (typeof value === "function") mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, value(articles), false);
+    else mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, articles, false);
   }
 
   return (
     <section className="py-4 rounded-lg shadow-md ">
       <div className="flex gap-4 flex-wrap justify-between items-center px-4">
-        <h2 className="font-medium text-xl text-slate-900 ">Articles</h2>
+        <h2 className="font-medium text-xl text-slate-900 ">Questions</h2>
         <div className="ml-auto flex gap-2">
           <div>
             <p className="mb-0.5 font-medium text-xs">Sort</p>
@@ -133,50 +133,43 @@ export default function Articles({ articles: initialArticles, search, categories
         </div>
       </div>
       <div className="hidden scr800:grid grid-cols-[1fr_125px_80px_80px_180px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
-        <div className=" py-3 text-slate-900">Name</div>
+        <div className=" py-3 text-slate-900">Title</div>
         <div className=" py-3 text-slate-900">Category</div>
         <div className=" py-3 text-slate-900">Likes</div>
         <div className=" py-3 text-slate-900">Pub. date</div>
         <div className=" py-3 text-slate-900"></div>
       </div>
-      {articles?.map((article, index) => (
+      {questions?.map((question, index) => (
         <Fragment key={index}>
-          <ArticleItem article={article} setArticles={setArticles} setFilter={setFilter} />
-          {index === articles?.length - 5 && <div className="scroll-trigger" />}
+          <QuestionItem question={question} setQuestions={setQuestions} setFilter={setFilter} />
+          {index === questions?.length - 5 && <div className="scroll-trigger" />}
         </Fragment>
       ))}
 
-      {!articles?.length && (
+      {!questions?.length && (
         <div className="flex items-center px-4 py-3 font-medium text-slate-500">
-          <p>There are no Articles</p>
+          <p>There are no Questions</p>
         </div>
       )}
     </section>
   );
 }
 
-function ArticleItem({ article, setArticles, setFilter }) {
+function QuestionItem({ question, setQuestions, setFilter }) {
   const [sending, setSending] = useState(false);
 
   return (
     <div
-      key={article.id}
+      key={question.id}
       className="article-container grid scr800:grid-cols-[1fr_125px_80px_80px_180px] py-3 scr800:py-2 gap-y-2 px-4 even:bg-slate-100/90 font-bold text-sm"
     >
       <div className="flex items-center gap-3 text-slate-900 capitalize">
         <div href="/profile" className="flex gap-2 items-center ">
           <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
-            <p className="scr800:hidden">Name</p>
+            <p className="scr800:hidden">Title</p>
 
             <div className="flex gap-2 items-center">
-              {article.poster ? (
-                <div className="shrink-0 relative w-8 aspect-square rounded-lg overflow-hidden">
-                  <Image src={`/api/photo?path=/uploads/articles/${article.poster}`} fill alt="Article Poster" className="object-cover" priority />
-                </div>
-              ) : (
-                <FontAwesomeIcon icon={faImage} className="text-3xl text-slate-500" />
-              )}
-              <p className="font-medium capitalize line-clamp-2 pr-2">{article.title}</p>
+              <p className="font-medium capitalize line-clamp-2 pr-2">{question.title}</p>
             </div>
           </div>
         </div>
@@ -184,35 +177,35 @@ function ArticleItem({ article, setArticles, setFilter }) {
       <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
         <p className="scr800:hidden">Category</p>
         <div className="flex items-center gap-3 text-slate-900 text-xs font-semibold">
-          <p suppressHydrationWarning>{article.Category?.name}</p>
+          <p suppressHydrationWarning>{question.Category?.name}</p>
         </div>
       </div>
       <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
         <p className="scr800:hidden">Likes</p>
         <div className="flex items-center gap-3 text-slate-900">
-          <p suppressHydrationWarning>{article.likes || Math.floor(Math.random() * 1000)}</p>
+          <p suppressHydrationWarning>{question.likes || Math.floor(Math.random() * 1000)}</p>
         </div>
       </div>
       <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
         <p className="scr800:hidden">Pub.</p>
         <div className="flex items-center gap-3 text-slate-900">
-          <p>{formatDate(new Date(article.createdAt), "day-month")}</p>
+          <p>{formatDate(new Date(question.createdAt), "day-month")}</p>
         </div>
       </div>
       <div className="flex gap-2 items-center">
         <Link
-          href={`/admin/articles/${article.id}`}
+          href={`/admin/questions/${question.id}`}
           className="w-fit px-3 border border-purple-800 rounded-full hover:bg-violet-100 text-purple-800 text-sm font-semibold duration-300"
         >
           Edit
         </Link>
-        <DeleteArticleMenu article={article} setArticles={setArticles} setFilter={setFilter} />
+        <DeleteMenu question={question} setQuestions={setQuestions} setFilter={setFilter} />
       </div>
     </div>
   );
 }
 
-function DeleteArticleMenu({ article, setArticles, setFilter }) {
+function DeleteMenu({ question, setQuestions, setFilter }) {
   const [sending, setSending] = useState(false);
 
   async function handleDelete(e) {
@@ -222,10 +215,10 @@ function DeleteArticleMenu({ article, setArticles, setFilter }) {
 
     setSending(true);
     try {
-      const res = await axios.delete("/api/articles/deleteById", { params: { id: article.id } });
+      const res = await axios.delete("/api/questions/deleteById", { params: { id: question.id } });
 
       setFilter((prev) => ({ ...prev, limit: prev.limit - 1 }));
-      setArticles((prev) => prev.filter((el) => el.id !== article.id));
+      setQuestions((prev) => prev.filter((el) => el.id !== question.id));
       toast.success("Article deleted");
     } catch (err) {
       toast.error("An error occurred");

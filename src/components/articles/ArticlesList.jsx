@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AllArticles({ articles }) {
+export default function ArticlesList({ articles }) {
   return (
     <article className="mt-10 mb-20 w-full">
       <h1 className="font-bold text-xl">Articles</h1>

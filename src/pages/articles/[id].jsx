@@ -6,7 +6,7 @@ import { signOut, useSession } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import QuestionsSidebar from "@/components/QuestionsSidebar";
-import AllArticles from "@/components/articles/AllArticles";
+import ArticlesList from "@/components/articles/ArticlesList";
 
 const inter = Inter({ subsets: ["latin"] });
 const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
