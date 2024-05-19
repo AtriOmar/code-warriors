@@ -41,7 +41,7 @@ function AddFeedback({ setFeedbacks }) {
   async function addFeedback() {
     if (sending) return;
 
-    if (!input.photo || !input.name || !input.role || !input.feedback) return;
+    if (!input.photo || !input.name || !input.role || !input.feedback) return toast.error("All fields are required");
 
     const formData = new FormData();
 

@@ -22,7 +22,6 @@ async function fetcher({ limit, search, categoryId, sort }) {
 const sortOptions = [
   { value: "newest", label: "Newest" },
   { value: "oldest", label: "Oldest" },
-  { value: "most-liked", label: "Most Liked" },
   { value: "title-asc", label: "Title Asc" },
   { value: "title-desc", label: "Title Desc" },
 ];
@@ -82,8 +81,8 @@ export default function Questions({ questions: initialQuestions, search, categor
   }, [questions]);
 
   function setQuestions(value) {
-    if (typeof value === "function") mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, value(articles), false);
-    else mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, articles, false);
+    if (typeof value === "function") mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, value(questions), false);
+    else mutateQuestions({ url: "/api/questions/getAll", limit: filter.limit, search }, questions, false);
   }
 
   return (
@@ -132,10 +131,9 @@ export default function Questions({ questions: initialQuestions, search, categor
           </div>
         </div>
       </div>
-      <div className="hidden scr800:grid grid-cols-[1fr_125px_80px_80px_180px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
+      <div className="hidden scr800:grid grid-cols-[1fr_125px_80px_180px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
         <div className=" py-3 text-slate-900">Title</div>
         <div className=" py-3 text-slate-900">Category</div>
-        <div className=" py-3 text-slate-900">Likes</div>
         <div className=" py-3 text-slate-900">Pub. date</div>
         <div className=" py-3 text-slate-900"></div>
       </div>
@@ -161,7 +159,7 @@ function QuestionItem({ question, setQuestions, setFilter }) {
   return (
     <div
       key={question.id}
-      className="article-container grid scr800:grid-cols-[1fr_125px_80px_80px_180px] py-3 scr800:py-2 gap-y-2 px-4 even:bg-slate-100/90 font-bold text-sm"
+      className="article-container grid scr800:grid-cols-[1fr_125px_80px_180px] py-3 scr800:py-2 gap-y-2 px-4 even:bg-slate-100/90 font-bold text-sm"
     >
       <div className="flex items-center gap-3 text-slate-900 capitalize">
         <div href="/profile" className="flex gap-2 items-center ">
@@ -178,12 +176,6 @@ function QuestionItem({ question, setQuestions, setFilter }) {
         <p className="scr800:hidden">Category</p>
         <div className="flex items-center gap-3 text-slate-900 text-xs font-semibold">
           <p suppressHydrationWarning>{question.Category?.name}</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
-        <p className="scr800:hidden">Likes</p>
-        <div className="flex items-center gap-3 text-slate-900">
-          <p suppressHydrationWarning>{question.likes || Math.floor(Math.random() * 1000)}</p>
         </div>
       </div>
       <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">

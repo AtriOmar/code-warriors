@@ -29,10 +29,27 @@ export default async function handler(req, res) {
     });
 
     const mailOptions = {
-      from: "Code Warriors <contact@omaratri.online>",
+      from: `Code Warriors <${process.env.EMAIL}>`,
       to: email,
       subject: "Thanks for subscribing to Code Warriors Newsletter",
       html: emailBody(),
+      attachments: [
+        {
+          filename: "logo.png",
+          path: "./public/logo.png",
+          cid: "unique",
+        },
+        {
+          filename: "facebook-line.png",
+          path: "./public/facebook-line.png",
+          cid: "unique@fb",
+        },
+        {
+          filename: "instagram-line.png",
+          path: "./public/instagram-line.png",
+          cid: "ig",
+        },
+      ],
     };
 
     try {

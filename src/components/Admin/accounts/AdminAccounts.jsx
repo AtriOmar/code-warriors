@@ -42,7 +42,7 @@ export default function AdminAccounts({ accounts }) {
         <div className=" py-3 text-slate-900">Remove</div>
       </div>
       {accounts?.map((user, index) => (
-        <UserItem key={index} user={user} />
+        <UserItem key={} user={user} />
       ))}
 
       {!accounts?.length && (

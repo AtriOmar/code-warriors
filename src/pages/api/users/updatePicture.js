@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const picture = files.picture?.[0] || null;
 
     if (files.hasOwnProperty("picture") || fields.hasOwnProperty("picture")) {
-      if (user.picture) {
+      if (user.picture && !user.picture?.startsWith("avatar-")) {
         console.log("-------------------- deleting user picture --------------------");
         await removeFile("./public/uploads/profile-pictures/" + user.picture);
       }

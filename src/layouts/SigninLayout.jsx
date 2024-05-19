@@ -34,7 +34,7 @@ export default function SigninLayout({ children }) {
               <Image src="/signin.png" alt="Sign in Image" layout="fill" objectPosition="left" objectFit="contain" />
             </div>
           </article>
-          <article className="grow shrink-0 w-[450px] scr900:min-w-[300px]">{children}</article>
+          <article className="grow shrink-0 mx-auto w-full max-w-[450px] scr900:min-w-[300px]">{children}</article>
         </section>
       </div>
       <footer className="flex flex-col-reverse gap-2 scr900:flex-row justify-between items-center mt-2 py-3 px-8 shadow-md bg-[#F9F9F9]">

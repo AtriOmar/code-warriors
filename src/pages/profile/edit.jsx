@@ -264,6 +264,7 @@ edit.getLayout = function getLayout(page, pageProps) {
 export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const Setting = require("@/models/Setting");
+  const Category = require("@/models/Category");
 
   if (!session) {
     return {
@@ -277,10 +278,13 @@ export async function getServerSideProps(context) {
 
   const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
+  const categories = await Category.findAll({ attributes: ["id", "name"] });
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       settings: JSON.parse(JSON.stringify(settings)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }

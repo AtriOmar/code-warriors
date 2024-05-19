@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     });
 
     const mailOptions = {
-      from: "Code Warriors <contact@omaratri.online>",
+      from: `Code Warriors <${process.env.EMAIL}>`,
       to: email,
       subject: "Vérification de compte Code Warriors",
       html: verificationEmailBody(name || "Mr/Mme,", verificationCode, "1 heure"),
@@ -47,7 +47,17 @@ export default async function handler(req, res) {
         {
           filename: "logo.png",
           path: "./public/logo.png",
-          cid: "unique@elcamba.net",
+          cid: "unique",
+        },
+        {
+          filename: "facebook-line.png",
+          path: "./public/facebook-line.png",
+          cid: "unique@fb",
+        },
+        {
+          filename: "instagram-line.png",
+          path: "./public/instagram-line.png",
+          cid: "ig",
         },
       ],
     };
@@ -66,94 +76,204 @@ export default async function handler(req, res) {
   }
 }
 
+// function verificationEmailBody(name, code, expiration) {
+//   return `
+//   <!DOCTYPE html>
+//   <html>
+//     <head>
+//       <meta charset="UTF-8" />
+//       <title>Vérification de compte ELCAMBA</title>
+//       <style>
+//         * {
+//           box-sizing: border-box;
+//         }
+//         body {
+//           font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+//           font-size: 16px;
+//           color: #333;
+//           padding: 20px;
+//         }
+//         h1{
+//           font-size:32px;
+//           font-weight:bold;
+//           color:#dc2626;
+//           text-align:center;
+//           border-bottom:1px solid #e2e8f0;
+//           padding-bottom:10px;
+//           margin:0;
+//           margin-bottom:20px;
+
+//         }
+//         h2 {
+//           font-size: 20px;
+//           font-weight: bold;
+//           margin-top: 30px;
+//           margin-bottom: 20px;
+//         }
+//         p {
+//           margin-top: 0;
+//           margin-bottom: 20px;
+//         }
+//         p:first-of-type{
+//           text-transform: capitalize;
+//         }
+//         .code {
+//           width:fit-content;
+//           color: #3b0764;
+//           background-color: #a855f7;
+//           padding: 10px 20px;
+//           border-radius: 5px;
+//           transition: background-color 150ms;
+//           margin:10px auto;
+//         }
+//         .code:hover {
+//           background-color: #9333ea;
+//         }
+//         .container{
+//           max-width:600px;
+//           margin:auto;
+//           border:1px solid #e2e8f0;
+//           border-radius:5px;
+//           padding:50px 30px;
+//         }
+//         .logo-container{
+
+//           position:relative;
+//           height:50px;
+//           width:fit-content;
+//           margin:auto;
+
+//         }
+//         .logo-container img{
+//           width:100%;
+//           height:100%;
+//           object-fit:contain;
+//         }
+//       </style>
+//     </head>
+//     <body>
+//       <section class="container"">
+//           <div class="logo-container">
+//               <img src="cid:unique@elcamba.net"  >
+//           </div>
+//           <h2>Code Warriors account verification</h2>
+//           <p>Hello ${name},</p>
+//           <p>Welcome to code warriors, to continue creating your account, here is your code:</p>
+//           <p class="code">${code}</p>
+//           <p>If you are not trying to create an account, you may ignore this email.</p>
+//           <p>Best regards,<br/>Code Warriors.</p>
+//       </section>
+//     </body>
+//   </html>
+//   `;
+// }
+
 function verificationEmailBody(name, code, expiration) {
   return `
-  <!DOCTYPE html>
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <title>Vérification de compte ELCAMBA</title>
-      <style>
-        * {
-          box-sizing: border-box;
-        }
-        body {
-          font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-          font-size: 16px;
-          color: #333;
-          padding: 20px;
-        }
-        h1{
-          font-size:32px;
-          font-weight:bold;
-          color:#dc2626;
-          text-align:center;
-          border-bottom:1px solid #e2e8f0;
-          padding-bottom:10px;
-          margin:0;
-          margin-bottom:20px;
-          
-        }
-        h2 {
-          font-size: 20px;
-          font-weight: bold;
-          margin-top: 30px;
-          margin-bottom: 20px;
-        }
-        p {
-          margin-top: 0;
-          margin-bottom: 20px;
-        }
-        p:first-of-type{
-          text-transform: capitalize;
-        }
-        .code {
-          width:fit-content;
-          color: #3b0764;
-          background-color: #a855f7;
-          padding: 10px 20px;
-          border-radius: 5px;
-          transition: background-color 150ms;
-          margin:10px auto;
-        }
-        .code:hover {
-          background-color: #9333ea;
-        }
-        .container{
-          max-width:600px;
-          margin:auto;
-          border:1px solid #e2e8f0;
-          border-radius:5px;
-          padding:50px 30px;
-        }
-        .logo-container{
-          
-          position:relative;
-          height:50px;
-          width:fit-content;
-          margin:auto;
-  
-        }
-        .logo-container img{
-          width:100%;
-          height:100%;
-          object-fit:contain;
-        }
-      </style>
-    </head>
-    <body>
-      <section class="container"">
-          <div class="logo-container">
-              <img src="cid:unique@elcamba.net"  >
+  <!DOCTYPEhtml>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title></title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        font-family: "Poppins", sans-serif !important;
+        font-size: 14px;
+        margin-bottom: 10px;
+        line-height: 24px;
+        color: #8094ae;
+        font-weight: 400;
+      }
+
+      * {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif !important;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      img {
+        -ms-interpolation-mode: bicubic;
+      }
+
+      .container {
+        background: linear-gradient(50deg, #302072 0%, #26143e 100%, #a559ab 100%);
+      }
+
+      .code {
+        padding: 5px 10px;
+        margin-inline: 10px;
+        border-radius: 5px;
+        background: #4f38ac;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+
+  <body width="100%" style="margin: 0; padding: 0 !important">
+    <div style="width: 100%" class="container">
+      <div style="max-width: 600px; width: 100%; margin: auto; padding: 40px 0">
+        <div style="margin: auto; padding-bottom: 5px; width: 100px; height: 60px">
+          <img src="cid:unique" alt="" style="height: 100%; width: 100%; object-fit: contain" />
+        </div>
+
+        <div class="width:100%; max-width:600px; margin:0 auto;">
+          <div style="text-align: center; padding: 30px 30px 20px">
+            <h5 style="margin-bottom: 24px; color: #c6d1e6; font-size: 20px; font-weight: 400; line-height: 28px; text-transform: capitalize">
+              Hello ${name},
+            </h5>
+            <p style="margin-bottom: 10px; color: #c6d1e6; font-size: 16px">
+              Thank you for registering with our service. To complete your registration process, please enter the following verification code:
+            </p>
+            <p style="margin-bottom: 10px; color: #c6d1e6">Verification Code: <span class="code">${code}</span></p>
+            <p style="margin-bottom: 10px; color: #c6d1e6">Enter this code on the registration page to validate your account.</p>
+            <p style="margin-bottom: 10px; color: #c6d1e6">
+              Best regards,<br />
+              Code Warriors
+            </p>
           </div>
-          <h2>Code Warriors account verification</h2>
-          <p>Hello ${name},</p>
-          <p>Welcome to code warriors, to continue creating your account, here is your code:</p>
-          <p class="code">${code}</p>
-          <p>If you are not trying to create an account, you may ignore this email.</p>
-          <p>Best regards,<br/>Code Warriors.</p>
-      </section>
-    </body>
-  </html>
+        </div>
+        <div style="width: 100%; max-width: 620px; margin: 0 auto">
+          <div style="text-align: center; padding: 20px 20px 0">
+            <p style="font-size: 13px; color:white;">Copyright © 2024 Code Warriors. All rights reserved.</p>
+            <ul style="margin: 10px -4px 0; padding: 0">
+              <li style="display: inline-block; list-style: none; padding: 4px">
+                <a
+                  style="display: inline-block; height: 30px; width: 30px; border-radius: 50%; background-color: white;"
+                  href="https://www.facebook.com/enetcomje"
+                  ><img style="width: 25px; height: 25px; padding: 2px" src="cid:unique@fb" alt="brand"
+                /></a>
+              </li>
+              <li style="display: inline-block; list-style: none; padding: 4px">
+                <a
+                  style="display: inline-block; height: 30px; width: 30px; border-radius: 50%; background-color: white;"
+                  href="https://www.instagram.com/enetcomjunior/"
+                  ><img style="width: 25px; height: 25px; padding: 2px" src="cid:ig" alt="brand"
+                /></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
   `;
 }

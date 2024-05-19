@@ -52,11 +52,20 @@ function SettingItem({ setting, setSettings }) {
         <div className="w-full flex justify-between items-center  rounded-lg text-sm font-medium capitalize">{setting.name}</div>
         <div className={`mt-1`}>
           {edit ? (
-            <input
-              value={input.value}
-              onChange={(e) => setInput((prev) => ({ ...prev, value: e.target.value }))}
-              className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
-            />
+            setting.name === "policy" ? (
+              <textarea
+                value={input.value}
+                onChange={(e) => setInput((prev) => ({ ...prev, value: e.target.value }))}
+                className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px] resize-none"
+                rows={10}
+              />
+            ) : (
+              <input
+                value={input.value}
+                onChange={(e) => setInput((prev) => ({ ...prev, value: e.target.value }))}
+                className="w-full px-2 py-1 outline-purple border border-slate-300 rounded-md text-[13px]"
+              />
+            )
           ) : (
             <div className={` text-[13px] text-slate-500`}>{setting.value}</div>
           )}

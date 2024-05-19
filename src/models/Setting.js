@@ -17,7 +17,7 @@ const Setting = sequelize.define(
   }
 );
 
-Setting.sync({ alter: true });
+// Setting.sync({ alter: true });
 
 // Setting.update(
 //   {

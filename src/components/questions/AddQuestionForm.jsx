@@ -100,8 +100,6 @@ export default function AddQuestionForm({ categories = [] }) {
       <div className=" px-2 py-4 rounded border border-slate-300">
         <Markdown source={input.content} />
       </div>
-      <h1 className="mt-8 font-bold">Mention tags</h1>
-      <input type="text" className="w-full mt-3 px-4 py-2 rounded-md border border-slate-300 outline-purple" placeholder="tags..." />
       <h1 className="mt-8 font-bold">Category</h1>
       {/* <input type="text" className="w-full mt-3 px-4 py-2 rounded-md border border-slate-300 outline-purple" placeholder="Category" /> */}
       <CategorySelect

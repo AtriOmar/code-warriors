@@ -28,6 +28,16 @@ export async function getServerSideProps(context) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const Setting = require("@/models/Setting");
 
+  if (!session) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/signin",
+      },
+      props: {},
+    };
+  }
+
   const categories = await Category.findAll();
 
   const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });

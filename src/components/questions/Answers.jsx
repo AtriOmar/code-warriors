@@ -100,7 +100,7 @@ function Answer({ answer, setAnswers }) {
         </div>
       )}
       <div className="ml-auto w-fit">
-        {authUser.id === answer.userId && !edit ? (
+        {authUser?.id === answer?.userId && !edit ? (
           <div className="flex items-center gap-2">
             <button
               onClick={() => {
@@ -113,7 +113,7 @@ function Answer({ answer, setAnswers }) {
             </button>
             <DeleteMenu answer={answer} setAnswers={setAnswers} />
           </div>
-        ) : authUser.id === answer.userId && edit ? (
+        ) : authUser?.id === answer?.userId && edit ? (
           <div className="flex gap-2">
             <button
               onClick={updateAnswer}

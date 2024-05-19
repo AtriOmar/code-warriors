@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo } from "react";
 
-export default function QuestionsSidebar() {
+export default function QuestionsSidebar({ categories }) {
   const router = useRouter();
   const pathname = router.pathname;
   const { conversations } = useChatContext();
@@ -24,9 +24,19 @@ export default function QuestionsSidebar() {
             <Link href="/questions">All questions</Link>
           </li>
         </ul>
-        <h2 className="mt-6 font-bold text-purple">Conversations</h2>
+        <h2 className="font-bold text-purple mt-6">Categories</h2>
+        <ul className="mt-2 flex flex-col gap-2 list-disc font-bold text-sm">
+          {categories?.slice(0, 8).map((category) => (
+            <li key={category.id} className={`ml-7 hover:text-purple ${pathname === "/tips?c=" + category.id ? "text-purple" : "text-black"}`}>
+              <Link href={"/tips?c=" + category.id} className={`block relative duration-200 `}>
+                <p>{category.name}</p>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        {conversations?.length > 0 && <h2 className="mt-6 font-bold text-purple">Conversations</h2>}
         <ul className="flex flex-col gap-0.5 mt-2">
-          {conversations.map((conversation) => (
+          {conversations.slice(0, 5).map((conversation) => (
             <li key={conversation.id}>
               <ConversationCard conversation={conversation} />
             </li>

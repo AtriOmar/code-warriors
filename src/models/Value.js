@@ -16,7 +16,7 @@ const Value = sequelize.define(
   }
 );
 
-Value.sync({ alter: true });
+// Value.sync({ alter: true });
 
 // Value.update(
 //   {

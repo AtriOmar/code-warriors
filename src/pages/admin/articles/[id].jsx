@@ -204,6 +204,16 @@ export async function getServerSideProps(context) {
   const categories = await Category.findAll();
   const article = await Article.findByPk(context.params.id, { include: { model: Category } });
 
+  if (!article) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/admin/articles",
+      },
+      props: {},
+    };
+  }
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),

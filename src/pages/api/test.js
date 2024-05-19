@@ -1,12 +1,12 @@
-const Article = require("@/models/Article");
+const Tip = require("@/models/Tip");
 
 export default async function handler(req, res) {
-  const articles = await Article.findAll({ raw: true });
+  const tips = await Tip.findAll({ raw: true });
 
-  articles.forEach(async (article) => {
-    const { id, ...data } = article;
+  tips.forEach(async (question) => {
+    const { id, createdAt, updatedAt, ...data } = question;
 
-    await Article.create(data);
+    await Tip.create(data);
   });
 
   res.send("done");

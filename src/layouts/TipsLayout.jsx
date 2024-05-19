@@ -10,7 +10,7 @@ export default function TipsLayout({ children, categories }) {
     <div className="relative scr900:px-4 py-4">
       <div className="flex gap-14 max-w">
         <TipsSidebar categories={categories} />
-        <div className="grow">{children}</div>
+        <div className="grow px-4">{children}</div>
       </div>
     </div>
   );

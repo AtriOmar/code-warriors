@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     const subject = `New message from ${body.name}`;
 
     const mailOptions = {
-      from: "Code Warriors <contact@omaratri.online>",
+      from: `Code Warriors <${process.env.EMAIL}>`,
       to: process.env.COMPANY_EMAIL,
       subject: subject,
       html: emailBody(body.name, body.email, body.phone, body.message),

@@ -10,11 +10,14 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Articles from "@/components/Admin/articles/Articles";
 import Link from "next/link";
 import SendEmailForm from "@/components/Admin/newsletter/SendEmailForm";
+import SubscribedAccounts from "@/components/Admin/newsletter/SubscribedAccounts";
 
 export default function newsletter({ subs }) {
   return (
-    <div className=" px-8 scr1100:px-20 pt-12 pb-20">
+    <div className="max-w-[1100px] px-8 scr1100:px-20 pt-12 pb-20">
       <SendEmailForm />
+      <div className="mt-20"></div>
+      <SubscribedAccounts subs={subs} />
     </div>
   );
 }

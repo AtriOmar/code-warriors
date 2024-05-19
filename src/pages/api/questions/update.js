@@ -2,12 +2,14 @@ const Question = require("@/models/Question");
 const Category = require("@/models/Category");
 
 export default async function handler(req, res) {
-  const { id, title, content } = req.body;
+  const { id, title, content, categoryId } = req.body;
 
   const data = {
     title,
     content,
   };
+
+  if (categoryId) data.categoryId = categoryId;
 
   try {
     await Question.update(data, {

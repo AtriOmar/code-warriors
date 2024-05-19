@@ -18,7 +18,7 @@ const Feedback = sequelize.define(
   }
 );
 
-Feedback.sync({ alter: true });
+// Feedback.sync({ alter: true });
 
 // Feedback.update(
 //   {

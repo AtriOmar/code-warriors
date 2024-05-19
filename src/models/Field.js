@@ -17,7 +17,7 @@ const Field = sequelize.define(
   }
 );
 
-Field.sync({ alter: true });
+// Field.sync({ alter: true });
 
 // Field.update(
 //   {

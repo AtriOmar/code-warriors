@@ -21,11 +21,13 @@ export default function articles({ article }) {
       <div className="flex gap-14 max-w">
         <QuestionsSidebar />
         {/* <AllArticles articles={articles} /> */}
-        <div className="mt-10 mb-20">
+        <div className=" mt-10 mb-20 w-full">
           <p className="w-fit mt-auto px-3 py-2 rounded-lg bg-purple hover:bg-purple-700 text-white text-lg  shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300">
             {article.title}
           </p>
-          <div className="mt-10" dangerouslySetInnerHTML={{ __html: article.content }}></div>
+          <div className="w-0 min-w-full">
+            <div className="mt-10" dangerouslySetInnerHTML={{ __html: article.content }}></div>
+          </div>
         </div>
       </div>
     </div>
@@ -39,14 +41,30 @@ articles.getLayout = function getLayout(page, pageProps) {
 export async function getServerSideProps(context) {
   const Article = require("@/models/Article");
   const Category = require("@/models/Category");
+  const Setting = require("@/models/Setting");
+
+  const article = await Article.findByPk(context.params.id, { include: { model: Category } });
+
+  if (!article) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/articles",
+      },
+      props: {},
+    };
+  }
 
   const session = await getServerSession(context.req, context.res, authOptions);
-  const article = await Article.findByPk(context.params.id, { include: { model: Category } });
+  const categories = await Category.findAll({ attributes: ["id", "name"] });
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       article: JSON.parse(JSON.stringify(article)),
+      categories: JSON.parse(JSON.stringify(categories)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

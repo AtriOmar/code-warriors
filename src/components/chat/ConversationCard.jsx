@@ -14,12 +14,14 @@ export default function ConversationCard({ conversation }) {
   const id = router?.query?.id;
 
   const otherUser = useMemo(() => (conversation?.User1?.id === user?.id ? conversation?.User2 : conversation?.User1), [conversation]);
-  const [formattedDate, setFormattedDate] = useState(formatDateRelative(conversation?.Messages?.[0].createdAt));
+  const [formattedDate, setFormattedDate] = useState(conversation?.Messages?.[0]?.createdAt && formatDateRelative(conversation?.Messages?.[0]?.createdAt));
 
   useEffect(() => {
-    setFormattedDate(formatDateRelative(conversation?.Messages?.[0].createdAt, "short"));
+    if (!conversation?.Messages?.[0]?.createdAt) return;
+
+    setFormattedDate(formatDateRelative(conversation?.Messages?.[0]?.createdAt, "short"));
     const interval = setInterval(() => {
-      setFormattedDate(formatDateRelative(conversation?.Messages?.[0].createdAt, "short"));
+      setFormattedDate(formatDateRelative(conversation?.Messages?.[0]?.createdAt, "short"));
     }, 30000);
 
     return () => clearInterval(interval);

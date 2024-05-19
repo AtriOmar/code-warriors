@@ -9,7 +9,7 @@ import TipsLayout from "@/layouts/TipsLayout";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import AllTips from "@/components/tips/AllTips";
-import TipsCategories from "@/components/tips/TipsCategories";
+import CategoriesNav from "@/components/CategoriesNav";
 import Articles from "@/components/categories/Articles";
 import Questions from "@/components/categories/Questions";
 import Tips from "@/components/categories/Tips";
@@ -29,10 +29,10 @@ export default function categories({ tips, categories, category, articles, quest
         <p className="w-fit mx-auto px-8 py-2 rounded-lg bg-purple hover:bg-purple-700 text-white text-lg  shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300">
           {category.name}
         </p>
-        <div className="flex max-w-[800px] mx-auto pl-4 pr-8 py-4 mt-4 rounded-full bg-slate-100">
+        {/* <div className="flex max-w-[800px] mx-auto pl-4 pr-8 py-4 mt-4 rounded-full bg-slate-100">
           <input type="text" placeholder="Looking for a something ?" className="grow outline-none bg-transparent" />
           <FontAwesomeIcon icon={faSearch} className="text-2xl text-slate-500" />
-        </div>
+        </div> */}
         <Categories categories={categories} />
       </div>
       {articles.length ? <Articles articles={articles} category={category} /> : ""}
@@ -54,8 +54,8 @@ export default function categories({ tips, categories, category, articles, quest
   );
 }
 
-categories.getLayout = function getLayout(page, { categories }) {
-  return <Layout>{page}</Layout>;
+categories.getLayout = function getLayout(page, pageProps) {
+  return <Layout {...pageProps}>{page}</Layout>;
 };
 
 export async function getServerSideProps(context) {
@@ -67,20 +67,24 @@ export async function getServerSideProps(context) {
   const User = require("@/models/User");
   const db = require("@/lib/sequelize"),
     sequelize = db.sequelize;
+  const Setting = require("@/models/Setting");
 
   const category = await Category.findByPk(context.params.id);
 
   const articles = await Article.findAll({
     where: { categoryId: context.params.id },
+    limit: 10,
   });
 
   const tips = await Tip.findAll({
     where: { categoryId: context.params.id },
+    limit: 20,
   });
 
   const categories = await Category.findAll();
 
   const questions = await Question.findAll({
+    limit: 20,
     where: { categoryId: context.params.id },
     attributes: [
       "id",
@@ -94,6 +98,8 @@ export async function getServerSideProps(context) {
     },
   });
 
+  const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
@@ -102,6 +108,7 @@ export async function getServerSideProps(context) {
       category: JSON.parse(JSON.stringify(category)),
       articles: JSON.parse(JSON.stringify(articles)),
       questions: JSON.parse(JSON.stringify(questions)),
+      settings: JSON.parse(JSON.stringify(settings)),
     },
   };
 }

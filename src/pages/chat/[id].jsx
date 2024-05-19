@@ -168,6 +168,11 @@ export default function Chat() {
   }
 
   if (!receiver) {
+    router?.push("/chat");
+    return;
+  }
+
+  if (!receiver) {
     return (
       <div className="grid place-items-center m-2 py-10 px-10 rounded-lg bg-white shadow-md">
         <div className="">

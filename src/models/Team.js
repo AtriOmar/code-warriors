@@ -17,7 +17,7 @@ const Team = sequelize.define(
   }
 );
 
-Team.sync({ alter: true });
+// Team.sync({ alter: true });
 
 // Team.update(
 //   {

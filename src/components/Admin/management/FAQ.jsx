@@ -30,6 +30,8 @@ function AddFAQ({ setFaqs }) {
   async function createFAQ() {
     if (sending) return;
 
+    if (!input.title || !input.content) return toast.error("All fields are required");
+
     const data = {
       title: input.title,
       content: input.content,

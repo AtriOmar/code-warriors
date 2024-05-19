@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/router";
 import MobileSidebar from "@/components/Admin/MobileSidebar";
 
-export default function Layout({ children, settings, showFooter = true }) {
+export default function Layout({ children, settings, categories, showFooter = true }) {
   const router = useRouter();
 
   return (
@@ -11,7 +11,7 @@ export default function Layout({ children, settings, showFooter = true }) {
       <Navbar />
       <main className="mt-[60px]">{children}</main>
       <MobileSidebar />
-      {showFooter && <Footer settings={settings} />}
+      {showFooter && <Footer settings={settings} categories={categories} />}
     </>
   );
 }

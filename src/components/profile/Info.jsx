@@ -52,13 +52,17 @@ export default function Info() {
       <h1 className=" mt-4 ml-8 font-bold capitalize">{user?.username}</h1>
       <h1 className="ml-8 text-sm font-bold text-slate-400">{user?.email}</h1>
       <p className=" mt-4 ml-8 font-semibold text-slate-700 text-sm">{user?.bio}</p>
-      <div className="mt-4 grid grid-cols-[22px_1fr] gap-2 items-center ml-8 ">
-        <FontAwesomeIcon icon={faLocationDot} className="text-black" />
-        <p className="font-medium text-slate-500 text-sm capitalize">
-          De <span className="text-black font-bold">{user?.address || "Sfax"}</span>
-        </p>
-      </div>
-      <div className="mt-2 grid grid-cols-[22px_1fr] gap-2 items-center ml-8 ">
+      {user?.address ? (
+        <div className="mt-4 grid grid-cols-[22px_1fr] gap-2 items-center ml-8 ">
+          <FontAwesomeIcon icon={faLocationDot} className="text-black" />
+          <p className="font-medium text-slate-500 text-sm capitalize">
+            De <span className="text-black font-bold">{user?.address || "Sfax"}</span>
+          </p>
+        </div>
+      ) : (
+        ""
+      )}
+      {/* <div className="mt-2 grid grid-cols-[22px_1fr] gap-2 items-center ml-8 ">
         <FontAwesomeIcon icon={faGraduationCap} className="text-black" />
         <p className="font-medium text-slate-500 text-sm capitalize">
           A étudié a <span className="text-black font-bold">{user?.address || "Enet'com"}</span>
@@ -69,7 +73,7 @@ export default function Info() {
         <p className="font-medium text-slate-500 text-sm capitalize">
           Membre à <span className="text-black font-bold">{user?.address || "Enet'com Junior"}</span>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }

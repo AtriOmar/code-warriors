@@ -145,7 +145,7 @@ export const authOptions = {
 
         const userData = {
           username: token.name,
-          email: token.email,
+          email: token.email || token.sub,
           password: "OAUTH",
           accessId: 1,
           active: 2,
@@ -154,7 +154,7 @@ export const authOptions = {
         console.log(userData);
         var [user, created] = await User.findOrCreate({
           where: {
-            email: token.email,
+            email: token.email || token.sub,
           },
           defaults: userData,
         });
@@ -183,7 +183,7 @@ export const authOptions = {
         }
       } else {
         // Fetch user data from the database using Sequelize
-        var user = await User.findOne({ where: { email: token.email } });
+        var user = await User.findOne({ where: { email: token.email || token.sub } });
       }
 
       // Include additional user data in the token
@@ -223,10 +223,10 @@ export const authOptions = {
       return session;
     },
   },
-  // pages: {
-  //   signIn: "/signin",
-  //   signUp: "/signup",
-  // },
+  pages: {
+    signIn: "/signin",
+    signUp: "/signup",
+  },
 };
 // For more information on each option (and a full list of options) go to
 // https://authjs.dev/reference/configuration/auth-config

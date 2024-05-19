@@ -85,7 +85,7 @@ function CategoryItem({ category, setCategories }) {
             </button>
             <button
               onClick={() => {
-                setInput({ title: category.name });
+                setInput({ name: category.name });
                 setEdit(false);
               }}
               className="w-fit px-3 border border-red-600 rounded-full hover:bg-violet-100 text-red-600 text-sm font-semibold duration-300"

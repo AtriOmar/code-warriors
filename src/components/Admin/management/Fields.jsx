@@ -42,7 +42,7 @@ function AddField({ setFields }) {
 
     if (sending) return;
 
-    if (!input.icon || !input.title || !input.content) return;
+    if (!input.icon || !input.title || !input.content) return toast.error("All fields are required");
 
     const formData = new FormData();
 

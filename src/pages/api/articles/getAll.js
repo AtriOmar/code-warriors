@@ -9,10 +9,14 @@ export default async function handler(req, res) {
     where: {},
   };
 
-  if (!isNaN(limit)) {
+  if (Number(limit) > 0) {
     options.limit = Number(limit);
   } else {
     options.limit = 20;
+  }
+
+  if (Number(page) > 0) {
+    options.offset = (Number(page) - 1) * options.limit;
   }
 
   if (search) {

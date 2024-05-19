@@ -40,7 +40,7 @@ function AddMember({ setTeam }) {
   async function addMember() {
     if (sending) return;
 
-    if (!input.photo || !input.name || !input.role) return;
+    if (!input.photo || !input.name || !input.role) return toast.error("All fields are required");
 
     const formData = new FormData();
 

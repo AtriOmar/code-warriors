@@ -45,6 +45,7 @@ export async function getServerSideProps(context) {
   const Friendship = require("@/models/Friendship");
   const { Op } = require("sequelize");
   const Setting = require("@/models/Setting");
+  const Category = require("@/models/Category");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -76,12 +77,17 @@ export async function getServerSideProps(context) {
 
   const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
 
+  const categories = await Category.findAll({
+    attributes: ["id", "name"],
+  });
+
   return {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       questions: JSON.parse(JSON.stringify(questions)),
       friendships: JSON.parse(JSON.stringify(friendships)),
       settings: JSON.parse(JSON.stringify(settings)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export default function Contact() {
   const [sending, setSending] = useState(false);
   const [input, setInput] = useState({
-    title: "",
+    name: "",
     email: "",
     phone: "",
     message: "",
@@ -31,7 +31,7 @@ export default function Contact() {
       const res = await axios.post("/api/contact/sendMessage", data);
 
       setInput({
-        title: "",
+        name: "",
         email: "",
         phone: "",
         message: "",
@@ -65,7 +65,7 @@ export default function Contact() {
               id="name"
               name="name"
               value={input.name}
-              onChange={(e) => setInput({ ...input, title: e.target.value })}
+              onChange={(e) => setInput({ ...input, name: e.target.value })}
               placeholder="Enter your name"
               className="w-full mt-1 px-3 py-2 rounded-md border border-slate-300 outline-purple text-slate-600 text-sm"
             />

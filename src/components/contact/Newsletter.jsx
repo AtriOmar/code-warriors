@@ -20,7 +20,8 @@ const Newsletter = () => {
 
       toast.success("Subscribed successfully");
     } catch (err) {
-      toast.error("An error occurred");
+      if (err?.response?.data === "already subscribed") toast.info("Already Subscribed", { autoClose: 3000 });
+      else toast.error("An error occurred");
       console.log(err?.response?.data || err);
     }
     setSending(false);

@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     });
 
     const mailOptions = {
-      from: "Code Warriors <contact@omaratri.online>",
+      from: `Code Warriors <${process.env.EMAIL}>`,
       to: emails.map((e) => e.email),
       subject: body.subject,
       html: body.body,

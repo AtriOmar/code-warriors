@@ -132,10 +132,9 @@ export default function Articles({ articles: initialArticles, search, categories
           </div>
         </div>
       </div>
-      <div className="hidden scr800:grid grid-cols-[1fr_125px_80px_80px_180px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
+      <div className="hidden scr800:grid grid-cols-[1fr_125px_80px_180px] bg-slate-100 mt-4 mb-2 px-4 border-y border-slate-200 font-medium text-sm">
         <div className=" py-3 text-slate-900">Name</div>
         <div className=" py-3 text-slate-900">Category</div>
-        <div className=" py-3 text-slate-900">Likes</div>
         <div className=" py-3 text-slate-900">Pub. date</div>
         <div className=" py-3 text-slate-900"></div>
       </div>
@@ -161,7 +160,7 @@ function ArticleItem({ article, setArticles, setFilter }) {
   return (
     <div
       key={article.id}
-      className="article-container grid scr800:grid-cols-[1fr_125px_80px_80px_180px] py-3 scr800:py-2 gap-y-2 px-4 even:bg-slate-100/90 font-bold text-sm"
+      className="article-container grid scr800:grid-cols-[1fr_125px_80px_180px] py-3 scr800:py-2 gap-y-2 px-4 even:bg-slate-100/90 font-bold text-sm"
     >
       <div className="flex items-center gap-3 text-slate-900 capitalize">
         <div href="/profile" className="flex gap-2 items-center ">
@@ -185,12 +184,6 @@ function ArticleItem({ article, setArticles, setFilter }) {
         <p className="scr800:hidden">Category</p>
         <div className="flex items-center gap-3 text-slate-900 text-xs font-semibold">
           <p suppressHydrationWarning>{article.Category?.name}</p>
-        </div>
-      </div>
-      <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">
-        <p className="scr800:hidden">Likes</p>
-        <div className="flex items-center gap-3 text-slate-900">
-          <p suppressHydrationWarning>{article.likes || Math.floor(Math.random() * 1000)}</p>
         </div>
       </div>
       <div className="grid grid-cols-[80px_1fr] scr800:grid-cols-1">

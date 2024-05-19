@@ -34,17 +34,17 @@ export default function AdminSidebar() {
         <button className={`${scr}:hidden absolute top-3 right-3 z-10`} onClick={() => setMobileNavbarOpen(false)}>
           <FontAwesomeIcon icon={faXmark} className="text-lg text-black" />
         </button>
-        <ul className="flex flex-col gap-4 ">
+        <ul className="flex flex-col gap-1 ">
           {items.map((item) => (
             <li key={item.name}>
               <Link
                 href={item.path || "/"}
-                className={`relative grid grid-cols-[20px_1fr] gap-3 items-center px-6 ${
+                className={`relative grid grid-cols-[20px_1fr] gap-3 items-center px-6 p-1.5 hover:bg-slate-200 duration-300 ${
                   (item.strict && pathname === item.path) || (!item.strict && pathname.startsWith(item.path)) ? "text-purple" : "text-slate-500"
                 }`}
               >
                 <div
-                  className={`absolute top-1/2 -translate-y-1/2 left-0 w-1.5 h-[150%] rounded-r-3xl bg-purple ${
+                  className={`absolute top-1/2 -translate-y-1/2 left-0 z-10 w-1.5 h-[150%] rounded-r-3xl bg-purple ${
                     pathname === item.path ? "" : "-translate-x-full"
                   } duration-300`}
                 ></div>
@@ -81,11 +81,11 @@ const items = [
     Icon: <FontAwesomeIcon icon={faNewspaper} className="" />,
     path: "/admin/articles",
   },
-  {
-    name: "Comments",
-    Icon: <FontAwesomeIcon icon={faComments} className="" />,
-    path: "/admin/comments",
-  },
+  // {
+  //   name: "Comments",
+  //   Icon: <FontAwesomeIcon icon={faComments} className="" />,
+  //   path: "/admin/comments",
+  // },
   {
     name: "Questions",
     Icon: <FontAwesomeIcon icon={faCircleQuestion} className="" />,

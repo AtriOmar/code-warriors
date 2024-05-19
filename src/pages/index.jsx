@@ -51,11 +51,13 @@ export async function getServerSideProps(context) {
   const Field = require("@/models/Field");
   const Feedback = require("@/models/Feedback");
   const Setting = require("@/models/Setting");
+  const Category = require("@/models/Category");
 
   const team = await Team.findAll({ attributes: ["id", "name", "role", "picture"] });
   const fields = await Field.findAll({ attributes: ["id", "title", "content", "icon"] });
   const feedbacks = await Feedback.findAll({ attributes: ["id", "name", "role", "feedback", "picture"] });
   const settings = await Setting.findAll({ attributes: ["id", "name", "value"] });
+  const categories = await Category.findAll({ attributes: ["id", "name"] });
 
   return {
     props: {
@@ -64,6 +66,7 @@ export async function getServerSideProps(context) {
       fields: JSON.parse(JSON.stringify(fields)),
       feedbacks: JSON.parse(JSON.stringify(feedbacks)),
       settings: JSON.parse(JSON.stringify(settings)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }

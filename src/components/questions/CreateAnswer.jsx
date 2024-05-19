@@ -6,6 +6,8 @@ import { useState } from "react";
 import * as commands from "@uiw/react-md-editor/commands";
 import axios from "axios";
 import { RingLoader } from "../Loading";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 const Markdown = dynamic(
@@ -17,11 +19,17 @@ const Markdown = dynamic(
 );
 
 export default function CreateAnswer({ question, refetchAnswers }) {
-  const [value, setValue] = useState("**Hello world!!!**");
+  const [value, setValue] = useState("");
   const [sending, setSending] = useState(false);
+  const { data: session } = useSession();
+  const router = useRouter();
 
   async function createAnswer() {
     if (sending) return;
+
+    if (!session) {
+      return router.push("/signin");
+    }
 
     setSending(true);
     try {
@@ -32,7 +40,7 @@ export default function CreateAnswer({ question, refetchAnswers }) {
       const res = await axios.post("/api/answers/create", data);
 
       console.log(res.data);
-      setValue("**Hello world!!!**");
+      setValue("");
       refetchAnswers();
     } catch (err) {
       console.log(err);

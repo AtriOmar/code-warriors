@@ -140,7 +140,7 @@ export default function Question({ question: initialQuestion }) {
           >
             Answer
           </Link>
-          {authUser.id === question.userId && !edit ? (
+          {authUser?.id === question?.userId && !edit ? (
             <div className="flex gap-2 items-center">
               <button
                 onClick={() => {
@@ -153,7 +153,7 @@ export default function Question({ question: initialQuestion }) {
               </button>
               <DeleteMenu question={question} setQuestion={setQuestion} />
             </div>
-          ) : authUser.id === question.userId && edit ? (
+          ) : authUser?.id === question?.userId && edit ? (
             <div className="flex gap-2">
               <button
                 onClick={updateQuestion}

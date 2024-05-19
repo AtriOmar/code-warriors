@@ -1,12 +1,34 @@
 import { useRouter } from "next/router";
 import React, { useState, useContext, useEffect } from "react";
 
+import CryptoJS from "crypto-js";
+import dynamic from "next/dynamic";
+import axios from "axios";
+
 const UIContext = React.createContext();
 
 function UIProvider({ children }) {
   const [mobileNavbarOpen, setMobileNavbarOpen] = useState(false);
   const [chatSidebarOpen, setChatSidebarOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const clientjs = require("clientjs");
+    const client = new clientjs.ClientJS();
+    const fingerprint = client.getFingerprint() + "";
+    console.log("-------------------- fingerprint --------------------");
+    console.log(fingerprint);
+    // const fingerprintToken = CryptoJS.AES.encrypt(fingerprint, process.env.NEXT_PUBLIC_FINGERPRINT_PASSWORD).toString();
+
+    async function sendFingerprint() {
+      try {
+        const res = await axios.post("/api/logins/create", { fingerprint });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    sendFingerprint();
+  }, []);
 
   useEffect(() => {
     setMobileNavbarOpen(false);

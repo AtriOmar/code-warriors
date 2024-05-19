@@ -70,7 +70,10 @@ export default function Navbar() {
               )}
             >
               {(isOpen) => (
-                <Link href="/" className="block font-bold text-slate-700  transition duration-300">
+                <Link
+                  href="/categories"
+                  className={`font-bold hover:text-purple-800 duration-300 ${pathname.startsWith("/categories") ? "text-purple-600" : "text-slate-700"}`}
+                >
                   Categories
                   <FontAwesomeIcon icon={faChevronDown} className={`ml-2 text-sm transition duration-300 ${isOpen ? "-rotate-180" : ""}`} />
                 </Link>
@@ -122,7 +125,7 @@ export default function Navbar() {
         </ul>
 
         {!user ? (
-          <div className="flex gap-4">
+          <div className="flex gap-1">
             <Link
               href="/signin"
               className="py-2 px-4 rounded-lg border-purple border-2 bg-purple text-white hover:text-purple hover:bg-white duration-300 transition-all"
@@ -171,7 +174,7 @@ export default function Navbar() {
                 ) : (
                   <FontAwesomeIcon icon={faCircleUser} className="text-4xl text-slate-500" />
                 )}
-                <p className="font-medium capitalize">{user.username}</p>
+                <p className="hidden scr400:block font-medium capitalize">{user.username}</p>
                 <FontAwesomeIcon icon={faChevronDown} className={`${isOpen ? "rotate-180" : ""} duration-300 text-sm`} />
                 {unread ? (
                   <span className="absolute bottom-0 left-0 -translate-x-1/3 translate-y-1/3 grid place-items-center w-4 h-4 rounded-[50%] bg-red-500 text-white text-xs ">

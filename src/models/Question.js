@@ -10,6 +10,7 @@ const Question = sequelize.define(
     id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
     title: DataTypes.TEXT,
     content: DataTypes.TEXT,
+    views: { type: DataTypes.INTEGER, defaultValue: 0 },
   },
   {
     tableName: "questions",

@@ -9,13 +9,33 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Articles from "@/components/Admin/articles/Articles";
 import Link from "next/link";
+import { useDebouncedCallback } from "use-debounce";
 import Tips from "@/components/Admin/tips/Tips";
 
-export default function articles({ tips }) {
+export default function tips({ tips, categories }) {
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+  const debouncedUpdateSearch = useDebouncedCallback(() => {
+    setDebouncedSearch(search);
+  }, 500);
+
+  useEffect(() => {
+    debouncedUpdateSearch();
+  }, [search]);
+
   return (
-    <div className="max-w-[1100px] px-8 scr1100:px-20 pt-12 pb-20">
+    <div className="max-w-[1100px] px-4 scr1100:px-20 pt-12 pb-20">
       <div className="flex pl-4 pr-8 py-4 mb-10 rounded-full bg-slate-100">
-        <input type="text" placeholder="What are you looking for ?" className="grow outline-none bg-transparent" />
+        <input
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          type="text"
+          placeholder="What are you looking for ?"
+          className="grow outline-none bg-transparent"
+        />
         <FontAwesomeIcon icon={faSearch} className="text-2xl text-slate-500" />
       </div>
       <Link
@@ -24,12 +44,12 @@ export default function articles({ tips }) {
       >
         New Tip
       </Link>
-      <Tips tips={tips} />
+      <Tips tips={tips} search={debouncedSearch} categories={categories} />
     </div>
   );
 }
 
-articles.getLayout = function getLayout(page) {
+tips.getLayout = function getLayout(page) {
   return <AdminLayout>{page}</AdminLayout>;
 };
 
@@ -37,8 +57,8 @@ export async function getServerSideProps(context) {
   var db = require("@/lib/sequelize"),
     sequelize = db.sequelize,
     Sequelize = db.Sequelize;
-  const Tip = require("@/models/Tip");
   const Category = require("@/models/Category");
+  const Tip = require("@/models/Tip");
 
   const session = await getServerSession(context.req, context.res, authOptions);
 
@@ -52,7 +72,12 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const categories = await Category.findAll({ attributes: ["id", "name"] });
+
   const tips = await Tip.findAll({
+    limit: 20,
+    attributes: ["id", "title", "createdAt"],
+    order: [["createdAt", "DESC"]],
     include: { model: Category, attributes: ["name"] },
   });
 
@@ -60,6 +85,7 @@ export async function getServerSideProps(context) {
     props: {
       session: JSON.parse(JSON.stringify(session)),
       tips: JSON.parse(JSON.stringify(tips)),
+      categories: JSON.parse(JSON.stringify(categories)),
     },
   };
 }

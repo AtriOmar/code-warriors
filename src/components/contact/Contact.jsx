@@ -5,16 +5,18 @@ import { RingLoader } from "../Loading";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function Contact() {
+export default function Contact({ settings }) {
   const [sending, setSending] = useState(false);
   const [input, setInput] = useState({
-    title: "",
+    name: "",
     email: "",
     phone: "",
     message: "",
   });
 
-  async function sendMessage() {
+  async function sendMessage(e) {
+    e.preventDefault();
+
     if (sending) return;
 
     if (!input.name || !input.email || !input.phone || !input.message) return toast.error("Please fill all the fields");
@@ -44,22 +46,22 @@ export default function Contact() {
         <div className="grow flex items-center">
           <div className="grid grid-cols-[30px_1fr] items-center gap-y-6">
             <FontAwesomeIcon icon={faPhone} className="" />
-            <p className="">+216 20 202 202</p>
+            <p className="">{settings?.find((el) => el.name === "phone")?.value}</p>
             <FontAwesomeIcon icon={faEnvelope} className="" />
-            <p className="">hello@codewarriors.com</p>
+            <p className="">{settings?.find((el) => el.name === "email")?.value}</p>
             <FontAwesomeIcon icon={faLocationDot} className="" />
-            <p className="">Sfax</p>
+            <p className="">{settings?.find((el) => el.name === "address")?.value}</p>
           </div>
         </div>
       </article>
-      <article className="grow flex flex-col justify-center">
+      <form onSubmit={sendMessage} className="grow flex flex-col justify-center">
         <p className="text-center font-bold text-xl ">Contact Us</p>
         <h1 className="mt-2 font-semibold text-sm text-slate-800">Name</h1>
         <input
           type="text"
           placeholder="Name"
           value={input.name}
-          onChange={(e) => setInput({ ...input, title: e.target.value })}
+          onChange={(e) => setInput({ ...input, name: e.target.value })}
           className="w-full mt-1 px-3 py-1 rounded-md border border-slate-300 outline-purple text-slate-600 text-sm"
         />
         <h1 className="mt-4 font-semibold text-sm text-slate-800">Phone number</h1>
@@ -72,7 +74,7 @@ export default function Contact() {
         />
         <h1 className="mt-4 font-semibold text-sm text-slate-800">Email</h1>
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           value={input.email}
           onChange={(e) => setInput({ ...input, email: e.target.value })}
@@ -88,7 +90,7 @@ export default function Contact() {
           rows={6}
         />
         <button
-          onClick={sendMessage}
+          type="submit"
           className="relative block mt-8 px-8 py-2 rounded-md bg-purple hover:bg-purple-700 text-white text-sm shadow-[1px_1px_7px_rgb(0,0,0,.2)] duration-300"
         >
           Send Message
@@ -100,7 +102,7 @@ export default function Contact() {
             ""
           )}
         </button>
-      </article>
+      </form>
     </section>
   );
 }
