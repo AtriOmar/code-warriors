@@ -21,6 +21,11 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
       <Head>
         <link rel="icon" href="/favicon.png" />
         <title>Code Warriors</title>
+        <meta property="og:url" content="https://warriors.omaratri.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Code Warriors | Developer's Home" />
+        <meta property="og:description" content="Platform for exchanging everything IT related -- questions, articles, tips, etc." />
+        <meta property="og:image" content="https://warriors.omaratri.com/opengraph-image.png" />
       </Head>
       <ChatProvider>
         <UIProvider>
