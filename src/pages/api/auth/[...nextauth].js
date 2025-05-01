@@ -21,15 +21,24 @@ export const authOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     TwitterProvider({
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET,
       version: "2.0",
+      httpOptions: {
+        timeout: 10000,
+      },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -40,6 +49,9 @@ export const authOptions = {
           access_type: "offline",
           response_type: "code",
         },
+      },
+      httpOptions: {
+        timeout: 10000,
       },
     }),
     CredentialsProvider({
