@@ -22,14 +22,14 @@ export const authOptions = {
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
       httpOptions: {
-        timeout: 5000,
+        timeout: 10000,
       },
     }),
     FacebookProvider({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
       httpOptions: {
-        timeout: 5000,
+        timeout: 10000,
       },
     }),
     TwitterProvider({
@@ -37,7 +37,7 @@ export const authOptions = {
       clientSecret: process.env.TWITTER_SECRET,
       version: "2.0",
       httpOptions: {
-        timeout: 5000,
+        timeout: 10000,
       },
     }),
     GoogleProvider({
@@ -51,7 +51,7 @@ export const authOptions = {
         },
       },
       httpOptions: {
-        timeout: 5000,
+        timeout: 10000,
       },
     }),
     CredentialsProvider({
